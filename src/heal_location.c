@@ -2,6 +2,7 @@
 #include "heal_location.h"
 #include "event_data.h"
 #include "constants/maps.h"
+#include "constants/map_groups.h"
 #include "constants/heal_locations.h"
 
 static void SetWhiteoutRespawnHealerNpcAsLastTalked(u32 healLocationIdx);
@@ -80,7 +81,7 @@ void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
         warp->mapNum = sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1];
         warp->warpId = 0xFF;
 
-        if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(KAILO_TOWN_PLAYERS_HOUSE_2F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(KAILO_TOWN_PLAYERS_HOUSE_2F))
+        if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(MAP_KAILO_TOWN_PLAYERS_HOUSE_2F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(MAP_KAILO_TOWN_PLAYERS_HOUSE_2F))
         {
             warp->x = 1;
             warp->y = 5;
