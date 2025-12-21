@@ -5,13 +5,13 @@ gNameChoice_Green::
     .string "PINK$"
 
 gNameChoice_Red::
-    .string "TRQOISE$"
+    .string "TRQIS$"
 
 gNameChoice_Leaf::
     .string "MIND$"
 
 gNameChoice_Fire::
-    .string "COLD$"
+    .string "ICE$"
 
 gNameChoice_Gary::
     .string "YORI$"
@@ -101,7 +101,7 @@ gNameChoice_Cassie::
     .string "CASSIE$"
 
 gNameChoice_Rey::
-    .string "VENTI$"
+    .string "REY$"
 
 gNameChoice_Seda::
     .string "SEDA$"

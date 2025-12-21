@@ -13,7 +13,7 @@ static const u32 sTMHMLearnsets[][2] =
                                         | TMHM(TM10_HIDDEN_POWER)
                                         | TMHM(TM11_SUNNY_DAY)
                                         | TMHM(TM17_PROTECT)
-                                        
+                                        | TMHM(TM19_GIGA_DRAIN)
                                         | TMHM(TM21_FRUSTRATION)
                                         | TMHM(TM22_SOLAR_BEAM)
                                         | TMHM(TM27_RETURN)

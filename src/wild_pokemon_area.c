@@ -78,7 +78,8 @@ static const u16 sDexAreas_Kanto[][2] = {
     { MAPSEC_POKEMON_TOWER,       DEX_AREA_POKEMON_TOWER },
     { MAPSEC_CERULEAN_CAVE,       DEX_AREA_CERULEAN_CAVE },
     { MAPSEC_POWER_PLANT,         DEX_AREA_POWER_PLANT },
-    { MAPSEC_KAILO_TOWN,          DEX_AREA_KAILO_TOWN }
+    { MAPSEC_KAILO_TOWN,          DEX_AREA_KAILO_TOWN },
+    { MAPSEC_DYERS_TUNNEL,        DEX_AREA_DYERS_TUNNEL }
 };
 
 static const u16 sDexAreas_Sevii1[][2] = {

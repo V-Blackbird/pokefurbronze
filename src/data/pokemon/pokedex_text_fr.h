@@ -2721,7 +2721,7 @@ const u8 gDeoxysPokedexTextUnused[] = _("");
 
 const u8 gVillPokedexText[] = _(
     "PROF. BLACKBIRD said that\n"
-    "this Ice type POKéMON evolved\n"
+    "this ICE type POKéMON evolved\n"
     "from EEVEE in Sinnoh.\n"
     "Strange.");
 
@@ -2736,9 +2736,9 @@ const u8 gMariePokedexText[] = _(
 const u8 gMariePokedexTextUnused[] = _("");
 
 const u8 gMarieFPokedexText[] = _(
-    "It evolved from Eevee that\n"
+    "It evolved from EEVEE that\n"
     "PROF. BLACKBIRD gave to me.\n"
-    "Now it's my strong, fluffy\n"
+    "Now it's my warm, fluffy\n"
     "FLAREON!");
 
 const u8 gMarieFPokedexTextUnused[] = _("");
@@ -2754,7 +2754,7 @@ const u8 gGilanPokedexTextUnused[] = _("");
 const u8 gGilanGPokedexText[] = _(
     "It's now looking like that\n"
     "PROF. BLACKBIRD's POKéMON.\n"
-    "And it's an Ice type now!\n"
+    "And it's an ICE type now!\n"
     "Cool!");
 
 const u8 gGilanGPokedexTextUnused[] = _("");
@@ -2769,9 +2769,9 @@ const u8 gEverestPokedexTextUnused[] = _("");
 
 const u8 gEverestLPokedexText[] = _(
     "It grew up into a...\n"
-    "Grass type?\n"
+    "GRASS type?\n"
     "It's sleeping even more, turning\n"
-    "its leafy ears to the sun");
+    "its leafy ears to the sun.");
 
 const u8 gEverestLPokedexTextUnused[] = _("");
 

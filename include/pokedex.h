@@ -98,6 +98,7 @@ enum {
     DEX_AREA_DOTTED_HOLE,
     DEX_AREA_TANOBY_CHAMBER,
     DEX_AREA_KAILO_TOWN,
+    DEX_AREA_DYERS_TUNNEL
 };
 
 struct PokedexEntry

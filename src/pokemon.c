@@ -1144,7 +1144,7 @@ static const u16 sHoennToNationalOrder[NUM_SPECIES - 1] =
     HOENN_TO_NATIONAL(RAYQUAZA),
     HOENN_TO_NATIONAL(JIRACHI),
     HOENN_TO_NATIONAL(DEOXYS),
-    HOENN_TO_NATIONAL(BULBASAUR), // PokĂ©mon from here onwards are UNSEEN in the HoennDex.
+    HOENN_TO_NATIONAL(BULBASAUR), // Pokémon from here onwards are UNSEEN in the HoennDex.
     HOENN_TO_NATIONAL(IVYSAUR),
     HOENN_TO_NATIONAL(VENUSAUR),
     HOENN_TO_NATIONAL(CHARMANDER),
@@ -1445,7 +1445,7 @@ static const s8 sPokeblockFlavorCompatibilityTable[NUM_NATURES * FLAVOR_COUNT] =
 #define PP_UP_SHIFTS(val)           val,        (val) << 2,        (val) << 4,        (val) << 6
 #define PP_UP_SHIFTS_INV(val) (u8)~(val), (u8)~((val) << 2), (u8)~((val) << 4), (u8)~((val) << 6)
 
-// PP Up bonuses are stored for a PokĂ©mon as a single byte.
+// PP Up bonuses are stored for a Pokémon as a single byte.
 // There are 2 bits (a value 0-3) for each move slot that
 // represent how many PP Ups have been applied.
 // The following arrays take a move slot id and return:
@@ -4480,9 +4480,9 @@ bool8 PokemonUseItemEffects(struct Pokemon *mon, u16 item, u8 partyIndex, u8 mov
                         break;
                     case 5: // ITEM5_FRIENDSHIP_LOW
                         // Changes to friendship are given differently depending on
-                        // how much friendship the PokĂ©mon already has.
-                        // In general, PokĂ©mon with lower friendship receive more,
-                        // and PokĂ©mon with higher friendship receive less.
+                        // how much friendship the Pokémon already has.
+                        // In general, Pokémon with lower friendship receive more,
+                        // and Pokémon with higher friendship receive less.
                         if (GetMonData(mon, MON_DATA_FRIENDSHIP, NULL) < 100)
                             UPDATE_FRIENDSHIP_FROM_ITEM();
                         idx++;
