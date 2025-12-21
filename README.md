@@ -2,7 +2,7 @@
 
 [![Build Status][travis-badge]][travis]
 
-[travis]: https://travis-ci.org/pret/pokefirered
+[travis]: https://travis-ci.org/V-Blackbird/pokefurbronze
 [travis-badge]: https://travis-ci.org/pret/pokefirered.svg?branch=master
 
 This is a disassembly of Pokémon FireRed and LeafGreen, modified and renamed as MindPink and IceTurquoise versions.
