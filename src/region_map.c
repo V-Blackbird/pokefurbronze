@@ -640,79 +640,79 @@ static const union AnimCmd *const sAnims_SwitchMapCursor[] = {
 static const struct DungeonMapInfo sDungeonInfo[] = {
     {
         .id = MAPSEC_VIRIDIAN_FOREST,
-        .name = sMapsecName_VIRIDIANFOREST,
+        .name = sMapsecName_VIRIDIAN_FOREST,
         .desc = gText_RegionMap_AreaDesc_ViridianForest
     }, {
         .id = MAPSEC_MT_MOON,
-        .name = sMapsecName_MTMOON,
+        .name = sMapsecName_MT__MOON,
         .desc = gText_RegionMap_AreaDesc_MtMoon
     }, {
         .id = MAPSEC_DIGLETTS_CAVE,
-        .name = sMapsecName_DIGLETTSCAVE,
+        .name = sMapsecName_DIGLETT_S_CAVE,
         .desc = gText_RegionMap_AreaDesc_DiglettsCave
     }, {
         .id = MAPSEC_KANTO_VICTORY_ROAD,
-        .name = sMapsecName_VICTORYROAD,
+        .name = sMapsecName_VICTORY_ROAD,
         .desc = gText_RegionMap_AreaDesc_VictoryRoad
     }, {
         .id = MAPSEC_POKEMON_MANSION,
-        .name = sMapsecName_POKMONMANSION,
+        .name = sMapsecName_POK__MON_MANSION,
         .desc = gText_RegionMap_AreaDesc_PokemonMansion
     }, {
         .id = MAPSEC_KANTO_SAFARI_ZONE,
-        .name = sMapsecName_SAFARIZONE,
+        .name = sMapsecName_SAFARI_ZONE,
         .desc = gText_RegionMap_AreaDesc_SafariZone
     }, {
         .id = MAPSEC_ROCK_TUNNEL,
-        .name = sMapsecName_ROCKTUNNEL,
+        .name = sMapsecName_ROCK_TUNNEL,
         .desc = gText_RegionMap_AreaDesc_RockTunnel
     }, {
         .id = MAPSEC_SEAFOAM_ISLANDS,
-        .name = sMapsecName_SEAFOAMISLANDS,
+        .name = sMapsecName_SEAFOAM_ISLANDS,
         .desc = gText_RegionMap_AreaDesc_SeafoamIslands
     }, {
         .id = MAPSEC_POKEMON_TOWER,
-        .name = sMapsecName_POKMONTOWER,
+        .name = sMapsecName_POK__MON_TOWER,
         .desc = gText_RegionMap_AreaDesc_PokemonTower
     }, {
         .id = MAPSEC_CERULEAN_CAVE,
-        .name = sMapsecName_CERULEANCAVE,
+        .name = sMapsecName_CERULEAN_CAVE,
         .desc = gText_RegionMap_AreaDesc_CeruleanCave
     }, {
         .id = MAPSEC_POWER_PLANT,
-        .name = sMapsecName_POWERPLANT,
+        .name = sMapsecName_POWER_PLANT,
         .desc = gText_RegionMap_AreaDesc_PowerPlant
     }, {
         .id = MAPSEC_MT_EMBER,
-        .name = sMapsecName_MTEMBER,
+        .name = sMapsecName_MT__EMBER,
         .desc = gText_RegionMap_AreaDesc_MtEmber
     }, {
         .id = MAPSEC_BERRY_FOREST,
-        .name = sMapsecName_BERRYFOREST,
+        .name = sMapsecName_BERRY_FOREST,
         .desc = gText_RegionMap_AreaDesc_BerryForest
     }, {
         .id = MAPSEC_ICEFALL_CAVE,
-        .name = sMapsecName_ICEFALLCAVE,
+        .name = sMapsecName_ICEFALL_CAVE,
         .desc = gText_RegionMap_AreaDesc_IcefallCave
     }, {
         .id = MAPSEC_LOST_CAVE,
-        .name = sMapsecName_LOSTCAVE,
+        .name = sMapsecName_LOST_CAVE,
         .desc = gText_RegionMap_AreaDesc_LostCave
     }, {
         .id = MAPSEC_TANOBY_CHAMBERS,
-        .name = sMapsecName_TANOBYCHAMBERS,
+        .name = sMapsecName_TANOBY_CHAMBERS,
         .desc = gText_RegionMap_AreaDesc_TanobyRuins
     }, {
         .id = MAPSEC_ALTERING_CAVE,
-        .name = sMapsecName_ALTERINGCAVE,
+        .name = sMapsecName_ALTERING_CAVE,
         .desc = gText_RegionMap_AreaDesc_AlteringCave
     }, {
         .id = MAPSEC_PATTERN_BUSH,
-        .name = sMapsecName_PATTERNBUSH,
+        .name = sMapsecName_PATTERN_BUSH,
         .desc = gText_RegionMap_AreaDesc_PatternBush
     }, {
         .id = MAPSEC_DOTTED_HOLE,
-        .name = sMapsecName_DOTTEDHOLE,
+        .name = sMapsecName_DOTTED_HOLE,
         .desc = gText_RegionMap_AreaDesc_DottedHole
     }
 };
@@ -3214,7 +3214,7 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
     case MAPSEC_UNDERGROUND_PATH:
         sMapCursor->x = 14;
         sMapCursor->y = 7;
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(UNDERGROUND_PATH_NORTH_ENTRANCE))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_UNDERGROUND_PATH_NORTH_ENTRANCE))
         {
             sMapCursor->x = 14; // optimized out but required to match
             sMapCursor->y = 5;
@@ -3223,7 +3223,7 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
     case MAPSEC_UNDERGROUND_PATH_2:
         sMapCursor->x = 12;
         sMapCursor->y = 6;
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(UNDERGROUND_PATH_EAST_ENTRANCE))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_UNDERGROUND_PATH_EAST_ENTRANCE))
         {
             sMapCursor->x = 15;
             sMapCursor->y = 6; // optimized out but required to match
@@ -3277,12 +3277,12 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
         sMapCursor->y = 6;
         break;
     case MAPSEC_ROUTE_2:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_PALLET_TOWN))
         {
             sMapCursor->x = 4;
             sMapCursor->y = 7;
         }
-        else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(CERULEAN_CITY))
+        else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_CERULEAN_CITY))
         {
             sMapCursor->x = 4;
             sMapCursor->y = 5;
@@ -3293,19 +3293,19 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
         }
         break;
     case MAPSEC_ROUTE_21:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE21_NORTH))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE21_NORTH))
         {
             sMapCursor->x = 4;
             sMapCursor->y = 12;
         }
-        else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(ROUTE21_SOUTH))
+        else if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_ROUTE21_SOUTH))
         {
             sMapCursor->x = 4;
             sMapCursor->y = 13;
         }
         break;
     case MAPSEC_ROUTE_5:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(VIRIDIAN_CITY))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_VIRIDIAN_CITY))
         {
             sMapCursor->x = 14;
             sMapCursor->y = 5;
@@ -3316,7 +3316,7 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
         }
         break;
     case MAPSEC_ROUTE_6:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_PALLET_TOWN))
         {
             sMapCursor->x = 14;
             sMapCursor->y = 7;
@@ -3327,7 +3327,7 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
         }
         break;
     case MAPSEC_ROUTE_7:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_PALLET_TOWN))
         {
             sMapCursor->x = 13;
             sMapCursor->y = 6;
@@ -3338,7 +3338,7 @@ static void GetPlayerPositionOnRegionMap_HandleOverrides(void)
         }
         break;
     case MAPSEC_ROUTE_8:
-        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(PALLET_TOWN))
+        if (gSaveBlock1Ptr->location.mapNum == MAP_NUM(MAP_PALLET_TOWN))
         {
             sMapCursor->x = 15;
             sMapCursor->y = 6;
@@ -3789,15 +3789,15 @@ static bool32 IsCeladonDeptStoreMapsec(u16 mapsec)
         return FALSE;
     if (mapsec != MAPSEC_CELADON_CITY)
         return FALSE;
-    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(CELADON_CITY_DEPARTMENT_STORE_1F))
+    if (gSaveBlock1Ptr->location.mapGroup != MAP_GROUP(MAP_CELADON_CITY_DEPARTMENT_STORE_1F))
         return FALSE;
-    if (gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_1F)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_2F)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_3F)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_4F)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_5F)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_ROOF)
-     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(CELADON_CITY_DEPARTMENT_STORE_ELEVATOR))
+    if (gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_1F)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_2F)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_3F)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_4F)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_5F)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_ROOF)
+     && gSaveBlock1Ptr->location.mapNum != MAP_NUM(MAP_CELADON_CITY_DEPARTMENT_STORE_ELEVATOR))
         return FALSE;
     return TRUE;
 }
@@ -3810,7 +3810,7 @@ u8 *GetMapName(u8 *dst0, u16 mapsec, u16 fill)
     if ((idx = mapsec - MAPSECS_KANTO) < MAPSEC_NONE - MAPSECS_KANTO)
     {
         if (IsCeladonDeptStoreMapsec(mapsec) == TRUE)
-            dst = StringCopy(dst0, sMapsecName_CELADONDEPT);
+            dst = StringCopy(dst0, sMapsecName_CELADON_DEPT_);
         else
             dst = StringCopy(dst0, sMapNames[idx]);
     }

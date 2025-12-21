@@ -2,9 +2,9 @@
 
 [![ROM build status](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/make.yml/badge.svg?branch=master)](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/make.yml)
 
-This is a disassembly of Pokémon FireRed and LeafGreen, modified and renamed as MindPink and IceTurquoise versions.
+This is a decompilation of English Pokémon FireRed and LeafGreen modified and renamed as MindPink and IceTurquoise versions.
 
-It builds the following ROMs:
+It builds the following ROM images:
 
 * [**pokemindpink.gba**](https://datomatic.no-intro.org/?page=show_record&s=23&n=1616) `sha1: 41cb23d8dccc8ebd7c649cd8fbb58eeace6e2fdc`
 * [**pokeiceturquoise.gba**](https://datomatic.no-intro.org/?page=show_record&s=23&n=1617) `sha1: 574fa542ffebb14be69902d1d36f1ec0a4afd71e`

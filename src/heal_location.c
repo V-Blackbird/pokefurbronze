@@ -69,8 +69,8 @@ void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
         gSpecialVar_LastTalked = 1;
         warp->x = 4;
         warp->y = 11;
-        warp->mapGroup = MAP_GROUP(TRAINER_TOWER_LOBBY);
-        warp->mapNum = MAP_NUM(TRAINER_TOWER_LOBBY);
+        warp->mapGroup = MAP_GROUP(MAP_TRAINER_TOWER_LOBBY);
+        warp->mapNum = MAP_NUM(MAP_TRAINER_TOWER_LOBBY);
         warp->warpId = 0xFF;
     }
     else
@@ -86,17 +86,17 @@ void SetWhiteoutRespawnWarpAndHealerNpc(struct WarpData * warp)
             warp->y = 5;
             FlagClear(FLAG_WHITEOUT_VILL);
         }
-        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(INDIGO_PLATEAU_POKEMON_CENTER_1F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(INDIGO_PLATEAU_POKEMON_CENTER_1F))
+        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(MAP_INDIGO_PLATEAU_POKEMON_CENTER_1F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(MAP_INDIGO_PLATEAU_POKEMON_CENTER_1F))
         {
             warp->x = 13;
             warp->y = 12;
         }
-        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(ONE_ISLAND_POKEMON_CENTER_1F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(ONE_ISLAND_POKEMON_CENTER_1F))
+        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(MAP_ONE_ISLAND_POKEMON_CENTER_1F) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(MAP_ONE_ISLAND_POKEMON_CENTER_1F))
         {
             warp->x = 5;
             warp->y = 4;
         }
-        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(TRAINER_TOWER_LOBBY) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(TRAINER_TOWER_LOBBY))
+        else if (sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][0] == MAP_GROUP(MAP_TRAINER_TOWER_LOBBY) && sWhiteoutRespawnHealCenterMapIdxs[healLocationIdx - 1][1] == MAP_NUM(MAP_TRAINER_TOWER_LOBBY))
         {
             warp->x = 4;
             warp->y = 11;
