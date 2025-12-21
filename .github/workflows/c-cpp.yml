@@ -21,7 +21,7 @@ jobs:
       run: cd ~/agbcc; ./build.sh; ./install.sh $GITHUB_WORKSPACE
     - name: make
       run: make -j$(nproc); make leafgreen
-    - name: make check
-      run: make check
+    - name: make _rev files
+      run: make firered_rev1; make leafgreen_rev1
     - name: make distcheck
       run: make distcheck
