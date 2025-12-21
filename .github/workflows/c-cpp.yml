@@ -18,7 +18,7 @@ jobs:
     - name: clone agbcc
       run: git clone https://github.com/pret/agbcc ~/agbcc
     - name: install agbcc
-      run: cd ~/agbcc; ./install $GITHUB_WORKSPACE
+      run: cd ~/agbcc; ./install.sh $GITHUB_WORKSPACE
     - name: make
       run: make -j$(nproc); make leafgreen
     - name: make check
