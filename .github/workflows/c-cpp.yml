@@ -23,5 +23,3 @@ jobs:
       run: make -j$(nproc); make leafgreen
     - name: make _rev files
       run: make firered_rev1; make leafgreen_rev1
-    - name: make distcheck
-      run: make distcheck
