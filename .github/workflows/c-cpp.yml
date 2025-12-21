@@ -13,8 +13,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: configure
-      run: ./configure
     - name: installing dependencies
       run: sudo apt install build-essential binutils-arm-none-eabi git libpng-dev
     - name: clone agbcc
