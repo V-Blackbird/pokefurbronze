@@ -1498,8 +1498,8 @@ void CopyObjectGraphicsInfoToSpriteTemplate(u16 graphicsId, void (*callback)(str
     
     do
     {
-        if (ScriptContext_IsEnabled() != TRUE && sub_8112CAC() == 1)
-            spriteTemplate->callback = sub_811246C;
+        if (ScriptContext_IsEnabled() != TRUE && QL_GetPlaybackState() == QL_PLAYBACK_STATE_RUNNING)
+            spriteTemplate->callback = QL_UpdateObject;
         else
             spriteTemplate->callback = callback;
     } while (0);
@@ -4784,7 +4784,7 @@ bool8 ObjectEventIsHeldMovementActive(struct ObjectEvent *objectEvent)
 
 bool8 ObjectEventSetHeldMovement(struct ObjectEvent *objectEvent, u8 movementActionId)
 {
-    if(sub_8112CAC() == TRUE)
+    if (QL_GetPlaybackState() == QL_PLAYBACK_STATE_RUNNING)
         ObjectEventClearHeldMovementIfActive(objectEvent);
     else if (ObjectEventIsMovementOverridden(objectEvent))
         return TRUE;
@@ -4860,7 +4860,7 @@ void UpdateObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sp
     ObjectEventUpdateSubpriority(objectEvent, sprite);
 }
 
-void UpdateQuestLogObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite)
+void QL_UpdateObjectEventCurrentMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite)
 {
     DoGroundEffects_OnSpawn(objectEvent, sprite);
     TryEnableObjectEventAnim(objectEvent, sprite);
@@ -5005,7 +5005,7 @@ static void ObjectEventSetSingleMovement(struct ObjectEvent *objectEvent, struct
     objectEvent->movementActionId = movementActionId;
     sprite->data[2] = 0;
     
-    if (gQuestLogPlaybackState == QL_PLAYBACK_STATE_2)
+    if (gQuestLogPlaybackState == QL_PLAYBACK_STATE_RECORDING)
         QuestLogRecordNPCStep(objectEvent->localId, objectEvent->mapNum, objectEvent->mapGroup, movementActionId);
 }
 
