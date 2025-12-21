@@ -1,6 +1,6 @@
 # Pokémon MindPink and IceTurquoise
 
-[![ROMs compiling status](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/c-cpp.yml/badge.svg?branch=master)](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/c-cpp.yml)
+[![ROM build status](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/make.yml/badge.svg)](https://github.com/V-Blackbird/pokefurbronze/actions/workflows/make.yml)
 
 This is a disassembly of Pokémon FireRed and LeafGreen, modified and renamed as MindPink and IceTurquoise versions.
 
