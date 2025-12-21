@@ -5000,15 +5000,13 @@ static bool8 ObjectEventExecSingleMovementAction(struct ObjectEvent *objectEvent
     return FALSE;
 }
 
-static void ObjectEventSetSingleMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 animId)
+static void ObjectEventSetSingleMovement(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 movementActionId)
 {
-    objectEvent->movementActionId = animId;
+    objectEvent->movementActionId = movementActionId;
     sprite->data[2] = 0;
     
-    if (gQuestLogPlaybackState == 2)
-    {
-        QuestLogRecordNPCStep(objectEvent->localId, objectEvent->mapNum, objectEvent->mapGroup, animId);
-    }
+    if (gQuestLogPlaybackState == QL_PLAYBACK_STATE_2)
+        QuestLogRecordNPCStep(objectEvent->localId, objectEvent->mapNum, objectEvent->mapGroup, movementActionId);
 }
 
 static void FaceDirection(struct ObjectEvent *objectEvent, struct Sprite *sprite, u8 direction)

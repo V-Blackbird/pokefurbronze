@@ -819,7 +819,7 @@ static void QL_LoadMapNormal(void)
     ChooseAmbientCrySpecies();
     SetDefaultFlashLevel();
     sub_8110920();
-    sub_8111708();
+    QL_RestoreMapLayoutId();
     LoadSaveblockMapHeader();
     InitMap();
 }
@@ -1399,7 +1399,7 @@ static void DoCB1_Overworld(u16 newKeys, u16 heldKeys)
     {
         if (ProcessPlayerFieldInput(&fieldInput) == TRUE)
         {
-            if (gQuestLogPlaybackState == 2)
+            if (gQuestLogPlaybackState == QL_PLAYBACK_STATE_2)
                 sub_81127F8(&gInputToStoreInQuestLogMaybe);
             LockPlayerFieldControls();
             DismissMapNamePopup();
@@ -1418,7 +1418,7 @@ static void DoCB1_Overworld_QuestLogPlayback(void)
 
     sub_8112B3C();
     UpdatePlayerAvatarTransitionState();
-    sub_8111C68();
+    HandleQuestLogInput();
     FieldClearPlayerInput(&fieldInput);
     fieldInput = gQuestLogFieldInput;
     FieldInput_HandleCancelSignpost(&fieldInput);
@@ -1458,7 +1458,7 @@ static void OverworldBasic(void)
     RunTasks();
     AnimateSprites();
     CameraUpdate();
-    sub_8115798();
+    SetQuestLogEvent_Arrived();
     UpdateCameraPanning();
     BuildOamBuffer();
     UpdatePaletteFade();
