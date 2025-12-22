@@ -115,7 +115,7 @@
       "graphics_id": "OBJ_EVENT_GFX_COOLTRAINER_M",
       "x": 109,
       "y": 3,
-      "target_local_id": 12,
+      "target_local_id": "LOCALID_CERULEAN_CAVE_GUARD",
       "target_map": "MAP_CERULEAN_CITY"
     }
   ],
@@ -189,6 +189,15 @@
       "flag": "FLAG_HIDDEN_ITEM_ROUTE4_RAZZ_BERRY",
       "quantity": 1,
       "underfoot": false
+    }
+  ],
+  "heal_locations": [
+    {
+      "id": "HEAL_LOCATION_ROUTE4",
+      "x": 12,
+      "y": 6,
+      "respawn_map": "MAP_ROUTE4_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_ROUTE4_NURSE"
     }
   ]
 }

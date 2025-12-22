@@ -1,5 +1,3 @@
-.equ LOCALID_MOM, 1
-
 KailoTown_PlayersHouse_1F_MapScripts::
   map_script MAP_SCRIPT_ON_FRAME_TABLE, KailoTown_PlayersHouse_1F_OnFrame
 	.byte 0

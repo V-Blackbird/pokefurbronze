@@ -4,7 +4,7 @@ KailoTown_PokemonCenter_1F_MapScripts::
 	.byte 0
 
 KailoTown_PokemonCenter_1F_OnTransition::
-    setrespawn SPAWN_KAILO_TOWN
+    setrespawn HEAL_LOCATION_KAILO_TOWN
 	end
 
 KailoTown_PokemonCenter_1F_EventScript_Doctor::

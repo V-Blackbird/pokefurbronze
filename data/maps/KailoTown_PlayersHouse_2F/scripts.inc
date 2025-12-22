@@ -21,7 +21,7 @@ KailoTown_PlayersHouse_2F_OnTransition::
 	end
 
 KailoTown_PlayersHouse_2F_EventScript_SetRespawn::
-	setrespawn SPAWN_HOME
+	setrespawn HEAL_LOCATION_HOME
 	return
 
 KailoTown_PlayersHouse_2F_OnWarp::

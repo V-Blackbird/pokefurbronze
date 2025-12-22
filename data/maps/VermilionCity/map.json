@@ -102,6 +102,7 @@
       "flag": "0"
     },
     {
+      "local_id": "LOCALID_VERMILION_FERRY_SAILOR",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_SAILOR",
       "x": 24,
@@ -304,6 +305,15 @@
       "flag": "FLAG_HIDDEN_ITEM_VERMILION_CITY_MAX_ETHER",
       "quantity": 1,
       "underfoot": false
+    }
+  ],
+  "heal_locations": [
+    {
+      "id": "HEAL_LOCATION_VERMILION_CITY",
+      "x": 15,
+      "y": 7,
+      "respawn_map": "MAP_VERMILION_CITY_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_VERMILION_NURSE"
     }
   ]
 }

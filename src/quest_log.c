@@ -67,10 +67,10 @@ struct FlagOrVarRecord
     u16 value;
 };
 
-u8 gQuestLogPlaybackState;
-u16 sMaxActionsInScene;
-struct FieldInput gQuestLogFieldInput;
-struct QuestLogAction * sCurSceneActions;
+COMMON_DATA u8 gQuestLogPlaybackState = 0;
+COMMON_DATA u16 sMaxActionsInScene = 0;
+COMMON_DATA struct FieldInput gQuestLogFieldInput = {0};
+COMMON_DATA struct QuestLogAction * sCurSceneActions = NULL;
 
 static struct FlagOrVarRecord * sFlagOrVarRecords;
 static u16 sNumFlagsOrVars;
@@ -1340,7 +1340,7 @@ void SaveQuestLogData(void)
 void QL_UpdateObject(struct Sprite *sprite)
 {
     struct ObjectEvent *objectEvent = &gObjectEvents[sprite->data[0]];
-    if (objectEvent->localId == OBJ_EVENT_ID_PLAYER)
+    if (objectEvent->localId == LOCALID_PLAYER)
     {
         if (sMovementScripts[0][0] != MOVEMENT_ACTION_NONE)
         {
