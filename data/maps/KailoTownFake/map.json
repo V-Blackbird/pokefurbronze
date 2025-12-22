@@ -22,6 +22,7 @@
   ],
   "object_events": [
     {
+      "local_id": "LOCALID_DAMIEN",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN",
       "x": 5,
@@ -36,6 +37,7 @@
       "flag": "0"
     },
     {
+      "local_id": "LOCALID_JOY",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_NURSE",
       "x": 17,
@@ -50,6 +52,7 @@
       "flag": "FLAG_HIDE_CUTSCENE_DUMMIES"
     },
     {
+      "local_id": "LOCALID_VICTOR",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_BLACKBIRD",
       "x": 4,
@@ -64,13 +67,7 @@
       "flag": "FLAG_HIDE_CUTSCENE_DUMMIES"
     }
   ],
-  "warp_events": [
-
-  ],
-  "coord_events": [
-
-  ],
-  "bg_events": [
-
-  ]
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": []
 }

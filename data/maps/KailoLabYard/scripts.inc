@@ -1,13 +1,3 @@
-.equ LOCALID_YORI, 6
-.equ LOCALID_GILAN, 4
-.equ LOCALID_GILAN1, 7
-.equ LOCALID_MARIE, 5
-.equ LOCALID_EVEREST, 1
-.equ LOCALID_VILL, 2
-.equ LOCALID_VICTORL, 8
-.equ LOCALID_VICTOR, 3
-.equ LOCALID_BALL, 9
-
 KailoLabYard_MapScripts::
 	.byte 0
 
@@ -84,18 +74,18 @@ KailoLabYard_StartBlackbirdMeeting::
   delay 5
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_VictorStandUp
   waitmovement 0
-  addobject LOCALID_YORI
+  addobject LOCALID_YORI_LAB
   message KailoLabYard_Text_StartBlackbirdMeeting_YoriHi
   waitmessage
   delay 85
   closemessage
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_Vill
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_YoriStart
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_YoriStart
   waitmovement 0
   msgbox KailoLabYard_Text_StartBlackbirdMeeting_YoriLate
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   msgbox KailoLabYard_Text_StartBlackbirdMeeting_VictorNotReally
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_YoriMiddle
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_YoriMiddle
   message KailoLabYard_Text_StartBlackbirdMeeting_YoriYes
   delay 50
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_PlayerTurn
@@ -122,41 +112,41 @@ KailoLabYard_StartBlackbirdMeeting::
   waitmovement 0
   msgbox KailoLabYard_Text_StartBlackbirdMeeting_VictorChoseOne
   closemessage
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   delay 50
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   delay 15
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   delay 50
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_YoriGilan
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_YoriGilan
   delay 50
   applymovement LOCALID_VILL, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   waitmovement 0
   delay 70
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   waitmovement 0
   delay 50
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
   message KailoLabYard_Text_StartBlackbirdMeeting_YoriLaugh1
   delay 50
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   waitmovement 0
   delay 25
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
   delay 10
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   waitmovement 0
   delay 10
   playmoncry SPECIES_EEVEE, CRY_MODE_NORMAL
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   waitmovement 0
   delay 10
@@ -192,7 +182,7 @@ KailoLabYard_StartBlackbirdMeeting::
   waitfanfare
   textcolor NPC_TEXT_COLOR_MALE
   setobjectmovementtype LOCALID_GILAN, MOVEMENT_TYPE_FACE_LEFT
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_YoriChosen
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_YoriChosen
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_GilanYori
   delay 25
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
@@ -375,7 +365,7 @@ KailoLabYard_GilanChose::
   end
   
 KailoLabYard_StartBlackbirdMeeting_RivalWalksToBulbasaur::
-	applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalWalksToBulbasaur
+	applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalWalksToBulbasaur
 	waitmovement 0
 	goto PalletTown_ProfessorOaksLab_EventScript_RivalTakesMarie
 	end
@@ -387,10 +377,10 @@ KailoLabYard_Tutorial_GiveBall::
   goto_if_eq PLAYER_STARTER_NUM, 2, KailoLabYard_Tutorial_GiveBallEverest
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_Tutorial_GiveBall
   delay 50
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   waitmovement 0
   delay 75
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   delay 10
   textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -403,7 +393,7 @@ KailoLabYard_Tutorial_GiveBall::
   waitmovement 0
   closemessage
   delay 50
-  applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalReact
+  applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalReact
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   msgbox KailoLabYard_Text_StarBlackbirdMeeting_YoriBalls
   waitmovement 0
@@ -432,10 +422,10 @@ KailoLabYard_Tutorial_GiveBall::
 KailoLabYard_Tutorial_GiveBallEverest::
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_Tutorial_GiveBallEverest
   delay 50
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   waitmovement 0
   delay 75
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   delay 10
   textcolor NPC_TEXT_COLOR_NEUTRAL
@@ -448,7 +438,7 @@ KailoLabYard_Tutorial_GiveBallEverest::
   waitmovement 0
   closemessage
   delay 50
-  applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalReact
+  applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalReact
   waitmovement 0
   delay 20
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
@@ -588,7 +578,7 @@ KailoLabYard_Tutorial_YoriCatchGilan::
   applymovement LOCALID_VILL, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   waitmovement 0
   applymovement LOCALID_EVEREST, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
@@ -598,7 +588,7 @@ KailoLabYard_Tutorial_YoriCatchGilan::
   waitmessage
   closemessage
   delay 25
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   fadeoutbgm 0
   playse SE_BALL_THROW
   addobject LOCALID_BALL
@@ -630,7 +620,7 @@ KailoLabYard_Tutorial_YoriCatchMarie::
   applymovement LOCALID_MARIE, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
   applymovement LOCALID_GILAN, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   waitmovement 0
   applymovement LOCALID_EVEREST, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
@@ -640,7 +630,7 @@ KailoLabYard_Tutorial_YoriCatchMarie::
   waitmessage
   closemessage
   delay 25
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   fadeoutbgm 0
   playse SE_BALL_THROW
   addobject LOCALID_BALL
@@ -696,7 +686,7 @@ KailoLabYard_YoriCatching::
   closemessage
   delay 50
   textcolor NPC_TEXT_COLOR_MALE
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   msgbox KailoLabYard_Text_StartBlackbirdMeeting_YoriIDidIt
   closemessage
   playbgm MUS_SEVII_67, 0
@@ -708,13 +698,13 @@ KailoLabYard_YoriCatching::
   end
 
 KailoLabYard_AfterTutorial_PlayerCatchEverest::
-  applymovement LOCALID_YORI KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+  applymovement LOCALID_YORI_LAB KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   removeobject LOCALID_BALL
   delay 50
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   waitmovement 0
   applymovement OBJ_EVENT_ID_PLAYER KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
-  applymovement LOCALID_YORI KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   msgbox KailoLabYard_Text_AfterTutorial_YourTurn
   closemessage
   applymovement LOCALID_EVEREST, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
@@ -854,13 +844,13 @@ KailoLabYard_Movement_CatchFailedEverestVictorWalkBack2::
   step_end
 
 KailoLabYard_AfterTutorial_PlayerCatchMarie::
-  applymovement LOCALID_YORI KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+  applymovement LOCALID_YORI_LAB KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   removeobject LOCALID_BALL
   delay 50
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
   applymovement OBJ_EVENT_ID_PLAYER KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
-  applymovement LOCALID_YORI KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   msgbox KailoLabYard_Text_AfterTutorial_YourTurn
   closemessage
   applymovement LOCALID_MARIE, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
@@ -999,7 +989,7 @@ KailoLabYard_Movement_CatchFailedMarieVillWalkBack::
 #############################################################################################################################
 
 KailoLabYard_AfterTutorial_PlayerCatchGilan::
-  applymovement LOCALID_YORI KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   removeobject LOCALID_BALL
   delay 50
   applymovement LOCALID_VICTOR, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
@@ -1035,7 +1025,7 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   playse SE_LEDGE
 
   delay 8
-  applymovement LOCALID_YORI, KailoLabYard_Movement_CatchFailedGilanYoriJump
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_CatchFailedGilanYoriJump
   playse SE_LEDGE
   message KailoLabYard_Text_AfterFailedBattle_Yori_Woah
   delay 12
@@ -1068,7 +1058,7 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   delay 4
   applymovement LOCALID_VILL, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   delay 100
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_MarieLookVictor
   delay 16
   applymovement LOCALID_VILL, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   delay 4
@@ -1090,10 +1080,10 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   waitmovement 0
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookMarie
   waitmovement 0
-  applymovement LOCALID_YORI, KailoLabYard_Movement_CatchFailedGilanYoriWalkBack
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_CatchFailedGilanYoriWalkBack
   msgbox KailoLabYard_Text_AfterFailedBattle_Yori_ThatWas
   waitmovement 0
-  applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+  applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
   msgbox KailoLabYard_Text_AfterFailedBattle_Yori_Unexpected
   waitmovement 0
   closemessage

@@ -22,6 +22,7 @@
   ],
   "object_events": [
     {
+      "local_id": "LOCALID_DAMIEN",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN",
       "x": 5,
@@ -36,6 +37,7 @@
       "flag": "0"
     },
     {
+      "local_id": "LOCALID_GIRL",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_WOMAN_1",
       "x": 17,
@@ -50,6 +52,7 @@
       "flag": "0"
     },
     {
+      "local_id": "LOCALID_SELLER",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_CLERK",
       "x": 24,
@@ -64,6 +67,7 @@
       "flag": "0"
     },
     {
+      "local_id": "LOCALID_JENNY",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN",
       "x": 14,
@@ -78,6 +82,7 @@
       "flag": "FLAG_HIDE_CUTSCENE_DUMMIES"
     },
     {
+      "local_id": "LOCALID_JENNY2",
       "type": "object",
       "graphics_id": "OBJ_EVENT_GFX_POLICEMAN",
       "x": 22,
@@ -156,7 +161,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 19,
+      "y": 18,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "1",
@@ -165,7 +170,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 19,
+      "y": 18,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "4",
@@ -174,7 +179,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 19,
+      "y": 18,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "2",
@@ -183,7 +188,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 19,
+      "y": 18,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "3",

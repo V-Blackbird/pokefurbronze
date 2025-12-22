@@ -1,6 +1,3 @@
-.equ LOCALID_YORI, 1
-.equ LOCALID_VILL, 2
-
 KailoTown_PlayersHouse_2F_MapScripts::
   map_script MAP_SCRIPT_ON_FRAME_TABLE, KailoTown_PlayersHouse_2F_OnFrame
   map_script MAP_SCRIPT_ON_LOAD, KailoTown_PlayersHouse_2F_OnLoad

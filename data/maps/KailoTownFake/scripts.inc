@@ -1,7 +1,3 @@
-.equ LOCALID_DAMIEN,  1
-.equ LOCALID_VICTOR,  3
-.equ LOCALID_JOY,  2
-
 KailoTownFake_MapScripts::
   map_script MAP_SCRIPT_ON_FRAME_TABLE, KailoTownFake_OnFrame
   map_script MAP_SCRIPT_ON_LOAD, KailoTownFake_OnLoad

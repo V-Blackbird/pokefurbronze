@@ -1,9 +1,3 @@
-.equ LOCALID_JENNY,  4
-.equ LOCALID_JENNY2,  5
-.equ LOCALID_GIRL,  2
-.equ LOCALID_SELLER, 3
-.equ LOCALID_DAMIEN, 1
-
 @ one tile run is 0.125 sec
 @ one tile walk is 0.25 sec
 
