@@ -515,8 +515,11 @@ static const u16 sSpeciesToHoennPokedexNum[NUM_SPECIES - 1] =
     SPECIES_TO_HOENN(CHIMECHO),
     SPECIES_TO_HOENN(VILL),
     SPECIES_TO_HOENN(MARIE),
+    SPECIES_TO_HOENN(MARIEF),
     SPECIES_TO_HOENN(GILAN),
+    SPECIES_TO_HOENN(GILANG),
     SPECIES_TO_HOENN(EVEREST),
+    SPECIES_TO_HOENN(EVERESTL),
 };
 
  // Assigns all species to the National Dex Index (Summary No. for National Dex)
@@ -935,8 +938,11 @@ static const u16 sSpeciesToNationalPokedexNum[NUM_SPECIES - 1] =
     SPECIES_TO_NATIONAL(CHIMECHO),
     SPECIES_TO_NATIONAL(VILL),
     SPECIES_TO_NATIONAL(MARIE),
+    SPECIES_TO_NATIONAL(MARIEF),
     SPECIES_TO_NATIONAL(GILAN),
+    SPECIES_TO_NATIONAL(GILANG),
     SPECIES_TO_NATIONAL(EVEREST),
+    SPECIES_TO_NATIONAL(EVERESTL),
 };
 
 // Assigns all Hoenn Dex Indexes to a National Dex Index

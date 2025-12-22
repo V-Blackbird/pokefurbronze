@@ -769,14 +769,29 @@ static const u16 sDexCategory_UrbanPkmn_Page10[] = {
 
 static const u16 sDexCategory_UrbanPkmn_Page11[] = {
     SPECIES_EEVEE,
-    SPECIES_VAPOREON,
-    SPECIES_JOLTEON,
-    SPECIES_FLAREON,
+    SPECIES_MARIE,
+    SPECIES_GILAN,
+    SPECIES_EVEREST,
 };
 
 static const u16 sDexCategory_UrbanPkmn_Page12[] = {
+    SPECIES_VAPOREON,
+    SPECIES_JOLTEON,
+    SPECIES_FLAREON,
+    SPECIES_MARIEF,
+};
+
+static const u16 sDexCategory_UrbanPkmn_Page13[] = {
     SPECIES_ESPEON,
     SPECIES_UMBREON,
+    SPECIES_GLACEON,
+    SPECIES_VILL,
+};
+
+static const u16 sDexCategory_UrbanPkmn_Page14[] = {
+    SPECIES_GILANG,
+    SPECIES_LEAFEON,
+    SPECIES_EVERESTL,
 };
 
 static const u16 sDexCategory_RarePkmn_Page1[] = {

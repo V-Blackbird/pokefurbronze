@@ -291,7 +291,24 @@ KailoTown_EventScript_WildBattleTest2::
   closemessage
   special StartStarterBattle
   waitstate
-  return
+  textcolor NPC_TEXT_COLOR_NEUTRAL
+	playfanfare MUS_OBTAIN_KEY_ITEM
+	message PalletTown_ProfessorOaksLab_Text_ReceivedPokedexFromOak
+	waitmessage
+	waitfanfare
+	call EventScript_RestorePrevTextColor
+	setflag FLAG_SYS_POKEDEX_GET
+	special SetUnlockedPokedexFlags
+  special EnableNationalPokedex
+  setvar VAR_MAP_SCENE_POKEMON_CENTER_TEALA, 1
+  givemon VAR_STARTER_MON, 5
+  givemon SPECIES_GILAN, 5
+  givemon SPECIES_EVEREST, 5
+  givemon SPECIES_MARIEF, 5
+  givemon SPECIES_GILANG, 5
+  givemon SPECIES_VILL, 5
+  setvar VAR_STARTER_MON, 0
+  release
   end
 
 KailoTown_Text_Try_Again::

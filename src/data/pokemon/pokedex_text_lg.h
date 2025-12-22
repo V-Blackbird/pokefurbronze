@@ -2711,58 +2711,51 @@ const u8 gDeoxysPokedexText[] = _(
 const u8 gDeoxysPokedexTextUnused[] = _("");
 
 const u8 gVillPokedexText[] = _(
-    "This is one of the PROF.\n"
-    "BLACKBIRD's POKéMON.\n"
-    "He said that it evolved from EEVEE\n"
-    "while exploring Sinnoh's cold areas.");
+    "One of the PROF. BLACKBIRD's\n"
+    "POKéMON. He said that it evolved\n"
+    "from EEVEE while exploring Sinnoh");
 
 const u8 gVillPokedexTextUnused[] = _("");
 
 const u8 gMariePokedexText[] = _(
-    "This is one of the PROF.\n"
-    "BLACKBIRD's POKéMON.\n"
-    "She's quite hardy and when she\n"
-    "bite it's somehow more painful.");
+    "One of PROF. BLACKBIRD's POKéMON.\n"
+    "She's quite hardy and when bites\n"
+    "it's somehow more painful.");
 
 const u8 gMariePokedexTextUnused[] = _("");
 
 const u8 gMarieFPokedexText[] = _(
-    "The EEVEE that PROF. BLACKBIRD gave\n"
-    "to me evolved into a FLAREON.\n"
-    "It's strange that it evolved without\n"
-    "the FIRE STONE, but that's great!");
+    "EEVEE that PROF. BLACKBIRD gave me\n"
+    "evolved into FLAREON. Strange that\n"
+    "she evolved without FIRE STONE...");
 
 const u8 gMarieFPokedexTextUnused[] = _("");
 
 const u8 gGilanPokedexText[] = _(
-    "This is one of the PROF.\n"
-    "BLACKBIRD's POKéMON.\n"
-    "That brown crazy furball never\n"
-    "knows when to slow down.");
+    "One of PROF. BLACKBIRD's POKéMON.\n"
+    "That brown crazy furball knows\n"
+    "never when to slow down.");
 
 const u8 gGilanPokedexTextUnused[] = _("");
 
 const u8 gGilanGPokedexText[] = _(
-    "The EEVEE that PROF. BLACKBIRD gave\n"
-    "to me evolved into a... GLACEON?.\n"
-    "It looks like that PROF's blue\n"
-    "POKéMON, and it's an Ice type now.");
+    "EEVEE that PROF. BLACKBIRD gave me\n"
+    "evolved into a... GLACEON? Looks\n"
+    "like PROF's blue POKéMON now...");
 
 const u8 gGilanGPokedexTextUnused[] = _("");
 
 const u8 gEverestPokedexText[] = _(
-    "This is one of the PROF.\n"
-    "BLACKBIRD's POKéMON.\n"
-    "He's quite sleepy but he's very\n"
-    "tough when he have to do something.");
+    "One of PROF. BLACKBIRD's POKéMON.\n"
+    "He's quite sleepy but very tough\n"
+    "when he have to do something.");
 
 const u8 gEverestPokedexTextUnused[] = _("");
 
 const u8 gEverestLPokedexText[] = _(
-    "The EEVEE that PROF. BLACKBIRD gave\n"
-    "to me evolved into L-LEA-LEAFEON?.\n"
-    "It's a Grass type POKéMON that uses\n"
-    "photosynthesis to regenerate itself.");
+    "EEVEE that PROF. BLACKBIRD gave me\n"
+    "evolved into L-LEA-LEAFEON?. GRASS\n"
+    "POKéMON feeding on photosynthesis...");
 
 const u8 gEverestLPokedexTextUnused[] = _("");
 
@@ -2777,7 +2770,7 @@ const u8 gLeafeonPokedexTextUnused[] = _("");
 const u8 gGlaceonPokedexText[] = _(
     "It can control its body temperature\n"
     "at will. This enables it to freeze the\n"
-    "moisture in the atmosphere, creating\n"
+    "moisture in the atmosphere, creating\p"
     "flurries of diamond dust.");
 
 const u8 gGlaceonPokedexTextUnused[] = _("");

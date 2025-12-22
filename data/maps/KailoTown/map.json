@@ -161,7 +161,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 18,
+      "y": 19,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "1",
@@ -170,7 +170,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 18,
+      "y": 19,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "4",
@@ -179,7 +179,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 18,
+      "y": 19,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "2",
@@ -188,7 +188,7 @@
     {
       "type": "trigger",
       "x": 21,
-      "y": 18,
+      "y": 19,
       "elevation": 0,
       "var": "VAR_MAP_SCENE_PALLET_TOWN_PROFESSOR_OAKS_LAB",
       "var_value": "3",

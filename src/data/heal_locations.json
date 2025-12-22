@@ -166,7 +166,7 @@
       "x": 21,
       "y": 18,
       "respawn_map": "MAP_KAILO_TOWN_POKEMON_CENTER_1F",
-      "respawn_npc": "LOCALID_KAILO_TOWN_NURSE"
+      "respawn_npc": "LOCALID_DOCTOR"
     },
     {
       "id": "HEAL_LOCATION_HOME",

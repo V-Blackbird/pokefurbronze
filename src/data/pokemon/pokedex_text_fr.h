@@ -2728,10 +2728,9 @@ const u8 gVillPokedexText[] = _(
 const u8 gVillPokedexTextUnused[] = _("");
 
 const u8 gMariePokedexText[] = _(
-    "It's a daughter of that PROF.\n"
-    "BLACKBIRD's blue POKéMON.\n"
-    "I saw the bite marks on PROF's\n"
-    "hand, it have to be strong...");
+    "It's a daughter of that PROF. BLACKBIRD's\n"
+    " blue POKéMON. I saw the bite marks\n"
+    "PROF's hand, it have to be strong...");
 
 const u8 gMariePokedexTextUnused[] = _("");
 

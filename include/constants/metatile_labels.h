@@ -78,9 +78,6 @@
 #define METATILE_KailoTown_Plain_Grass             0x328
 #define METATILE_KailoTown_WideTreeTopRight_Grass  0x3D7
 
-// gTileset_Lavaridge
-#define METATILE_Lavaridge_NormalGrass  0x206
-
 // gTileset_LavenderTown
 #define METATILE_LavenderTown_Door  0x2A2
 

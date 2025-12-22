@@ -2873,7 +2873,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.shadowColor = 2;
 
         length = GetStringWidth(FONT_NORMAL, gPokedexEntries[species].description, 0);
-        xCenter = x + (240 - length) / 2;
+        xCenter = x + (240 - length) / 4;
 
         if (xCenter > 0)
             x = xCenter;
