@@ -23,3 +23,8 @@ jobs:
       run: make -j$(nproc); make leafgreen
     - name: make _rev files
       run: make firered_rev1; make leafgreen_rev1
+    - name: Upload ROM artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: rom-builds
+        path: pokeiceturquoise.gba; pokemindpink.gba; pokeiceturquoise_rev1.gba; pokemindpink_rev1.gba
