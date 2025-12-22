@@ -33,5 +33,5 @@ jobs:
     - name: Upload SHA1 files
       uses: actions/upload-artifact@v4
       with:
-      name: sha1s
-      path: pokeiceturquoise.sha1; pokemindpink.sha1; pokeiceturquoise_rev1.sha1; pokemindpink_rev1.sha1
+        name: sha1s
+        path: pokeiceturquoise.sha1; pokemindpink.sha1; pokeiceturquoise_rev1.sha1; pokemindpink_rev1.sha1
