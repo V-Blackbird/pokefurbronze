@@ -27,11 +27,19 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: rom-builds
-        path: pokeiceturquoise.gba; pokemindpink.gba; pokeiceturquoise_rev1.gba; pokemindpink_rev1.gba
+        path: |
+          pokeiceturquoise.gba
+          pokemindpink.gba
+          pokeiceturquoise_rev1.gba
+          pokemindpink_rev1.gba
     - name: Save SHA1 hashes
       run: sha1sum pokeiceturquoise.gba > pokeiceturquoise.sha1; sha1sum pokemindpink.gba > pokemindpink.sha1; sha1sum pokeiceturquoise_rev1.gba > pokeiceturquoise_rev1.sha1; sha1sum pokemindpink_rev1.gba > pokemindpink_rev1.sha1
     - name: Upload SHA1 files
       uses: actions/upload-artifact@v4
       with:
         name: sha1s
-        path: pokeiceturquoise.sha1; pokemindpink.sha1; pokeiceturquoise_rev1.sha1; pokemindpink_rev1.sha1
+        path: |
+          pokeiceturquoise.sha1
+          pokemindpink.sha1
+          pokeiceturquoise_rev1.sha1
+          pokemindpink_rev1.sha1
