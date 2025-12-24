@@ -1,7 +1,9 @@
 #include "global.h"
 #include "pokedex.h"
 #include "pokedex_screen.h"
-#include "data/pokemon/pokedex_orders.h"
+
+// External declarations for pokedex order arrays
+extern const u16 gPokedexOrder_Kanto[];
 
 // Unused
 const u8 *GetPokedexCategoryName(u16 dexNum)
