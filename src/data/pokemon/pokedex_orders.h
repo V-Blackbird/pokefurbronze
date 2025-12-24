@@ -1357,9 +1357,13 @@ const u16 gPokedexOrder_Kanto[] =
     NATIONAL_DEX_LAPRAS,
     NATIONAL_DEX_DITTO,
     NATIONAL_DEX_EEVEE,
+    NATIONAL_DEX_MARIE,     // 133.1 - Eevee fabular variant
+    NATIONAL_DEX_GILAN,     // 133.2 - Eevee fabular variant
+    NATIONAL_DEX_EVEREST,   // 133.3 - Eevee fabular variant
     NATIONAL_DEX_VAPOREON,
     NATIONAL_DEX_JOLTEON,
     NATIONAL_DEX_FLAREON,
+    NATIONAL_DEX_MARIEF,    // 136.1 - Flareon fabular variant
     NATIONAL_DEX_PORYGON,
     NATIONAL_DEX_OMANYTE,
     NATIONAL_DEX_OMASTAR,
@@ -1375,6 +1379,12 @@ const u16 gPokedexOrder_Kanto[] =
     NATIONAL_DEX_DRAGONITE,
     NATIONAL_DEX_MEWTWO,
     NATIONAL_DEX_MEW,
+    // Gen 4 and fabular variants at the end
+    NATIONAL_DEX_LEAFEON,   // 470
+    NATIONAL_DEX_EVERESTL,  // 470.1 - Leafeon fabular variant
+    NATIONAL_DEX_GLACEON,   // 471
+    NATIONAL_DEX_VILL,      // 471.1 - Glaceon fabular variant
+    NATIONAL_DEX_GILANG,    // 471.2 - Glaceon fabular variant
 };
 
 const u16 gPokedexOrder_Type[] =
