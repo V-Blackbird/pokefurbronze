@@ -1387,6 +1387,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
+    case DEX_ORDER_KANTO:
         for (i = 0; i < KANTO_DEX_COUNT; i++)
         {
             ndex_num = KantoToNationalOrder(i + 1);
@@ -1470,24 +1471,6 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
                     ret++;
                 }
             }
-        }
-        break;
-    case DEX_ORDER_KANTO:
-        for (i = 0; i < KANTO_DEX_COUNT; i++)
-        {
-            ndex_num = KantoToNationalOrder(i + 1);
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-            if (seen)
-            {
-                sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                ret = ndex_num;
-            }
-            else
-            {
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
-            }
-            sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
         }
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:

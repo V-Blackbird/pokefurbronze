@@ -158,14 +158,15 @@ bool16 HasAllMons(void)
             return FALSE;
     }
 
-    // -3 excludes Lugia, Ho-Oh, and Celebi from Johto range
+    // Check Johto range, -3 excludes Lugia, Ho-Oh, and Celebi
+    // Start from Chikorita (159), which is NATIONAL_DEX_MEW + 1
     for (i = NATIONAL_DEX_MEW; i < JOHTO_DEX_COUNT - 3; i++)
     {
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
             return FALSE;
     }
 
-    // -2 excludes Jirachi and Deoxys from National range
+    // -2 excludes Jirachi and Deoxys from remaining mons
     for (i = JOHTO_DEX_COUNT; i < NATIONAL_DEX_COUNT - 2; i++)
     {
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
