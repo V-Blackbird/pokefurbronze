@@ -1,6 +1,7 @@
 #include "global.h"
 #include "pokedex.h"
 #include "pokedex_screen.h"
+#include "data/pokemon/pokedex_orders.h"
 
 // Unused
 const u8 *GetPokedexCategoryName(u16 dexNum)
@@ -24,6 +25,30 @@ u16 GetPokedexHeightWeight(u16 dexNum, u8 data)
 s8 GetSetPokedexFlag(u16 nationalDexNo, u8 caseID)
 {
     return DexScreen_GetSetPokedexFlag(nationalDexNo, caseID, 0);
+}
+
+// Convert Kanto dex number to National dex number
+u16 KantoToNationalOrder(u16 kantoDexNum)
+{
+    if (kantoDexNum == 0 || kantoDexNum > KANTO_DEX_COUNT)
+        return 0;
+    return gPokedexOrder_Kanto[kantoDexNum - 1];
+}
+
+// Convert National dex number to Kanto dex number (returns 0 if not in Kanto dex)
+u16 NationalToKantoOrder(u16 nationalDexNum)
+{
+    u16 i;
+    
+    if (nationalDexNum == 0)
+        return 0;
+        
+    for (i = 0; i < KANTO_DEX_COUNT; i++)
+    {
+        if (gPokedexOrder_Kanto[i] == nationalDexNum)
+            return i + 1;
+    }
+    return 0;
 }
 
 u16 GetNationalPokedexCount(u8 caseID)
@@ -82,11 +107,11 @@ u16 GetKantoPokedexCount(u8 caseID)
         switch (caseID)
         {
         case FLAG_GET_SEEN:
-            if (GetSetPokedexFlag(i + 1, FLAG_GET_SEEN))
+            if (GetSetPokedexFlag(KantoToNationalOrder(i + 1), FLAG_GET_SEEN))
                 count++;
             break;
         case FLAG_GET_CAUGHT:
-            if (GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
+            if (GetSetPokedexFlag(KantoToNationalOrder(i + 1), FLAG_GET_CAUGHT))
                 count++;
             break;
         }
@@ -114,7 +139,7 @@ bool16 HasAllKantoMons(void)
     // -1 excludes Mew
     for (i = 0; i < KANTO_DEX_COUNT - 1; i++)
     {
-        if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
+        if (!GetSetPokedexFlag(KantoToNationalOrder(i + 1), FLAG_GET_CAUGHT))
             return FALSE;
     }
     return TRUE;
@@ -124,21 +149,21 @@ bool16 HasAllMons(void)
 {
     u16 i;
 
-    // -1 excludes Mew
+    // -1 excludes Mew from Kanto dex
     for (i = 0; i < KANTO_DEX_COUNT - 1; i++)
     {
-        if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
+        if (!GetSetPokedexFlag(KantoToNationalOrder(i + 1), FLAG_GET_CAUGHT))
             return FALSE;
     }
 
-    // -3 excludes Lugia, Ho-Oh, and Celebi
-    for (i = KANTO_DEX_COUNT; i < JOHTO_DEX_COUNT - 3; i++)
+    // -3 excludes Lugia, Ho-Oh, and Celebi from Johto range
+    for (i = NATIONAL_DEX_MEW; i < JOHTO_DEX_COUNT - 3; i++)
     {
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))
             return FALSE;
     }
 
-    // -2 excludes Jirachi and Deoxys
+    // -2 excludes Jirachi and Deoxys from National range
     for (i = JOHTO_DEX_COUNT; i < NATIONAL_DEX_COUNT - 2; i++)
     {
         if (!GetSetPokedexFlag(i + 1, FLAG_GET_CAUGHT))

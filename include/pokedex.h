@@ -128,6 +128,8 @@ u16 GetKantoPokedexCount(u8);
 bool16 HasAllHoennMons(void);
 bool16 HasAllKantoMons(void);
 bool16 HasAllMons(void);
+u16 KantoToNationalOrder(u16 kantoDexNum);
+u16 NationalToKantoOrder(u16 nationalDexNum);
 
 u8 DexScreen_RegisterMonToPokedex(u16 species);
 
