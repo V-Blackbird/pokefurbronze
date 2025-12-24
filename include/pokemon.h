@@ -375,6 +375,7 @@ u16 SpeciesToNationalPokedexNum(u16 species);
 u16 HoennToNationalOrder(u16 hoennNum);
 u16 KantoToNationalOrder(u16 kantoNum);
 u8 GetPokedexVariantNumber(u16 species);
+u16 GetPokedexVariantBase(u16 species);
 u16 SpeciesToCryId(u16 species);
 void DrawSpindaSpots(u16 species, u32 personality, u8 *dest, bool8 isFrontPic);
 void EvolutionRenameMon(struct Pokemon *mon, u16 oldSpecies, u16 newSpecies);

@@ -111,8 +111,9 @@ bool16 HasAllKantoMons(void)
 {
     u16 i;
 
-    // -1 excludes Mew
-    for (i = 0; i < KANTO_DEX_COUNT - 1; i++)
+    // Excludes Mew (#151) and the 7 Fabular Pokemon (152-158 in Kanto Dex)
+    // Only checks original 150 Kanto Pokemon (Bulbasaur through Mewtwo)
+    for (i = 0; i < 150; i++)
     {
         if (!GetSetPokedexFlag(KantoToNationalOrder(i + 1), FLAG_GET_CAUGHT))
             return FALSE;

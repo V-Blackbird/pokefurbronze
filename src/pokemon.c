@@ -1508,9 +1508,13 @@ static const u16 sKantoToNationalOrder[KANTO_DEX_COUNT] =
     KANTO_TO_NATIONAL(LAPRAS),
     KANTO_TO_NATIONAL(DITTO),
     KANTO_TO_NATIONAL(EEVEE),
+    KANTO_TO_NATIONAL(MARIE),      // Fabular variant of Eevee - displays as "133/1"
+    KANTO_TO_NATIONAL(GILAN),      // Fabular variant of Eevee - displays as "133/2"
+    KANTO_TO_NATIONAL(EVEREST),    // Fabular variant of Eevee - displays as "133/3"
     KANTO_TO_NATIONAL(VAPOREON),
     KANTO_TO_NATIONAL(JOLTEON),
     KANTO_TO_NATIONAL(FLAREON),
+    KANTO_TO_NATIONAL(MARIEF),     // Fabular variant of Flareon - displays as "136/1"
     KANTO_TO_NATIONAL(PORYGON),
     KANTO_TO_NATIONAL(OMANYTE),
     KANTO_TO_NATIONAL(OMASTAR),
@@ -1526,6 +1530,10 @@ static const u16 sKantoToNationalOrder[KANTO_DEX_COUNT] =
     KANTO_TO_NATIONAL(DRAGONITE),
     KANTO_TO_NATIONAL(MEWTWO),
     KANTO_TO_NATIONAL(MEW),
+    // Fabular Pokemon at end of Kanto Dex (variants of Leafeon and Glaceon)
+    KANTO_TO_NATIONAL(VILL),       // Variant of Glaceon - displays as "471/1" (or "398/1" if using current numbering)
+    KANTO_TO_NATIONAL(GILANG),     // Variant of Glaceon - displays as "471/2" (or "398/2" if using current numbering)
+    KANTO_TO_NATIONAL(EVERESTL),   // Variant of Leafeon - displays as "470/1" (or "397/1" if using current numbering)
 };
 
 static const struct SpindaSpot sSpindaSpotGraphics[] =
@@ -5421,12 +5429,60 @@ u8 GetPokedexVariantNumber(u16 species)
 {
     switch (species)
     {
+    // Eevee variants (National Dex #133)
     case SPECIES_MARIE:    // Variant of Eevee
         return 1;
     case SPECIES_GILAN:    // Variant of Eevee
         return 2;
+    case SPECIES_EVEREST:  // Variant of Eevee
+        return 3;
+    
+    // Flareon variant (National Dex #136)
     case SPECIES_MARIEF:   // Variant of Flareon
         return 1;
+    
+    // Glaceon variants (National Dex #471 if using official numbers, currently #398)
+    case SPECIES_VILL:     // Variant of Glaceon
+        return 1;
+    case SPECIES_GILANG:   // Variant of Glaceon
+        return 2;
+    
+    // Leafeon variant (National Dex #470 if using official numbers, currently #397)
+    case SPECIES_EVERESTL: // Variant of Leafeon
+        return 1;
+    
+    default:
+        return 0;
+    }
+}
+
+// Returns the base Pokemon's National Dex number for variant Pokemon
+// For non-variant Pokemon, returns 0 (indicating to use their actual National Dex number)
+u16 GetPokedexVariantBase(u16 species)
+{
+    switch (species)
+    {
+    // Eevee variants → display as 133
+    case SPECIES_MARIE:
+    case SPECIES_GILAN:
+    case SPECIES_EVEREST:
+        return NATIONAL_DEX_EEVEE;
+    
+    // Flareon variant → display as 136
+    case SPECIES_MARIEF:
+        return NATIONAL_DEX_FLAREON;
+    
+    // Glaceon variants → display as current Glaceon number (398)
+    // TODO: Change to 471 when giving Glaceon its official number
+    case SPECIES_VILL:
+    case SPECIES_GILANG:
+        return NATIONAL_DEX_GLACEON;
+    
+    // Leafeon variant → display as current Leafeon number (397)
+    // TODO: Change to 470 when giving Leafeon its official number
+    case SPECIES_EVERESTL:
+        return NATIONAL_DEX_LEAFEON;
+    
     default:
         return 0;
     }

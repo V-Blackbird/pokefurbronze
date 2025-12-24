@@ -2214,9 +2214,16 @@ static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOf
 
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
 {
-    u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u16 dexNum;
     u8 variantNum = GetPokedexVariantNumber(species);
+    u16 baseNum = GetPokedexVariantBase(species);
     u8 buff[8];
+    
+    // For variants, display the base Pokemon's number; otherwise use actual National Dex number
+    if (baseNum > 0)
+        dexNum = baseNum;
+    else
+        dexNum = SpeciesToNationalPokedexNum(species);
     
     DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
     
