@@ -2220,9 +2220,10 @@ static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u
     
     DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
     
-    if (variantNum > 0)
+    if (variantNum > 0 && variantNum <= 9)
     {
         // Display as "XXX/Y" for variants (e.g., "133/1" for MARIE)
+        // Only supports single-digit variants (1-9)
         buff[0] = (dexNum / 100) + CHAR_0;
         buff[1] = ((dexNum % 100) / 10) + CHAR_0;
         buff[2] = (dexNum % 10) + CHAR_0;
