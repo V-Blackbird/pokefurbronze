@@ -785,6 +785,9 @@ static void Task_EvolutionScene(u8 taskId)
 				SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
 				CalculateMonStats(mon);
 				EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
+                if (gTasks[taskId].tPostEvoSpecies == SPECIES_MARIEF)
+                    GetSetPokedexFlag(SPECIES_FLAREON, FLAG_SET_SEEN);
+				    GetSetPokedexFlag(SPECIES_FLAREON, FLAG_SET_CAUGHT);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
 				IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);
@@ -798,6 +801,9 @@ static void Task_EvolutionScene(u8 taskId)
 				SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
 				CalculateMonStats(mon);
 				EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
+                if (gTasks[taskId].tPostEvoSpecies == SPECIES_GILANG)
+                    GetSetPokedexFlag(SPECIES_GLACEON, FLAG_SET_SEEN);
+				    GetSetPokedexFlag(SPECIES_GLACEON, FLAG_SET_CAUGHT);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
 				IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);
@@ -811,6 +817,9 @@ static void Task_EvolutionScene(u8 taskId)
 				SetMonData(mon, MON_DATA_SPECIES, (void *)(&gTasks[taskId].tPostEvoSpecies));
 				CalculateMonStats(mon);
 				EvolutionRenameMon(mon, gTasks[taskId].tPreEvoSpecies, gTasks[taskId].tPostEvoSpecies);
+                if (gTasks[taskId].tPostEvoSpecies == SPECIES_EVERESTL)
+                    GetSetPokedexFlag(SPECIES_LEAFEON, FLAG_SET_SEEN);
+				    GetSetPokedexFlag(SPECIES_LEAFEON, FLAG_SET_CAUGHT);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_SEEN);
 				GetSetPokedexFlag(SpeciesToNationalPokedexNum(gTasks[taskId].tPostEvoSpecies), FLAG_SET_CAUGHT);
 				IncrementGameStat(GAME_STAT_EVOLVED_POKEMON);

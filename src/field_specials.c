@@ -1536,12 +1536,12 @@ u16 GetStarterSpecies(void)
 
 void SetSeenMon(void)
 {
-    GetSetPokedexFlag(SpeciesToNationalPokedexNum(gSpecialVar_0x8004), 2);
+    GetSetPokedexFlag(SpeciesToNationalPokedexNum(gSpecialVar_0x8004), FLAG_SET_SEEN);
 }
 
 void SetCaughtMon(void)
 {
-    GetSetPokedexFlag(SpeciesToNationalPokedexNum(gSpecialVar_0x8004), 1);
+    GetSetPokedexFlag(SpeciesToNationalPokedexNum(gSpecialVar_0x8004), FLAG_SET_CAUGHT);
 }
 
 void ResetContextNpcTextColor(void)

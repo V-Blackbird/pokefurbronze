@@ -774,6 +774,18 @@ KailoLabYard_AfterTutorial_PlayerCatchEverestFailed::
   special StartStarterBattle
   waitstate
   setvar VAR_STARTER_MON, 2
+  setvar VAR_0x8004, SPECIES_EEVEE
+  special SetSeenMon
+  special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_GLACEON
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_MARIE
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_GILAN
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_VILL
+  special SetSeenMon
+  special SetCaughtMon
   return
   end
 
@@ -919,6 +931,17 @@ KailoLabYard_AfterTutorial_PlayerCatchMarieFailed::
   special StartStarterBattle
   waitstate
   setvar VAR_STARTER_MON, 0
+  setvar VAR_0x8004, SPECIES_EEVEE
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_GLACEON
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_GILAN
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_EVEREST
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_VILL
+  special SetSeenMon
+  special SetCaughtMon
   return
   end
 
@@ -1023,7 +1046,6 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   playmoncry SPECIES_EEVEE, CRY_MODE_HIGH_PITCH
   applymovement LOCALID_GILAN, KailoLabYard_Movement_CatchFailedGilan
   playse SE_LEDGE
-
   delay 8
   applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_CatchFailedGilanYoriJump
   playse SE_LEDGE
@@ -1034,7 +1056,6 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   closemessage
   applymovement OBJ_EVENT_ID_PLAYER, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
   waitmovement 0
-
   delay 50
   playmoncry SPECIES_VILL, CRY_MODE_DOUBLES
   applymovement LOCALID_VILL, KailoLabYard_Movement_CatchFailedGilanVillWalk
@@ -1091,6 +1112,17 @@ KailoLabYard_AfterTutorial_PlayerCatchGilanFailed::
   special StartStarterBattle
   waitstate
   setvar VAR_STARTER_MON, 2
+  setvar VAR_0x8004, SPECIES_EEVEE
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_GLACEON
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_MARIE
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_EVEREST
+  special SetSeenMon
+  setvar VAR_0x8004, SPECIES_VILL
+  special SetSeenMon
+  special SetCaughtMon
   return
   end
 

@@ -769,28 +769,31 @@ static const u16 sDexCategory_UrbanPkmn_Page10[] = {
 
 static const u16 sDexCategory_UrbanPkmn_Page11[] = {
     SPECIES_EEVEE,
+    SPECIES_VAPOREON,
+    SPECIES_JOLTEON,
+    SPECIES_FLAREON,
+};
+
+static const u16 sDexCategory_UrbanPkmn_Page12[] = {
+    SPECIES_ESPEON,
+    SPECIES_UMBREON,
+    SPECIES_LEAFEON,
+    SPECIES_GLACEON,
+};
+
+static const u16 sDexCategory_UrbanPkmn_Page13[] = {
+    SPECIES_VILL,
+};
+
+static const u16 sDexCategory_UrbanPkmn_Page14[] = {
     SPECIES_MARIE,
     SPECIES_GILAN,
     SPECIES_EVEREST,
 };
 
-static const u16 sDexCategory_UrbanPkmn_Page12[] = {
-    SPECIES_VAPOREON,
-    SPECIES_JOLTEON,
-    SPECIES_FLAREON,
+static const u16 sDexCategory_UrbanPkmn_Page15[] = {
     SPECIES_MARIEF,
-};
-
-static const u16 sDexCategory_UrbanPkmn_Page13[] = {
-    SPECIES_ESPEON,
-    SPECIES_UMBREON,
-    SPECIES_GLACEON,
-    SPECIES_VILL,
-};
-
-static const u16 sDexCategory_UrbanPkmn_Page14[] = {
     SPECIES_GILANG,
-    SPECIES_LEAFEON,
     SPECIES_EVERESTL,
 };
 
@@ -987,6 +990,9 @@ static const struct PokedexCategoryPage sDexCategory_UrbanPkmn[] = {
     DEX_CATEGORY(UrbanPkmn_Page10),
     DEX_CATEGORY(UrbanPkmn_Page11),
     DEX_CATEGORY(UrbanPkmn_Page12),
+    DEX_CATEGORY(UrbanPkmn_Page13),
+    DEX_CATEGORY(UrbanPkmn_Page14),
+    DEX_CATEGORY(UrbanPkmn_Page15),
 };
 
 static const struct PokedexCategoryPage sDexCategory_RarePkmn[] = {
