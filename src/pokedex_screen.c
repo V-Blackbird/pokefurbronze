@@ -364,7 +364,6 @@ static const struct ListMenuItem sListMenuItems_NatDexModeSelect[] = {
     {gText_PokemonList,                  LIST_HEADER},
     {gText_NumericalModeKanto,           DEX_MODE(NUMERICAL_KANTO)},
     {gText_NumericalModeNational,        DEX_MODE(NUMERICAL_NATIONAL)},
-    {gText_KantoDex,                     DEX_MODE(KANTO)},
     {gText_PokemonHabitats,              LIST_HEADER},
     {gText_DexCategory_GrasslandPkmn,    DEX_CATEGORY_GRASSLAND},
     {gText_DexCategory_ForestPkmn,       DEX_CATEGORY_FOREST},
@@ -490,10 +489,6 @@ static const struct PokedexScreenWindowGfx sTopMenuSelectionIconGfxPtrs[] = {
     [DEX_MODE(SMALLEST)] = {
         .tiles = sTopMenuIconTiles_Smallest,
         .pal   = sTopMenuIconPals_Smallest
-    },
-    [DEX_MODE(KANTO)] = {
-        .tiles = sTopMenuIconTiles_Numerical,
-        .pal   = sTopMenuIconPals_Numerical
     },
     [DEX_MODE(NUMERICAL_NATIONAL)] = {
         .tiles = sTopMenuIconTiles_Numerical,
@@ -1069,7 +1064,6 @@ static void Task_PokedexScreen(u8 taskId)
                 break;
             case DEX_MODE(NUMERICAL_KANTO):
             case DEX_MODE(NUMERICAL_NATIONAL):
-            case DEX_MODE(KANTO):
                 RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
                 sPokedexScreenData->dexOrderId = sPokedexScreenData->modeSelectInput - DEX_CATEGORY_COUNT;
                 BeginNormalPaletteFade(~0x8000, 0, 0, 16, RGB_WHITEALPHA);
@@ -1387,7 +1381,6 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
-    case DEX_ORDER_KANTO:
         for (i = 0; i < KANTO_DEX_COUNT; i++)
         {
             ndex_num = KantoToNationalOrder(i + 1);
@@ -1501,7 +1494,6 @@ static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate *
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
-    case DEX_ORDER_KANTO:
         sPokedexScreenData->orderedListMenuTaskId = ListMenuInitInRect(template, sListMenuRects_OrderedList, sPokedexScreenData->kantoOrderMenuCursorPos, sPokedexScreenData->kantoOrderMenuItemsAbove);
         break;
     case DEX_ORDER_ATOZ:
@@ -1522,7 +1514,6 @@ static void DexScreen_DestroyDexOrderListMenu(u8 order)
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
-    case DEX_ORDER_KANTO:
         DestroyListMenuTask(sPokedexScreenData->orderedListMenuTaskId, &sPokedexScreenData->kantoOrderMenuCursorPos, &sPokedexScreenData->kantoOrderMenuItemsAbove);
         break;
     case DEX_ORDER_ATOZ:
@@ -2049,7 +2040,6 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction)
     {
     default:
     case DEX_ORDER_NUMERICAL_KANTO:
-    case DEX_ORDER_KANTO:
         cursorPos_p = &sPokedexScreenData->kantoOrderMenuCursorPos;
         itemsAbove_p = &sPokedexScreenData->kantoOrderMenuItemsAbove;
         break;
