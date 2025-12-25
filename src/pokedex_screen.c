@@ -1389,7 +1389,6 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             if (seen)
             {
                 sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                ret = ndex_num;
             }
             else
             {
@@ -1397,7 +1396,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             }
             sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
         }
-        break;
+        return KANTO_DEX_COUNT;
     case DEX_ORDER_ATOZ:
         for (i = 0; i < NUM_SPECIES - 1; i++)
         {
@@ -1475,7 +1474,6 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             if (seen)
             {
                 sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
-                ret = ndex_num;
             }
             else
             {
@@ -1483,7 +1481,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
             }
             sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
         }
-        break;
+        return NATIONAL_DEX_COUNT;
     }
     return ret;
 }
