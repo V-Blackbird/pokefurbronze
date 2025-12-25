@@ -1466,16 +1466,27 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
         }
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
-        // Iterate through species and get their National Dex numbers
-        // This avoids creating "000" entries for gaps (e.g., 387-469, 472-1249)
+        // Build list in National Dex number order by checking each dex number
+        // and finding its species. This maintains proper ordering.
         {
             u16 listIndex = 0;
             u16 species;
-            // Loop through all valid species (excluding SPECIES_EGG and Unown forms)
+            u16 maxNdexNum = 0;
+            
+            // First, find the maximum National Dex number we need to check
             for (species = SPECIES_BULBASAUR; species <= SPECIES_EVERESTL; species++)
             {
                 ndex_num = SpeciesToNationalPokedexNum(species);
-                if (ndex_num == 0) // Skip species with no National Dex number
+                if (ndex_num > maxNdexNum)
+                    maxNdexNum = ndex_num;
+            }
+            
+            // Now iterate through National Dex numbers in order
+            for (ndex_num = 1; ndex_num <= maxNdexNum; ndex_num++)
+            {
+                species = NationalPokedexNumToSpecies(ndex_num);
+                // Skip if no valid species or beyond our range
+                if (species == 0 || species > SPECIES_EVERESTL)
                     continue;
                 
                 seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
