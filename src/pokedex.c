@@ -16,13 +16,13 @@ struct FractionalDexEntry
 
 static const struct FractionalDexEntry sFractionalDexEntries[] =
 {
-    {SPECIES_MARIE,    133, 1},  // 133.1 (Eevee variant)
-    {SPECIES_GILAN,    133, 2},  // 133.2 (Eevee variant)
-    {SPECIES_EVEREST,  133, 3},  // 133.3 (Eevee variant)
-    {SPECIES_MARIEF,   136, 1},  // 136.1 (Flareon variant)
-    {SPECIES_EVERESTL, 470, 1},  // 470.1 (Leafeon variant)
     {SPECIES_VILL,     471, 1},  // 471.1 (Glaceon variant)
+    {SPECIES_MARIE,    133, 1},  // 133.1 (Eevee variant)
+    {SPECIES_MARIEF,   136, 1},  // 136.1 (Flareon variant)
+    {SPECIES_GILAN,    133, 2},  // 133.2 (Eevee variant)
     {SPECIES_GILANG,   471, 2},  // 471.2 (Glaceon variant)
+    {SPECIES_EVEREST,  133, 3},  // 133.3 (Eevee variant)
+    {SPECIES_EVERESTL, 470, 1},  // 470.1 (Leafeon variant)
 };
 
 #define NUM_FRACTIONAL_DEX_ENTRIES ARRAY_COUNT(sFractionalDexEntries)
