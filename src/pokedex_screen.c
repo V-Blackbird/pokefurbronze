@@ -1471,17 +1471,9 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
         {
             u16 listIndex = 0;
             u16 species;
-            u16 maxNdexNum = 0;
+            u16 maxNdexNum = NATIONAL_DEX_EVERESTL;  // Hard cap at EVERESTL (1256)
             
-            // First, find the maximum National Dex number we need to check
-            for (species = SPECIES_BULBASAUR; species <= SPECIES_EVERESTL; species++)
-            {
-                ndex_num = SpeciesToNationalPokedexNum(species);
-                if (ndex_num > maxNdexNum)
-                    maxNdexNum = ndex_num;
-            }
-            
-            // Now iterate through National Dex numbers in order
+            // Iterate through National Dex numbers in order, up to EVERESTL
             for (ndex_num = 1; ndex_num <= maxNdexNum; ndex_num++)
             {
                 species = NationalPokedexNumToSpecies(ndex_num);
