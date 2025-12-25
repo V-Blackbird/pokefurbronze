@@ -1383,7 +1383,7 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
     case DEX_ORDER_NUMERICAL_KANTO:
         for (i = 0; i < KANTO_DEX_COUNT; i++)
         {
-            ndex_num = i + 1;
+            ndex_num = KantoToNationalOrder(i + 1);
             seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
             if (seen)
