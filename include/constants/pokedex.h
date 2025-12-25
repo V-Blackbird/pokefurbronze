@@ -396,8 +396,8 @@ enum {
     //Sinnoh (with official National Dex numbers)
     NATIONAL_DEX_LEAFEON = 470,
     NATIONAL_DEX_GLACEON = 471,
-    //Fabular (moved to 1250+ range for Gen 4 trading compatibility)
-    NATIONAL_DEX_VILL = 1250,
+    //Fabular (moved to 650+ range for Gen 5 compatibility and performance)
+    NATIONAL_DEX_VILL = 650,
     NATIONAL_DEX_MARIE,
     NATIONAL_DEX_MARIEF,
     NATIONAL_DEX_GILAN,
