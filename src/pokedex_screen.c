@@ -1466,22 +1466,30 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
         }
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+        // Iterate through all Pokemon species, not all national dex numbers
+        // This avoids creating empty "000" entries for gaps (e.g., 472-1499)
+        ret = 0;
+        for (i = 1; i <= NUM_SPECIES - 1; i++)
         {
-            ndex_num = i + 1;
+            u16 species = i;
+            ndex_num = SpeciesToNationalPokedexNum(species);
+            if (ndex_num == 0)
+                continue;  // Skip species without a national dex number
+                
             seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
             caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
             if (seen)
             {
-                sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                sPokedexScreenData->listItems[ret].label = gSpeciesNames[species];
             }
             else
             {
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
+                sPokedexScreenData->listItems[ret].label = gText_5Dashes;
             }
-            sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+            sPokedexScreenData->listItems[ret].index = (caught << 17) + (seen << 16) + species;
+            ret++;
         }
-        return NATIONAL_DEX_COUNT;
+        return ret;
     }
     return ret;
 }
@@ -1552,12 +1560,12 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 12, y);
     if (caught)
     {
-        // Caught icon positioned to accommodate fractional numbers (XXX.Y format)
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x48, y);
+        // Caught icon positioned to accommodate fractional numbers (XXX.Y format needs more space)
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x58, y);
         type1 = gSpeciesInfo[species].types[0];
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x88, y);
         if (type1 != gSpeciesInfo[species].types[1])
-            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y);
+            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0xA8, y);
     }
 }
 
