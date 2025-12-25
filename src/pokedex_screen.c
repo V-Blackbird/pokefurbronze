@@ -1466,22 +1466,32 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
         }
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
-        for (i = 0; i < NATIONAL_DEX_COUNT; i++)
+        // Iterate through species and get their National Dex numbers
+        // This avoids creating "000" entries for gaps (e.g., 472-1249)
         {
-            ndex_num = i + 1;
-            seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
-            caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
-            if (seen)
+            u16 listIndex = 0;
+            u16 species;
+            for (species = SPECIES_BULBASAUR; species < NUM_SPECIES; species++)
             {
-                sPokedexScreenData->listItems[i].label = gSpeciesNames[NationalPokedexNumToSpecies(ndex_num)];
+                ndex_num = SpeciesToNationalPokedexNum(species);
+                if (ndex_num == 0) // Skip species with no National Dex number
+                    continue;
+                
+                seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
+                caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
+                if (seen)
+                {
+                    sPokedexScreenData->listItems[listIndex].label = gSpeciesNames[species];
+                }
+                else
+                {
+                    sPokedexScreenData->listItems[listIndex].label = gText_5Dashes;
+                }
+                sPokedexScreenData->listItems[listIndex].index = (caught << 17) + (seen << 16) + species;
+                listIndex++;
             }
-            else
-            {
-                sPokedexScreenData->listItems[i].label = gText_5Dashes;
-            }
-            sPokedexScreenData->listItems[i].index = (caught << 17) + (seen << 16) + NationalPokedexNumToSpecies(ndex_num);
+            return listIndex;
         }
-        return NATIONAL_DEX_COUNT;
     }
     return ret;
 }
