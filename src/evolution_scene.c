@@ -252,12 +252,28 @@ void EvolutionScene(struct Pokemon* mon, u16 postEvoSpecies, bool8 canStopEvo, u
     sEvoStructPtr = AllocZeroed(sizeof(struct EvoInfo));
     AllocateMonSpritesGfx();
 
+    currSpecies = GetMonData(mon, MON_DATA_SPECIES);
+
     GetMonData(mon, MON_DATA_NICKNAME, name);
     StringCopy_Nickname(gStringVar1, name);
-    StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
+    if (currSpecies == SPECIES_MARIE && postEvoSpecies == SPECIES_MARIEF)
+    {
+        StringCopy(gStringVar2, gSpeciesNames[SPECIES_FLAREON]);
+    }
+    else if (currSpecies == SPECIES_GILAN && postEvoSpecies == SPECIES_GILANG)
+    {
+        StringCopy(gStringVar2, gSpeciesNames[SPECIES_GLACEON]);
+    }
+    else if (currSpecies == SPECIES_EVEREST && postEvoSpecies == SPECIES_EVERESTL)
+    {
+        StringCopy(gStringVar2, gSpeciesNames[SPECIES_LEAFEON]);
+    }
+    else
+    {
+        StringCopy(gStringVar2, gSpeciesNames[postEvoSpecies]);
+    }
 
     // preEvo sprite
-    currSpecies = GetMonData(mon, MON_DATA_SPECIES);
     trainerId = GetMonData(mon, MON_DATA_OT_ID);
     personality = GetMonData(mon, MON_DATA_PERSONALITY);
     DecompressPicFromTable(&gMonFrontPicTable[currSpecies],
