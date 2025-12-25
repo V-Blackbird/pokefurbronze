@@ -393,9 +393,9 @@ enum {
     NATIONAL_DEX_RAYQUAZA,
     NATIONAL_DEX_JIRACHI,
     NATIONAL_DEX_DEOXYS,
-    //Sinnoh
-    NATIONAL_DEX_LEAFEON,
-    NATIONAL_DEX_GLACEON,
+    //Sinnoh (with official National Dex numbers)
+    NATIONAL_DEX_LEAFEON = 470,
+    NATIONAL_DEX_GLACEON = 471,
     //Fabular
     NATIONAL_DEX_VILL,
     NATIONAL_DEX_MARIE,
