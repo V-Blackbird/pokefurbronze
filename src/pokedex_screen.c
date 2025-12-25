@@ -1552,12 +1552,12 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 12, y);
     if (caught)
     {
-        // Moved caught icon further right to accommodate fractional numbers (XXX.Y format)
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x38, y);
+        // Caught icon positioned to accommodate fractional numbers (XXX.Y format)
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x48, y);
         type1 = gSpeciesInfo[species].types[0];
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x88, y);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y);
         if (type1 != gSpeciesInfo[species].types[1])
-            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0xA8, y);
+            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y);
     }
 }
 
@@ -2961,7 +2961,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     // Species stats
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[1], PIXEL_FILL(0));
     DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[1], FONT_SMALL, sPokedexScreenData->dexSpecies, 0, 8);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[1], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], 28, 8, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[1], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], 40, 8, 0);
     DexScreen_PrintMonCategory(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 24);
     DexScreen_PrintMonHeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 36);
     DexScreen_PrintMonWeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 48);
