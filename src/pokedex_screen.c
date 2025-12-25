@@ -1489,6 +1489,11 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
                 if (species == 0 || species > SPECIES_EVERESTL)
                     continue;
                 
+                // Verify that this species actually has this National Dex number
+                // (prevents picking up unrelated species for gaps in the National Dex)
+                if (SpeciesToNationalPokedexNum(species) != ndex_num)
+                    continue;
+                
                 seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
                 if (seen)
