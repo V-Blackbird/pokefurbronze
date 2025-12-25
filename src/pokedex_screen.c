@@ -2213,8 +2213,29 @@ static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOf
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
 {
     u16 dexNum = SpeciesToNationalPokedexNum(species);
+    u16 baseDexNum;
+    u8 fraction;
+    u8 buff[8];
+    
     DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
-    DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x + 9, y, 0);
+    
+    // Check if this is a fabular species with fractional dex number
+    if (GetFractionalDexNumber(species, &baseDexNum, &fraction))
+    {
+        // Format as "XXX.Y" (e.g., "133.1")
+        buff[0] = (baseDexNum / 100) + CHAR_0;
+        buff[1] = ((baseDexNum % 100) / 10) + CHAR_0;
+        buff[2] = (baseDexNum % 10) + CHAR_0;
+        buff[3] = CHAR_PERIOD;  // Decimal point
+        buff[4] = fraction + CHAR_0;
+        buff[5] = EOS;
+        DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x + 9, y, 0);
+    }
+    else
+    {
+        // Normal 3-digit display
+        DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x + 9, y, 0);
+    }
 }
 
 s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecies)
