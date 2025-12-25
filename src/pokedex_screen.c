@@ -1467,11 +1467,15 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
         break;
     case DEX_ORDER_NUMERICAL_NATIONAL:
         // Build list in National Dex number order by checking each dex number
-        // and finding its species. This maintains proper ordering.
+        // and finding its species. Fabular Pokemon are inserted after their base species.
         {
             u16 listIndex = 0;
             u16 species;
             u16 maxNdexNum = NATIONAL_DEX_EVERESTL;  // Hard cap at EVERESTL (662)
+            u16 fabSpecies, fabNdexNum;
+            u16 baseDexNum;
+            u8 fraction;
+            u16 j;
             
             // Iterate through National Dex numbers in order, up to EVERESTL
             for (ndex_num = 1; ndex_num <= maxNdexNum; ndex_num++)
@@ -1486,6 +1490,12 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
                 if (SpeciesToNationalPokedexNum(species) != ndex_num)
                     continue;
                 
+                // Skip fabular Pokemon at their actual dex numbers (656-662)
+                // They will be inserted after their base species
+                if (IsFabularSpecies(species))
+                    continue;
+                
+                // Add the base species
                 seen = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_SEEN, FALSE);
                 caught = DexScreen_GetSetPokedexFlag(ndex_num, FLAG_GET_CAUGHT, FALSE);
                 if (seen)
@@ -1498,6 +1508,31 @@ static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx)
                 }
                 sPokedexScreenData->listItems[listIndex].index = (caught << 17) + (seen << 16) + species;
                 listIndex++;
+                
+                // Check if this species has fabular variants and add them right after
+                for (j = SPECIES_LEAFEON; j <= SPECIES_EVERESTL; j++)
+                {
+                    if (IsFabularSpecies(j) && GetFractionalDexNumber(j, &baseDexNum, &fraction))
+                    {
+                        // If this fabular variant belongs to the current base species
+                        if (baseDexNum == ndex_num)
+                        {
+                            fabNdexNum = SpeciesToNationalPokedexNum(j);
+                            seen = DexScreen_GetSetPokedexFlag(fabNdexNum, FLAG_GET_SEEN, FALSE);
+                            caught = DexScreen_GetSetPokedexFlag(fabNdexNum, FLAG_GET_CAUGHT, FALSE);
+                            if (seen)
+                            {
+                                sPokedexScreenData->listItems[listIndex].label = gSpeciesNames[j];
+                            }
+                            else
+                            {
+                                sPokedexScreenData->listItems[listIndex].label = gText_5Dashes;
+                            }
+                            sPokedexScreenData->listItems[listIndex].index = (caught << 17) + (seen << 16) + j;
+                            listIndex++;
+                        }
+                    }
+                }
             }
             return listIndex;
         }
