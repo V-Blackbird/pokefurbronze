@@ -2271,8 +2271,6 @@ static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u
     u8 fraction;
     u8 buff[8];
     
-    DexScreen_AddTextPrinterParameterized(windowId, fontId, gText_PokedexNo, x, y, 0);
-    
     // Check if this is a fabular species with fractional dex number
     if (GetFractionalDexNumber(species, &baseDexNum, &fraction))
     {
@@ -2283,12 +2281,12 @@ static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u
         buff[3] = CHAR_PERIOD;  // Decimal point
         buff[4] = fraction + CHAR_0;
         buff[5] = EOS;
-        DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x + 9, y, 0);
+        DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x, y, 0);
     }
     else
     {
         // Normal 3-digit display
-        DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x + 9, y, 0);
+        DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x, y, 0);
     }
 }
 
