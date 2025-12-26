@@ -20,6 +20,9 @@
 #include "constants/sound.h"
 #include "pokedex_area_markers.h"
 #include "field_specials.h"
+#include "pokemon.h"
+#include "palette.h"
+#include "blit.h"
 
 #define TAG_AREA_MARKERS 2001
 
@@ -2259,9 +2262,64 @@ static u32 DexScreen_GetDefaultPersonality(int species)
     }
 }
 
+// Convert a palette to LCD monochrome (light = RGB(93,91,68), dark = black)
+static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
+{
+    u16 i;
+    for (i = 0; i < count; i++)
+    {
+        u16 color = palette[i];
+        
+        // Extract RGB components (5-bit each)
+        u8 r = (color & 0x1F);
+        u8 g = ((color >> 5) & 0x1F);
+        u8 b = ((color >> 10) & 0x1F);
+        
+        // Calculate luminance (using standard coefficients scaled for 5-bit values)
+        // Y = 0.299*R + 0.587*G + 0.114*B
+        // Scaled: Y = (77*R + 151*G + 28*B) / 256
+        u16 luminance = (77 * r + 151 * g + 28 * b) / 256;
+        
+        // Map to LCD colors based on luminance threshold
+        // Light color: RGB(93, 91, 68) in 5-bit = (11, 11, 8)
+        // Dark color: RGB(0, 0, 0) = black
+        if (luminance >= 12)  // Threshold approximately mid-range
+        {
+            // Light LCD color: RGB 93,91,68 converted to GBA 5-bit format
+            // 93/8 = 11, 91/8 = 11, 68/8 = 8
+            palette[i] = RGB(11, 11, 8);
+        }
+        else
+        {
+            // Dark color: black
+            palette[i] = RGB(0, 0, 0);
+        }
+    }
+}
+
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset)
 {
-    LoadMonPicInWindow(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, paletteOffset >> 4, windowId);
+    u8 paletteSlot = paletteOffset >> 4;
+    u32 otId = SHINY_ODDS;
+    u32 personality = DexScreen_GetDefaultPersonality(species);
+    const u32 *compressedPal;
+    u16 palBuffer[16];
+    
+    // Load the sprite using the original function
+    LoadMonPicInWindow(species, otId, personality, TRUE, paletteSlot, windowId);
+    
+    // Now convert the palette that was just loaded
+    // Get the compressed palette data
+    compressedPal = GetMonSpritePalFromSpeciesAndPersonality(species, otId, personality);
+    
+    // Decompress palette into buffer
+    LZ77UnCompWram(compressedPal, palBuffer);
+    
+    // Convert to LCD monochrome
+    ConvertPaletteToLCDMonochrome(palBuffer, 16);
+    
+    // Load the converted palette
+    LoadPalette(palBuffer, BG_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
 }
 
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
