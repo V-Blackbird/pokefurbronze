@@ -2191,34 +2191,13 @@ static void DexScreen_RemoveWindow(u8 *windowId_p)
 static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx)
 {
     u8 textColor[3];
-    switch (colorIdx)
-    {
-    case 0:
-        textColor[0] = 0;
-        textColor[1] = 1;
-        textColor[2] = 3;
-        break;
-    case 1:
-        textColor[0] = 0;
-        textColor[1] = 5;
-        textColor[2] = 1;
-        break;
-    case 2:
-        textColor[0] = 0;
-        textColor[1] = 15;
-        textColor[2] = 14;
-        break;
-    case 3:
-        textColor[0] = 0;
-        textColor[1] = 11;
-        textColor[2] = 1;
-        break;
-    case 4:
-        textColor[0] = 0;
-        textColor[1] = 1;
-        textColor[2] = 2;
-        break;
-    }
+    // LCD monochrome mode: Black text with transparent shadow (background color)
+    // This creates the authentic LCD appearance where text is solid black
+    // and the "shadow" is the same as background, making it invisible
+    textColor[0] = 0;  // Background/transparent (uses window's background color)
+    textColor[1] = 1;  // Main text color: Black
+    textColor[2] = 0;  // Shadow color: Same as background (transparent/invisible)
+    
     AddTextPrinterParameterized4(windowId, fontId, x, y, fontId == FONT_SMALL ? 0 : 1, 0, textColor, -1, str);
 }
 
