@@ -536,7 +536,7 @@ static const struct ListMenuWindowRect sListMenuRects_OrderedList[] = {
         .y = 0,
         .width = 5,
         .height = 16,
-        .palNum = 0
+        .palNum = 1
     }, {
         .x = 5,
         .y = 0,
@@ -1194,9 +1194,9 @@ static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct Lis
 static void ItemPrintFunc_DexModeSelect(u8 windowId, u32 itemId, u8 y)
 {
     if (itemId >= DEX_CATEGORY_COUNT || sPokedexScreenData->unlockedCategories & (1 << itemId))
-        ListMenuOverrideSetColors(TEXT_COLOR_WHITE, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_LIGHT_GRAY);
+        ListMenuOverrideSetColors(TEXT_COLOR_WHITE, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_TRANSPARENT);
     else
-        ListMenuOverrideSetColors(TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_TRANSPARENT, TEXT_DYNAMIC_COLOR_2);
+        ListMenuOverrideSetColors(TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_TRANSPARENT);
 }
 
 static void Task_DexScreen_NumericalOrder(u8 taskId)
@@ -2191,13 +2191,34 @@ static void DexScreen_RemoveWindow(u8 *windowId_p)
 static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx)
 {
     u8 textColor[3];
-    // LCD monochrome mode: Black text with transparent shadow (background color)
-    // This creates the authentic LCD appearance where text is solid black
-    // and the "shadow" is the same as background, making it invisible
-    textColor[0] = 0;  // Background/transparent (uses window's background color)
-    textColor[1] = 1;  // Main text color: Black
-    textColor[2] = 0;  // Shadow color: Same as background (transparent/invisible)
-    
+    switch (colorIdx)
+    {
+    case 0:
+        textColor[0] = 0;
+        textColor[1] = 1;
+        textColor[2] = 0;
+        break;
+    case 1:
+        textColor[0] = 0;
+        textColor[1] = 1;
+        textColor[2] = 0;
+        break;
+    case 2:
+        textColor[0] = 0;
+        textColor[1] = 1;
+        textColor[2] = 0;
+        break;
+    case 3:
+        textColor[0] = 0;
+        textColor[1] = 1;
+        textColor[2] = 0;
+        break;
+    case 4:
+        textColor[0] = 0;
+        textColor[1] = 1;
+        textColor[2] = 0;
+        break;
+    }
     AddTextPrinterParameterized4(windowId, fontId, x, y, fontId == FONT_SMALL ? 0 : 1, 0, textColor, -1, str);
 }
 
@@ -2978,7 +2999,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.unk = 0;
         printerTemplate.fgColor = 1;
         printerTemplate.bgColor = 0;
-        printerTemplate.shadowColor = 2;
+        printerTemplate.shadowColor = 0;
 
         length = GetStringWidth(FONT_SMALL, gPokedexEntries[species].description, 0);
         xCenter = x + (240 - length) / 3.8;
