@@ -1603,7 +1603,7 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     bool8 seen = (itemId >> 16) & 1;  // not used but required to match
     bool8 caught = (itemId >> 17) & 1;
     u8 type1;
-    DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 8, y);
+    DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 13, y);
     if (caught)
     {
         BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y);
@@ -2935,7 +2935,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
     {
         printerTemplate.currentChar = gPokedexEntries[species].description;
         printerTemplate.windowId = windowId;
-        printerTemplate.fontId = FONT_NORMAL;
+        printerTemplate.fontId = FONT_SMALL;
         printerTemplate.letterSpacing = 1;
         printerTemplate.lineSpacing = 0;
         printerTemplate.unk = 0;
@@ -2943,8 +2943,8 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.bgColor = 0;
         printerTemplate.shadowColor = 2;
 
-        length = GetStringWidth(FONT_NORMAL, gPokedexEntries[species].description, 0);
-        xCenter = x + (240 - length) / 4;
+        length = GetStringWidth(FONT_SMALL, gPokedexEntries[species].description, 0);
+        xCenter = x + (240 - length) / 3.8;
 
         if (xCenter > 0)
             x = xCenter;
