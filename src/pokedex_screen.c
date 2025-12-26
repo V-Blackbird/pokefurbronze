@@ -2262,7 +2262,7 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
         // Map to LCD colors based on luminance threshold
         // Light color: RGB(93, 91, 68) in 5-bit = (11, 11, 8)
         // Dark color: RGB(0, 0, 0) = black
-        if (luminance >= 12)  // Threshold approximately mid-range
+        if (luminance >= 17)  // Threshold approximately mid-range
         {
             // Light LCD color: RGB 93,91,68 converted to GBA 5-bit format
             // 93/8 = 11, 91/8 = 11, 68/8 = 8
