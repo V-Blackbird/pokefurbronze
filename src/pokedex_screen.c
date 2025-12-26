@@ -146,6 +146,9 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 const u32 sCategoryMonInfoBgTiles[] = INCBIN_U32("graphics/pokedex/mini_page.4bpp.lz");
 const u32 sKantoDexTiles[] = INCBIN_U32("graphics/pokedex/kanto_dex_bgtiles.4bpp.lz");
 const u32 sNatDexTiles[] = INCBIN_U32("graphics/pokedex/national_dex_bgtiles.4bpp.lz");
+const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.4bpp.lz");
+const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap.bin");
+const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sKantoDexPalette[0x100] = INCBIN_U16("graphics/pokedex/kanto_dex_bgpals.gbapal");
 
 const u16 sDexScreen_CategoryCursorPals[] = {
@@ -896,10 +899,10 @@ void DexScreen_LoadResources(void)
     SetBgTilemapBuffer(2, (u16 *)Alloc(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(1, (u16 *)Alloc(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(0, (u16 *)Alloc(BG_SCREEN_SIZE));
-    if (natDex)
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sNatDexTiles, BG_SCREEN_SIZE, 0, 0);
-    else
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sKantoDexTiles, BG_SCREEN_SIZE, 0, 0);
+    // Load new tileset for 80s PDA LCD design
+    DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, BG_SCREEN_SIZE, 0, 0);
+    // Load tilemap for list screen (same for both Kanto and National)
+    CopyToBgTilemapBuffer(3, sNationalDexTilemap, 0, 0);
     InitWindows(sWindowTemplates);
     DeactivateAllTextPrinters();
     m4aSoundVSyncOn();
@@ -3053,6 +3056,8 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
     DexScreen_DexPageZoomEffectFrame(3, 6);
+    // Load tilemap for entry details screen (80s PDA LCD design)
+    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
@@ -3121,37 +3126,12 @@ u8 DexScreen_DrawMonAreaPage(void)
     species = sPokedexScreenData->dexSpecies;
     speciesId = SpeciesToNationalPokedexNum(species);
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
-    width = 28;
-    height = 14;
-    left = 0;
-    top = 2;
 
-    FillBgTilemapBufferRect_Palette0(3, 4, left, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(4), left + 1 + width, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(4), left, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_V_FLIP(4), left + 1 + width, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 5, left + 1, top, width, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(5), left + 1, top + 1 + height, width, 1);
-    FillBgTilemapBufferRect_Palette0(3, 6, left, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(6), left + 1 + width, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(3, 1, left + 1, top + 1, width, height);
-    FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
-
-    width = 10;
-    height = 6;
-    left = 1;
-    top = 9;
-
-    FillBgTilemapBufferRect_Palette0(0, 29, left, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(29), left + 1 + width, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(29), left, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_V_FLIP(29), left + 1 + width, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 30, left + 1, top, width, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(30), left + 1, top + 1 + height, width, 1);
-    FillBgTilemapBufferRect_Palette0(0, 31, left, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(31), left + 1 + width, top + 1, 1, height);
+    // Use tilemap for area page background as well
+    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
+    FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
 
     sPokedexScreenData->unlockedSeviiAreas = GetUnlockedSeviiAreas();
     kantoMapVoff = 4;
