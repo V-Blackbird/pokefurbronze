@@ -929,7 +929,7 @@ void DexScreen_LoadResources(void)
     ChangeBgY(3, 0, 0);
     gPaletteFade.bufferTransferDisabled = TRUE;
     // Use unified LCD palette for all modes
-    LoadPalette(sDexLCDPalette, BG_PLTT_ID(0), sizeof(sDexLCDPalette));
+    LoadPalette(sDexLCDPalette, BG_PLTT_ID(1), sizeof(sDexLCDPalette));
     // Clear BG3 - each screen will set up its own background (tilemap for lists/entries, programmatic for DEX mode)
     FillBgTilemapBufferRect(3, 0x000, 0, 0, 32, 32, 0);
     FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
@@ -3106,8 +3106,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     PutWindowTilemap(sPokedexScreenData->windowIds[2]);
     CopyWindowToVram(sPokedexScreenData->windowIds[2], COPYWIN_GFX);
 
-    // Control info
-    FillWindowPixelBuffer(1, PIXEL_FILL(15));
+    // Control info - hide bottom bar to show full tilemap
+    ClearWindowTilemap(1);
     if (justRegistered == FALSE)
     {
         DexScreen_AddTextPrinterParameterized(1, FONT_SMALL, gText_Cry, 8, 2, 4);
