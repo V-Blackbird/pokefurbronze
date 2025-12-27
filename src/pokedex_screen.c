@@ -3059,9 +3059,14 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
+    int i;
     // Load tilemap-based background for entry/info screen
-    // Copy to buffer - will be copied to VRAM by state machine
-    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
+    // Copy entire 30x20 tilemap to buffer manually - will be copied to VRAM by state machine
+    u16 *buffer = GetBgTilemapBuffer(3);
+    for (i = 0; i < 30 * 20; i++)
+    {
+        buffer[i] = sDexEntryTilemap[i];
+    }
     
     // Now clear other layers
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
@@ -3134,8 +3139,14 @@ u8 DexScreen_DrawMonAreaPage(void)
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
 
     // Load tilemap-based background for entry/area screen
-    // Copy to buffer - will be copied to VRAM by state machine
-    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
+    // Copy entire 30x20 tilemap to buffer manually - will be copied to VRAM by state machine
+    {
+        u16 *buffer = GetBgTilemapBuffer(3);
+        for (i = 0; i < 30 * 20; i++)
+        {
+            buffer[i] = sDexEntryTilemap[i];
+        }
+    }
     
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
