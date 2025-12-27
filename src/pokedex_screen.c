@@ -1813,7 +1813,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         else
         {
             FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
-            // BG3 already copied to VRAM in DexScreen_DrawMonDexPage(), don't copy again
+            CopyBgTilemapBufferToVram(3);
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
             CopyBgTilemapBufferToVram(0);
@@ -1917,7 +1917,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         break;
     case 25:
         DexScreen_DrawMonDexPage(FALSE);
-        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
+        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
@@ -1989,7 +1989,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
+        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
@@ -2078,7 +2078,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         break;
     case 11:
         DexScreen_DrawMonDexPage(FALSE);
-        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
+        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
@@ -3060,9 +3060,8 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
     // Load tilemap-based background for entry/info screen
-    // Must copy to VRAM immediately to replace any previous BG3 content (like 0x0E fill from top menu)
+    // Copy to buffer - will be copied to VRAM by state machine
     CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
-    CopyBgTilemapBufferToVram(3);
     
     // Now clear other layers
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
@@ -3135,8 +3134,8 @@ u8 DexScreen_DrawMonAreaPage(void)
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
 
     // Load tilemap-based background for entry/area screen
+    // Copy to buffer - will be copied to VRAM by state machine
     CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
-    CopyBgTilemapBufferToVram(3);
     
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
