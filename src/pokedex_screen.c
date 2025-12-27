@@ -146,7 +146,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 const u32 sCategoryMonInfoBgTiles[] = INCBIN_U32("graphics/pokedex/mini_page.4bpp.lz");
 const u32 sKantoDexTiles[] = INCBIN_U32("graphics/pokedex/kanto_dex_bgtiles.4bpp.lz");
 const u32 sNatDexTiles[] = INCBIN_U32("graphics/pokedex/national_dex_bgtiles.4bpp.lz");
-const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.4bpp.lz");
+const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.8bpp.lz");
 const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap.bin");
 const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sKantoDexPalette[0x100] = INCBIN_U16("graphics/pokedex/kanto_dex_bgpals.gbapal");
