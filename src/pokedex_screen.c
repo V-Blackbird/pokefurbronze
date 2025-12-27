@@ -1274,6 +1274,7 @@ static void DexScreen_InitGfxForNumericalOrderList(void)
     struct ListMenuTemplate template;
     // Load tilemap-based background for list screen
     CopyToBgTilemapBuffer(3, sNationalDexTilemap, 0, 0);
+    CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
@@ -1361,6 +1362,7 @@ static void DexScreen_CreateCharacteristicListMenu(void)
     struct ListMenuTemplate template;
     // Load tilemap-based background for list screen
     CopyToBgTilemapBuffer(3, sNationalDexTilemap, 0, 0);
+    CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
