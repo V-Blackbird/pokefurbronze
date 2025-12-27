@@ -1813,7 +1813,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         else
         {
             FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
-            CopyBgTilemapBufferToVram(3);
+            // BG3 already copied to VRAM in DexScreen_DrawMonDexPage(), don't copy again
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
             CopyBgTilemapBufferToVram(0);
@@ -1917,7 +1917,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         break;
     case 25:
         DexScreen_DrawMonDexPage(FALSE);
-        CopyBgTilemapBufferToVram(3);
+        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
@@ -1989,7 +1989,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        CopyBgTilemapBufferToVram(3);
+        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
@@ -2078,7 +2078,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         break;
     case 11:
         DexScreen_DrawMonDexPage(FALSE);
-        CopyBgTilemapBufferToVram(3);
+        // BG3 already copied to VRAM in DexScreen_DrawMonDexPage()
         CopyBgTilemapBufferToVram(2);
         CopyBgTilemapBufferToVram(1);
         CopyBgTilemapBufferToVram(0);
