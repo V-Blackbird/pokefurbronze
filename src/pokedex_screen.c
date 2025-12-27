@@ -930,8 +930,8 @@ void DexScreen_LoadResources(void)
     gPaletteFade.bufferTransferDisabled = TRUE;
     // Use unified LCD palette for all modes
     LoadPalette(sDexLCDPalette, BG_PLTT_ID(0), sizeof(sDexLCDPalette));
-    // Fill BG3 with background tile (palette 0) - list screens will overwrite with tilemap, entry/area screens use for programmatic frames
-    FillBgTilemapBufferRect_Palette0(3, 1, 0,  0, 32, 32);
+    // Clear BG3 - each screen will set up its own background (tilemap for lists/entries, programmatic for DEX mode)
+    FillBgTilemapBufferRect(3, 0x000, 0, 0, 32, 32, 0);
     FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
     FillBgTilemapBufferRect(1, 0x000, 0,  0, 32, 32, 17);
     FillBgTilemapBufferRect(0, 0x003, 0,  0, 32,  2, 15);
@@ -3128,35 +3128,12 @@ u8 DexScreen_DrawMonAreaPage(void)
     species = sPokedexScreenData->dexSpecies;
     speciesId = SpeciesToNationalPokedexNum(species);
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
-    width = 28;
-    height = 14;
-    left = 0;
-    top = 2;
 
-    FillBgTilemapBufferRect_Palette0(3, 4, left, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(4), left + 1 + width, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(4), left, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_V_FLIP(4), left + 1 + width, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(3, 5, left + 1, top, width, 1);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_V_FLIP(5), left + 1, top + 1 + height, width, 1);
-    FillBgTilemapBufferRect_Palette0(3, 6, left, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(3, BG_TILE_H_FLIP(6), left + 1 + width, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(3, 1, left + 1, top + 1, width, height);
+    // Load tilemap-based background for entry/area screen
+    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
+    CopyBgTilemapBufferToVram(3);
+    
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
-
-    width = 10;
-    height = 6;
-    left = 1;
-    top = 9;
-
-    FillBgTilemapBufferRect_Palette0(0, 29, left, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(29), left + 1 + width, top, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(29), left, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_V_FLIP(29), left + 1 + width, top + 1 + height, 1, 1);
-    FillBgTilemapBufferRect_Palette0(0, 30, left + 1, top, width, 1);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_V_FLIP(30), left + 1, top + 1 + height, width, 1);
-    FillBgTilemapBufferRect_Palette0(0, 31, left, top + 1, 1, height);
-    FillBgTilemapBufferRect_Palette0(0, BG_TILE_H_FLIP(31), left + 1 + width, top + 1, 1, height);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
 
