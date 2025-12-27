@@ -3064,13 +3064,16 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
-    int i;
+    int i, row, col;
     // Load tilemap-based background for entry/info screen
-    // Copy tilemap data with palette 1 (bits 12-15) to avoid palette 0 which has unused green
+    // Copy tilemap row-by-row with 32-tile stride to match GBA VRAM layout
     u16 *buffer = GetBgTilemapBuffer(3);
-    for (i = 0; i < 30 * 20; i++)
+    for (row = 0; row < 20; row++)
     {
-        buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
+        for (col = 0; col < 32; col++)
+        {
+            buffer[row * 32 + col] = sDexEntryTilemap[row * 32 + col];
+        }
     }
     CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     
@@ -3136,12 +3139,16 @@ u8 DexScreen_DrawMonAreaPage(void)
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
 
     // Load tilemap-based background for entry/area screen
-    // Copy tilemap data with palette 1 (bits 12-15) to avoid palette 0 which has unused green
+    // Copy tilemap row-by-row with 32-tile stride to match GBA VRAM layout
     {
         u16 *buffer = GetBgTilemapBuffer(3);
-        for (i = 0; i < 30 * 20; i++)
+        int row, col;
+        for (row = 0; row < 20; row++)
         {
-            buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
+            for (col = 0; col < 32; col++)
+            {
+                buffer[row * 32 + col] = sDexEntryTilemap[row * 32 + col];
+            }
         }
         CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     }
