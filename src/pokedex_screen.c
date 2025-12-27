@@ -3065,7 +3065,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     u16 *buffer = GetBgTilemapBuffer(3);
     for (i = 0; i < 30 * 20; i++)
     {
-        buffer[i] = sDexEntryTilemap[i] | 0x1000;  // Add palette 1 to all tiles
+        buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
     }
     
     // Now clear other layers (full screen to avoid black bars)
@@ -3144,7 +3144,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         u16 *buffer = GetBgTilemapBuffer(3);
         for (i = 0; i < 30 * 20; i++)
         {
-            buffer[i] = sDexEntryTilemap[i] | 0x1000;  // Add palette 1 to all tiles
+            buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
         }
     }
     
