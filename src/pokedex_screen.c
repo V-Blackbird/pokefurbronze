@@ -243,7 +243,7 @@ static const struct BgTemplate sBgTemplates[] = {
         .charBaseIndex = 0,
         .mapBaseIndex = 7,
         .screenSize = 0,
-        .paletteMode = 0,
+        .paletteMode = 1,  // 8bpp mode for 256-color LCD tileset
         .priority = 3,
         .baseTile = 0x0000
     },
