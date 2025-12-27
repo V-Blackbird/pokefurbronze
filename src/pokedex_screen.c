@@ -150,6 +150,7 @@ const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.4b
 const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap.bin");
 const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sKantoDexPalette[0x100] = INCBIN_U16("graphics/pokedex/kanto_dex_bgpals.gbapal");
+const u16 sDexLCDPalette[0x100] = INCBIN_U16("graphics/pokedex/dex_lcd_bgpals.gbapal");
 
 const u16 sDexScreen_CategoryCursorPals[] = {
     RGB(24, 22, 17), RGB(26, 24, 20),
@@ -927,10 +928,8 @@ void DexScreen_LoadResources(void)
     ChangeBgX(3, 0, 0);
     ChangeBgY(3, 0, 0);
     gPaletteFade.bufferTransferDisabled = TRUE;
-    if (natDex)
-        LoadPalette(sNationalDexPalette, BG_PLTT_ID(0), sizeof(sNationalDexPalette));
-    else
-        LoadPalette(sKantoDexPalette, BG_PLTT_ID(0), sizeof(sKantoDexPalette));
+    // Use unified LCD palette for all modes
+    LoadPalette(sDexLCDPalette, BG_PLTT_ID(0), sizeof(sDexLCDPalette));
     FillBgTilemapBufferRect(3, 0x001, 0,  0, 32, 32, 0);
     FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
     FillBgTilemapBufferRect(1, 0x000, 0,  0, 32, 32, 17);
