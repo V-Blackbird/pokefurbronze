@@ -240,7 +240,7 @@ static const struct BgTemplate sBgTemplates[] = {
     },
     {
         .bg = 3,
-        .charBaseIndex = 0,
+        .charBaseIndex = 3,  // Use separate character base from BG0
         .mapBaseIndex = 7,
         .screenSize = 0,
         .paletteMode = 1,  // 8bpp mode for 256-color LCD tileset
