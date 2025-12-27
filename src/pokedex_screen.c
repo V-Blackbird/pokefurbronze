@@ -2274,7 +2274,7 @@ static u32 DexScreen_GetDefaultPersonality(int species)
     }
 }
 
-// Convert a palette to LCD monochrome (light = RGB(93,91,68), dark = black)
+// Convert a palette to LCD monochrome (light = RGB(81,80,60), dark = black)
 static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
 {
     u16 i;
@@ -2293,13 +2293,13 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
         u16 luminance = (77 * r + 151 * g + 28 * b) / 256;
         
         // Map to LCD colors based on luminance threshold
-        // Light color: RGB(93, 91, 68) in 5-bit = (11, 11, 8)
+        // Light color: RGB(81, 80, 60) in 5-bit = (10, 10, 7)
         // Dark color: RGB(0, 0, 0) = black
         if (luminance >= 17)  // Threshold approximately mid-range
         {
-            // Light LCD color: RGB 93,91,68 converted to GBA 5-bit format
-            // 93/8 = 11, 91/8 = 11, 68/8 = 8
-            palette[i] = RGB(11, 11, 8);
+            // Light LCD color: RGB 81,80,60 converted to GBA 5-bit format
+            // 81/8 = 10, 80/8 = 10, 60/8 = 7
+            palette[i] = RGB(10, 10, 7);
         }
         else
         {
@@ -3014,7 +3014,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.shadowColor = 0;
 
         length = GetStringWidth(FONT_SMALL, gPokedexEntries[species].description, 0);
-        xCenter = x + (240 - length) / 3.8;
+        xCenter = x + (240 - length) / 2;
 
         if (xCenter > 0)
             x = xCenter;
