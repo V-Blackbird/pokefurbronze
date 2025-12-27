@@ -3059,9 +3059,7 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
-    DexScreen_DexPageZoomEffectFrame(3, 6);
-    
-    // Load tilemap-based background for entry/info screen
+    // Load tilemap-based background for entry/info screen (no programmatic frame needed)
     CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
     CopyBgTilemapBufferToVram(3);
     
