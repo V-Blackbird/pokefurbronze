@@ -3059,13 +3059,13 @@ void DexScreen_DrawMonFootprint(u8 windowId, u16 species, u8 x, u8 y)
 
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
-    // Load tilemap-based background for entry/info screen (no programmatic frame needed)
-    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
-    CopyBgTilemapBufferToVram(3);
-    
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
+    
+    // Load tilemap-based background for entry/info screen (no programmatic frame needed)
+    // Copy to buffer only - VRAM copy happens in state machine at line 1816
+    CopyToBgTilemapBuffer(3, sDexEntryTilemap, 0, 0);
 
     sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic);
     sPokedexScreenData->windowIds[1] = AddWindow(&sWindowTemplate_DexEntry_SpeciesStats);
