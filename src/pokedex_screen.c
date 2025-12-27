@@ -629,7 +629,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesName = {
     .width = 12,
     .height = 4,
     .paletteNum = 9,
-    .baseBlock = 0x01e8
+    .baseBlock = 0x0230
 };
 
 const struct WindowTemplate sWindowTemplate_DexEntry_FlavorText = {
