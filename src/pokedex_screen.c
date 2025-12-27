@@ -1272,8 +1272,13 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
 static void DexScreen_InitGfxForNumericalOrderList(void)
 {
     struct ListMenuTemplate template;
-    // Load tilemap-based background for list screen
-    CopyToBgTilemapBuffer(3, sNationalDexTilemap, 0, 0);
+    int i;
+    // Load tilemap-based background for list screen with palette 1
+    u16 *buffer = GetBgTilemapBuffer(3);
+    for (i = 0; i < 30 * 20; i++)
+    {
+        buffer[i] = (sNationalDexTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
+    }
     CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
