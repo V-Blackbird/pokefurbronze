@@ -930,8 +930,8 @@ void DexScreen_LoadResources(void)
     gPaletteFade.bufferTransferDisabled = TRUE;
     // Use unified LCD palette for all modes
     LoadPalette(sDexLCDPalette, BG_PLTT_ID(0), sizeof(sDexLCDPalette));
-    // Clear BG3 - list screens will use tilemap, entry/area screens will draw programmatically
-    FillBgTilemapBufferRect(3, 0x000, 0,  0, 32, 32, 0);
+    // Fill BG3 with background tile (palette 0) - list screens will overwrite with tilemap, entry/area screens use for programmatic frames
+    FillBgTilemapBufferRect_Palette0(3, 1, 0,  0, 32, 32);
     FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
     FillBgTilemapBufferRect(1, 0x000, 0,  0, 32, 32, 17);
     FillBgTilemapBufferRect(0, 0x003, 0,  0, 32,  2, 15);
