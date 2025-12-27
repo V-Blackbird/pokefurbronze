@@ -3107,17 +3107,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     CopyWindowToVram(sPokedexScreenData->windowIds[2], COPYWIN_GFX);
 
     // Control info - hide bottom bar to show full tilemap
+    // Window 1 cleared and not shown to display full tilemap at bottom
     ClearWindowTilemap(1);
-    if (justRegistered == FALSE)
-    {
-        DexScreen_AddTextPrinterParameterized(1, FONT_SMALL, gText_Cry, 8, 2, 4);
-        DexScreen_PrintControlInfo(gText_NextDataCancel);
-    }
-    else
-        // Just registered
-        DexScreen_PrintControlInfo(gText_Next);
-    PutWindowTilemap(1);
-    CopyWindowToVram(1, COPYWIN_GFX);
 
     return 1;
 }
