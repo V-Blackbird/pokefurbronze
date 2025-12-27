@@ -3092,8 +3092,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     
     // Now clear other layers (full screen to avoid black bars)
+    // Don't clear BG1 - windows use it for text display
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
-    FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
 
     sPokedexScreenData->windowIds[3] = AddWindow(&sWindowTemplate_DexEntry_MonPic);
