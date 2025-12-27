@@ -3067,6 +3067,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     {
         buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
     }
+    CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     
     // Now clear other layers (full screen to avoid black bars)
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
@@ -3146,6 +3147,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         {
             buffer[i] = (sDexEntryTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
         }
+        CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     }
     
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
