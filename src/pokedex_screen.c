@@ -901,9 +901,9 @@ void DexScreen_LoadResources(void)
     SetBgTilemapBuffer(1, (u16 *)Alloc(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(0, (u16 *)Alloc(BG_SCREEN_SIZE));
     if (natDex)
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, BG_SCREEN_SIZE, 0, 0);
     else
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, BG_SCREEN_SIZE, 0, 0);
     InitWindows(sWindowTemplates);
     DeactivateAllTextPrinters();
     m4aSoundVSyncOn();
@@ -929,7 +929,7 @@ void DexScreen_LoadResources(void)
     ChangeBgY(3, 0, 0);
     gPaletteFade.bufferTransferDisabled = TRUE;
     // Use unified LCD palette for all modes
-    LoadPalette(sDexLCDPalette, BG_PLTT_ID(1), sizeof(sDexLCDPalette));
+    LoadPalette(sDexLCDPalette, BG_PLTT_ID(0), sizeof(sDexLCDPalette));
     // Clear BG3 - each screen will set up its own background (tilemap for lists/entries, programmatic for DEX mode)
     FillBgTilemapBufferRect(3, 0x000, 0, 0, 32, 32, 0);
     FillBgTilemapBufferRect(2, 0x000, 0,  0, 32, 32, 17);
