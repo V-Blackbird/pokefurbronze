@@ -3061,16 +3061,11 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
     int i;
     // Load tilemap-based background for entry/info screen
-    // First clear BG3 buffer to prevent garbage data from showing
+    // Copy tilemap data with palette 1 (bits 12-15) to avoid palette 0 which has unused green
     u16 *buffer = GetBgTilemapBuffer(3);
     for (i = 0; i < 30 * 20; i++)
     {
-        buffer[i] = 0x1000;  // Tile 0 with palette 1 (avoids palette 0 which has unused green)
-    }
-    // Now copy the tilemap data
-    for (i = 0; i < 30 * 20; i++)
-    {
-        buffer[i] = sDexEntryTilemap[i];
+        buffer[i] = sDexEntryTilemap[i] | 0x1000;  // Add palette 1 to all tiles
     }
     
     // Now clear other layers (full screen to avoid black bars)
@@ -3144,17 +3139,12 @@ u8 DexScreen_DrawMonAreaPage(void)
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
 
     // Load tilemap-based background for entry/area screen
-    // First clear BG3 buffer to prevent garbage data from showing
+    // Copy tilemap data with palette 1 (bits 12-15) to avoid palette 0 which has unused green
     {
         u16 *buffer = GetBgTilemapBuffer(3);
         for (i = 0; i < 30 * 20; i++)
         {
-            buffer[i] = 0x1000;  // Tile 0 with palette 1 (avoids palette 0 which has unused green)
-        }
-        // Now copy the tilemap data
-        for (i = 0; i < 30 * 20; i++)
-        {
-            buffer[i] = sDexEntryTilemap[i];
+            buffer[i] = sDexEntryTilemap[i] | 0x1000;  // Add palette 1 to all tiles
         }
     }
     
