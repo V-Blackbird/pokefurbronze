@@ -1812,7 +1812,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         }
         else
         {
-            FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
+            FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 0, 30, 20);
             CopyBgTilemapBufferToVram(3);
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
@@ -3061,17 +3061,22 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 {
     int i;
     // Load tilemap-based background for entry/info screen
-    // Copy entire 30x20 tilemap to buffer manually - will be copied to VRAM by state machine
+    // First clear BG3 buffer to prevent garbage data from showing
     u16 *buffer = GetBgTilemapBuffer(3);
+    for (i = 0; i < 30 * 20; i++)
+    {
+        buffer[i] = 0x1000;  // Tile 0 with palette 1 (avoids palette 0 which has unused green)
+    }
+    // Now copy the tilemap data
     for (i = 0; i < 30 * 20; i++)
     {
         buffer[i] = sDexEntryTilemap[i];
     }
     
-    // Now clear other layers
+    // Now clear other layers (full screen to avoid black bars)
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
-    FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
+    FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
 
     sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic);
     sPokedexScreenData->windowIds[1] = AddWindow(&sWindowTemplate_DexEntry_SpeciesStats);
@@ -3139,16 +3144,21 @@ u8 DexScreen_DrawMonAreaPage(void)
     monIsCaught = DexScreen_GetSetPokedexFlag(species, FLAG_GET_CAUGHT, TRUE);
 
     // Load tilemap-based background for entry/area screen
-    // Copy entire 30x20 tilemap to buffer manually - will be copied to VRAM by state machine
+    // First clear BG3 buffer to prevent garbage data from showing
     {
         u16 *buffer = GetBgTilemapBuffer(3);
+        for (i = 0; i < 30 * 20; i++)
+        {
+            buffer[i] = 0x1000;  // Tile 0 with palette 1 (avoids palette 0 which has unused green)
+        }
+        // Now copy the tilemap data
         for (i = 0; i < 30 * 20; i++)
         {
             buffer[i] = sDexEntryTilemap[i];
         }
     }
     
-    FillBgTilemapBufferRect_Palette0(0, 0, 0, 2, 30, 16);
+    FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
 
