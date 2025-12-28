@@ -605,10 +605,10 @@ static const struct WindowTemplate sWindowTemplate_CategoryMonInfo = {
 const struct WindowTemplate sWindowTemplate_DexEntry_MonPic = {
     .bg = 1,
     .tilemapLeft = 4,
-    .tilemapTop = 3,
-    .width = 9,
-    .height = 9,
-    .paletteNum = 0,
+    .tilemapTop = 2,
+    .width = 8,
+    .height = 8,
+    .paletteNum = 9,
     .baseBlock = 0x01a8
 };
 
@@ -618,7 +618,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesStats = {
     .tilemapTop = 4,
     .width = 13,
     .height = 9,
-    .paletteNum = 0,
+    .paletteNum = 3,
     .baseBlock = 0x01e8
 };
 
@@ -628,7 +628,17 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesName = {
     .tilemapTop = 0,
     .width = 12,
     .height = 4,
-    .paletteNum = 0,
+    .paletteNum = 3,
+    .baseBlock = 0x0230
+};
+
+const struct WindowTemplate sWindowTemplate_DexEntry_MonNo= {
+    .bg = 1,
+    .tilemapLeft = 4,
+    .tilemapTop = 10,
+    .width = 8,
+    .height = 2,
+    .paletteNum = 3,
     .baseBlock = 0x0230
 };
 
@@ -638,7 +648,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_FlavorText = {
     .tilemapTop = 12,
     .width = 30,
     .height = 7,
-    .paletteNum = 0,
+    .paletteNum = 1,
     .baseBlock = 0x0250
 };
 
@@ -3013,7 +3023,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.currentChar = gPokedexEntries[species].description;
         printerTemplate.windowId = windowId;
         printerTemplate.fontId = FONT_SMALL;
-        printerTemplate.letterSpacing = 0;
+        printerTemplate.letterSpacing = 0.75;
         printerTemplate.lineSpacing = 0;
         printerTemplate.unk = 0;
         printerTemplate.fgColor = 2;
@@ -3077,6 +3087,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     u16 *buffer = GetBgTilemapBuffer(3);
     bool8 monIsCaught;
     u16 length;
+    u8 buffer2;
+    u8 dexNum2;
     const u8 *labelText;
 
         labelText = gText_Number;
@@ -3092,23 +3104,22 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     
     // Now clear other layers (full screen to avoid black bars)
-    // Don't clear BG1 - windows use it for text display
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
+    FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
 
-    sPokedexScreenData->windowIds[3] = AddWindow(&sWindowTemplate_DexEntry_MonPic);
+    sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_MonPic);
     sPokedexScreenData->windowIds[1] = AddWindow(&sWindowTemplate_DexEntry_SpeciesStats);
     sPokedexScreenData->windowIds[2] = AddWindow(&sWindowTemplate_DexEntry_FlavorText);
-    sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_DexEntry_SpeciesName);
+    sPokedexScreenData->windowIds[3] = AddWindow(&sWindowTemplate_DexEntry_SpeciesName);
+    sPokedexScreenData->windowIds[4] = AddWindow(&sWindowTemplate_DexEntry_MonNo);
 
     // Mon pic
 
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[3], PIXEL_FILL(0));
-    DexScreen_LoadMonPicInWindow(sPokedexScreenData->windowIds[3], sPokedexScreenData->dexSpecies, 144);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_SMALL, labelText, 10, 57, 0);
-    DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[3], FONT_SMALL, sPokedexScreenData->dexSpecies, 25, 57);
-    PutWindowTilemap(sPokedexScreenData->windowIds[3]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[3], COPYWIN_GFX);
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[0], PIXEL_FILL(0));
+    DexScreen_LoadMonPicInWindow(sPokedexScreenData->windowIds[0], sPokedexScreenData->dexSpecies, 144);
+    PutWindowTilemap(sPokedexScreenData->windowIds[0]);
+    CopyWindowToVram(sPokedexScreenData->windowIds[0], COPYWIN_GFX);
 
     // Species stats
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[1], PIXEL_FILL(0));;
@@ -3121,7 +3132,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     }
     DexScreen_PrintMonHeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 32);
     DexScreen_PrintMonWeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 48);
-    DexScreen_DrawMonFootprint(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 72, 0);
+    DexScreen_DrawMonFootprint(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 72, 16);
     PutWindowTilemap(sPokedexScreenData->windowIds[1]);
     CopyWindowToVram(sPokedexScreenData->windowIds[1], COPYWIN_GFX);
 
@@ -3132,13 +3143,23 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     CopyWindowToVram(sPokedexScreenData->windowIds[2], COPYWIN_GFX);
 
     // Species name
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[0], PIXEL_FILL(0));
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[3], PIXEL_FILL(0));
     length = GetStringWidth(FONT_NORMAL, gText_PokemonListNoColor, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[0], FONT_NORMAL, gText_PokemonListNoColor, (((240 / 30) * 12) - length) / 2, 0, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_NORMAL, gText_PokemonListNoColor, (((240 / 30) * 12) - length) / 2, 0, 0);
     length = GetStringWidth(FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[0], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], (((240 / 30) * 12) - length) / 2, 20, 0);
-    PutWindowTilemap(sPokedexScreenData->windowIds[0]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[0], COPYWIN_GFX);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], (((240 / 30) * 12) - length) / 2, 20, 0);
+    PutWindowTilemap(sPokedexScreenData->windowIds[3]);
+    CopyWindowToVram(sPokedexScreenData->windowIds[3], COPYWIN_GFX);
+
+    // Mon no.
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[4], PIXEL_FILL(0));
+    StringCopy(buffer2, labelText);
+    dexNum2 = SpeciesToNationalPokedexNum(sPokedexScreenData->dexSpecies);
+    StringAppend(buffer2, dexNum2);
+    length = GetStringWidth(FONT_NORMAL, buffer2, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 12) - length) / 2, 0, 0);
+    PutWindowTilemap(sPokedexScreenData->windowIds[4]);
+    CopyWindowToVram(sPokedexScreenData->windowIds[4], COPYWIN_GFX);
 
     // Control info - hide bottom bar to show full tilemap
     // Window 1 cleared and not shown to display full tilemap at bottom
@@ -3152,7 +3173,8 @@ u8 RemoveDexPageWindows(void)
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[0]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[1]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[2]);
-    DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[3]);  // Remove MonPic window too
+    DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[3]);
+    DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[4]);
 
     return 0;
 }
