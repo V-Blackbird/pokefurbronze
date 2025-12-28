@@ -3156,7 +3156,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     dexNum2 = SpeciesToNationalPokedexNum(sPokedexScreenData->dexSpecies);
     ConvertIntToDecimalStringN(stringPtr, dexNum2, STR_CONV_MODE_LEADING_ZEROS, 3);
     length = GetStringWidth(FONT_NORMAL, buffer2, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 12) - length) / 2, 0, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 8) - length) / 2, 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[4]);
     CopyWindowToVram(sPokedexScreenData->windowIds[4], COPYWIN_GFX);
 
