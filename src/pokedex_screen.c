@@ -3159,7 +3159,7 @@ void DexScreen_PrintMonFlavorText(u8 windowId, u16 species, u8 x, u8 y)
         printerTemplate.windowId = windowId;
         printerTemplate.fontId = FONT_SMALL;
         printerTemplate.letterSpacing = 0.75;
-        printerTemplate.lineSpacing = 0;
+        printerTemplate.lineSpacing = 1;
         printerTemplate.unk = 0;
         printerTemplate.fgColor = 2;
         printerTemplate.bgColor = 0;
