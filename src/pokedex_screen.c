@@ -2339,6 +2339,125 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
     }
 }
 
+// Add inset black outline to sprite to improve visibility of light-colored Pokemon
+static void DexScreen_AddSpriteInsetOutline(u8 windowId)
+{
+    u8 *tileData = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
+    u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
+    u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
+    u32 pixelWidth = width * 8;
+    u32 pixelHeight = height * 8;
+    u8 *pixelBuffer;
+    u32 x, y;
+    
+    // Allocate temp buffer for 64x64 pixels (4096 bytes for 4bpp)
+    pixelBuffer = Alloc(pixelWidth * pixelHeight);
+    if (pixelBuffer == NULL)
+        return;
+    
+    // Convert tile data to linear pixel buffer
+    // Each tile is 8x8 pixels, 4bpp (2 pixels per byte)
+    for (y = 0; y < pixelHeight; y++)
+    {
+        u32 tileY = y / 8;
+        u32 localY = y % 8;
+        
+        for (x = 0; x < pixelWidth; x++)
+        {
+            u32 tileX = x / 8;
+            u32 localX = x % 8;
+            u32 tileIndex = tileY * width + tileX;
+            u32 tileOffset = tileIndex * 32; // 32 bytes per 4bpp tile
+            u32 rowOffset = localY * 4; // 4 bytes per row in 4bpp
+            u32 byteOffset = tileOffset + rowOffset + (localX / 2);
+            u8 pixelPair = tileData[byteOffset];
+            u8 pixel;
+            
+            if (localX & 1)
+                pixel = (pixelPair >> 4) & 0xF;
+            else
+                pixel = pixelPair & 0xF;
+            
+            pixelBuffer[y * pixelWidth + x] = pixel;
+        }
+    }
+    
+    // Find edge pixels and darken them (inset outline)
+    // Edge = non-transparent pixel with at least one transparent neighbor
+    for (y = 0; y < pixelHeight; y++)
+    {
+        for (x = 0; x < pixelWidth; x++)
+        {
+            u32 idx = y * pixelWidth + x;
+            u8 pixel = pixelBuffer[idx];
+            
+            // Skip if already transparent (color index 0)
+            if (pixel == 0)
+                continue;
+            
+            // Check 8 neighbors for transparency
+            bool8 hasTransparentNeighbor = FALSE;
+            s32 dx, dy;
+            
+            for (dy = -1; dy <= 1; dy++)
+            {
+                for (dx = -1; dx <= 1; dx++)
+                {
+                    if (dx == 0 && dy == 0)
+                        continue;
+                    
+                    s32 nx = x + dx;
+                    s32 ny = y + dy;
+                    
+                    // Check bounds
+                    if (nx < 0 || nx >= (s32)pixelWidth || ny < 0 || ny >= (s32)pixelHeight)
+                        continue;
+                    
+                    // Check if neighbor is transparent
+                    if (pixelBuffer[ny * pixelWidth + nx] == 0)
+                    {
+                        hasTransparentNeighbor = TRUE;
+                        break;
+                    }
+                }
+                if (hasTransparentNeighbor)
+                    break;
+            }
+            
+            // If this is an edge pixel, mark it for darkening
+            // We'll use palette index 15 as black outline color
+            if (hasTransparentNeighbor)
+            {
+                pixelBuffer[idx] = 15; // Black outline color
+            }
+        }
+    }
+    
+    // Convert pixel buffer back to tile data
+    for (y = 0; y < pixelHeight; y++)
+    {
+        u32 tileY = y / 8;
+        u32 localY = y % 8;
+        
+        for (x = 0; x < pixelWidth; x += 2)
+        {
+            u32 tileX = x / 8;
+            u32 localX = x % 8;
+            u32 tileIndex = tileY * width + tileX;
+            u32 tileOffset = tileIndex * 32;
+            u32 rowOffset = localY * 4;
+            u32 byteOffset = tileOffset + rowOffset + (localX / 2);
+            
+            u8 pixel0 = pixelBuffer[y * pixelWidth + x];
+            u8 pixel1 = pixelBuffer[y * pixelWidth + x + 1];
+            
+            tileData[byteOffset] = (pixel1 << 4) | pixel0;
+        }
+    }
+    
+    Free(pixelBuffer);
+}
+
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset)
 {
     u8 paletteSlot = paletteOffset >> 4;
@@ -2360,8 +2479,14 @@ static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOf
     // Convert to LCD monochrome
     ConvertPaletteToLCDMonochrome(palBuffer, 16);
     
+    // Ensure palette index 15 is black for outline
+    palBuffer[15] = RGB(0, 0, 0);
+    
     // Load the converted palette
     LoadPalette(palBuffer, BG_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
+    
+    // Add inset outline to improve visibility
+    DexScreen_AddSpriteInsetOutline(windowId);
 }
 
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
