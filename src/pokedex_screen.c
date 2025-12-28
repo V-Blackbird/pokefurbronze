@@ -608,7 +608,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_MonPic = {
     .tilemapTop = 3,
     .width = 9,
     .height = 9,
-    .paletteNum = 9,
+    .paletteNum = 0,
     .baseBlock = 0x01a8
 };
 
@@ -618,7 +618,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesStats = {
     .tilemapTop = 4,
     .width = 13,
     .height = 9,
-    .paletteNum = 9,
+    .paletteNum = 0,
     .baseBlock = 0x01e8
 };
 
@@ -628,7 +628,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesName = {
     .tilemapTop = 0,
     .width = 12,
     .height = 4,
-    .paletteNum = 9,
+    .paletteNum = 0,
     .baseBlock = 0x0230
 };
 
@@ -638,7 +638,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_FlavorText = {
     .tilemapTop = 12,
     .width = 30,
     .height = 7,
-    .paletteNum = 1,
+    .paletteNum = 0,
     .baseBlock = 0x0250
 };
 
