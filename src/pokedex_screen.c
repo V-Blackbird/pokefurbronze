@@ -2390,15 +2390,15 @@ static void DexScreen_AddSpriteInsetOutline(u8 windowId)
         {
             u32 idx = y * pixelWidth + x;
             u8 pixel = pixelBuffer[idx];
+            bool8 hasTransparentNeighbor = FALSE;
+            s32 dx, dy;
+            s32 nx, ny;
             
             // Skip if already transparent (color index 0)
             if (pixel == 0)
                 continue;
             
             // Check 8 neighbors for transparency
-            bool8 hasTransparentNeighbor = FALSE;
-            s32 dx, dy;
-            
             for (dy = -1; dy <= 1; dy++)
             {
                 for (dx = -1; dx <= 1; dx++)
@@ -2406,8 +2406,8 @@ static void DexScreen_AddSpriteInsetOutline(u8 windowId)
                     if (dx == 0 && dy == 0)
                         continue;
                     
-                    s32 nx = x + dx;
-                    s32 ny = y + dy;
+                    nx = x + dx;
+                    ny = y + dy;
                     
                     // Check bounds
                     if (nx < 0 || nx >= (s32)pixelWidth || ny < 0 || ny >= (s32)pixelHeight)
