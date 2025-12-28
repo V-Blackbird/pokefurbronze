@@ -3152,6 +3152,7 @@ u8 RemoveDexPageWindows(void)
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[0]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[1]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[2]);
+    DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[3]);  // Remove MonPic window too
 
     return 0;
 }
