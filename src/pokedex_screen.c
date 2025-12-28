@@ -3100,6 +3100,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     u8 buffer2[32];
     u16 dexNum2;
     u8 *stringPtr;
+    u16 baseDexNum;
+    u8 fraction;
 
         monIsCaught = DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE);
 
@@ -3162,8 +3164,21 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     // Mon no.
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[4], PIXEL_FILL(0));
     stringPtr = StringCopy(buffer2, gText_Number);
-    dexNum2 = SpeciesToNationalPokedexNum(sPokedexScreenData->dexSpecies);
-    ConvertIntToDecimalStringN(stringPtr, dexNum2, STR_CONV_MODE_LEADING_ZEROS, 3);
+    if (GetFractionalDexNumber(sPokedexScreenData->dexSpecies, &baseDexNum, &fraction))
+    {
+        // Fractional dex number (e.g., "No.133.1")
+        ConvertIntToDecimalStringN(stringPtr, baseDexNum, STR_CONV_MODE_LEADING_ZEROS, 3);
+        stringPtr += 3;
+        *stringPtr++ = CHAR_PERIOD;
+        *stringPtr++ = CHAR_0 + fraction;
+        *stringPtr = EOS;
+    }
+    else
+    {
+        // Normal dex number (e.g., "No.001")
+        dexNum2 = SpeciesToNationalPokedexNum(sPokedexScreenData->dexSpecies);
+        ConvertIntToDecimalStringN(stringPtr, dexNum2, STR_CONV_MODE_LEADING_ZEROS, 3);
+    }
     length = GetStringWidth(FONT_NORMAL, buffer2, 0);
     DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 8) - length) / 2, 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[4]);
