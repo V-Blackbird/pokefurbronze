@@ -2349,6 +2349,39 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
     }
 }
 
+// Convert type badge palette to LCD monochrome: white->black, rest->LCD green
+static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count)
+{
+    u16 i;
+    for (i = 0; i < count; i++)
+    {
+        u16 color = palette[i];
+        
+        // Extract RGB components (5-bit each)
+        u8 r = (color & 0x1F);
+        u8 g = ((color >> 5) & 0x1F);
+        u8 b = ((color >> 10) & 0x1F);
+        
+        // Calculate luminance to detect white/light colors
+        // Y = 0.299*R + 0.587*G + 0.114*B
+        // Scaled: Y = (77*R + 151*G + 28*B) / 256
+        u16 luminance = (77 * r + 151 * g + 28 * b) / 256;
+        
+        // Map white (high luminance) to black, everything else to LCD green
+        // LCD green: RGB(81, 80, 60) in 5-bit = (10, 10, 7)
+        if (luminance >= 28)  // Threshold for white/very light colors
+        {
+            // White text becomes black
+            palette[i] = RGB(0, 0, 0);
+        }
+        else
+        {
+            // Everything else becomes LCD green: RGB 81,80,60 = (10, 10, 7)
+            palette[i] = RGB(10, 10, 7);
+        }
+    }
+}
+
 // Add inset black outline to sprite to improve visibility of light-colored Pokemon
 static void DexScreen_AddSpriteInsetOutline(u8 windowId)
 {
@@ -3324,6 +3357,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     // Mon types
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[6], PIXEL_FILL(0));
     ListMenuLoadStdPalAt(BG_PLTT_ID(11), 1);
+    // Convert type badge palette to LCD monochrome style (white->black, rest->LCD green)
+    DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(11)], 16);
     if (monIsCaught)
     {
         BlitMenuInfoIcon(sPokedexScreenData->windowIds[6], 1 + gSpeciesInfo[sPokedexScreenData->dexSpecies].types[0], 0, 0);
@@ -3449,6 +3484,8 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Type icons
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[12], PIXEL_FILL(0));
     ListMenuLoadStdPalAt(BG_PLTT_ID(11), 1);
+    // Convert type badge palette to LCD monochrome style (white->black, rest->LCD green)
+    DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(11)], 16);
 
     if (monIsCaught)
     {
