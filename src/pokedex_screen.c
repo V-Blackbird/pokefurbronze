@@ -624,10 +624,10 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesStats = {
 
 const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesName = {
     .bg = 1,
-    .tilemapLeft = 9,
-    .tilemapTop = 0,
-    .width = 12,
-    .height = 4,
+    .tilemapLeft = 11,
+    .tilemapTop = 2,
+    .width = 8,
+    .height = 2,
     .paletteNum = 3,
     .baseBlock = 0x0230
 };
@@ -637,6 +637,16 @@ const struct WindowTemplate sWindowTemplate_DexEntry_MonNo= {
     .tilemapLeft = 4,
     .tilemapTop = 10,
     .width = 8,
+    .height = 2,
+    .paletteNum = 3,
+    .baseBlock = 0x0230
+};
+
+const struct WindowTemplate sWindowTemplate_DexEntry_PokeDex80 = {
+    .bg = 1,
+    .tilemapLeft = 9,
+    .tilemapTop = 0,
+    .width = 12,
     .height = 2,
     .paletteNum = 3,
     .baseBlock = 0x0230
@@ -3112,6 +3122,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     sPokedexScreenData->windowIds[2] = AddWindow(&sWindowTemplate_DexEntry_FlavorText);
     sPokedexScreenData->windowIds[3] = AddWindow(&sWindowTemplate_DexEntry_SpeciesName);
     sPokedexScreenData->windowIds[4] = AddWindow(&sWindowTemplate_DexEntry_MonNo);
+    sPokedexScreenData->windowIds[5] = AddWindow(&sWindowTemplate_DexEntry_PokeDex80);
 
     // Mon pic
 
@@ -3131,7 +3142,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     }
     DexScreen_PrintMonHeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 32);
     DexScreen_PrintMonWeight(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 0, 48);
-    DexScreen_DrawMonFootprint(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 72, 16);
+    DexScreen_DrawMonFootprint(sPokedexScreenData->windowIds[1], sPokedexScreenData->dexSpecies, 67, 16);
     PutWindowTilemap(sPokedexScreenData->windowIds[1]);
     CopyWindowToVram(sPokedexScreenData->windowIds[1], COPYWIN_GFX);
 
@@ -3143,10 +3154,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 
     // Species name
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[3], PIXEL_FILL(0));
-    length = GetStringWidth(FONT_NORMAL, gText_PokemonListNoColor, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_NORMAL, gText_PokemonListNoColor, (((240 / 30) * 12) - length) / 2, 0, 0);
     length = GetStringWidth(FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], (((240 / 30) * 12) - length) / 2, 20, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[3], FONT_NORMAL, gSpeciesNames[sPokedexScreenData->dexSpecies], (((240 / 30) * 8) - length) / 2, 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[3]);
     CopyWindowToVram(sPokedexScreenData->windowIds[3], COPYWIN_GFX);
 
@@ -3159,6 +3168,14 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 8) - length) / 2, 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[4]);
     CopyWindowToVram(sPokedexScreenData->windowIds[4], COPYWIN_GFX);
+
+    //Pokemon DeX '80
+    FillWindowPixelBuffer(sPokedexScreenData->windowIds[5], PIXEL_FILL(0));
+    length = GetStringWidth(FONT_NORMAL, gText_PokemonListNoColor, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[5], FONT_NORMAL, gText_PokemonListNoColor, (((240 / 30) * 12) - length) / 2, 0, 0);
+    PutWindowTilemap(sPokedexScreenData->windowIds[5]);
+    CopyWindowToVram(sPokedexScreenData->windowIds[5], COPYWIN_GFX);
+
 
     // Control info - hide bottom bar to show full tilemap
     // Window 1 cleared and not shown to display full tilemap at bottom
@@ -3174,6 +3191,7 @@ u8 RemoveDexPageWindows(void)
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[2]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[3]);
     DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[4]);
+    DexScreen_RemoveWindow(&sPokedexScreenData->windowIds[5]);
 
     return 0;
 }
