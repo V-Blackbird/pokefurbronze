@@ -624,7 +624,7 @@ const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesStats = {
 
 const struct WindowTemplate sWindowTemplate_DexEntry_SpeciesName = {
     .bg = 1,
-    .tilemapLeft = 11,
+    .tilemapLeft = 12,
     .tilemapTop = 2,
     .width = 8,
     .height = 2,
