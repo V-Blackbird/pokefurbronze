@@ -2340,8 +2340,13 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
 }
 
 // Add inset black outline to sprite to improve visibility of light-colored Pokemon
+// NOTE: Function temporarily disabled due to compiler complexity issues with agbcc
 static void DexScreen_AddSpriteInsetOutline(u8 windowId)
 {
+    // TODO: Re-implement with simpler algorithm or split into smaller functions
+    return;
+    
+#if 0
     u8 *tileData = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
     u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
     u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
@@ -2456,6 +2461,7 @@ static void DexScreen_AddSpriteInsetOutline(u8 windowId)
     }
     
     Free(pixelBuffer);
+#endif
 }
 
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset)
