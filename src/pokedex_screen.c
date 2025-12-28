@@ -3087,11 +3087,10 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     u16 *buffer = GetBgTilemapBuffer(3);
     bool8 monIsCaught;
     u16 length;
-    u8 buffer2;
-    u8 dexNum2;
-    const u8 *labelText;
+    u8 buffer2[32];
+    u16 dexNum2;
+    u8 *stringPtr;
 
-        labelText = gText_Number;
         monIsCaught = DexScreen_GetSetPokedexFlag(sPokedexScreenData->dexSpecies, FLAG_GET_CAUGHT, TRUE);
 
     for (row = 0; row < 20; row++)
@@ -3153,9 +3152,9 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 
     // Mon no.
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[4], PIXEL_FILL(0));
-    StringCopy(buffer2, labelText);
+    stringPtr = StringCopy(buffer2, gText_Number);
     dexNum2 = SpeciesToNationalPokedexNum(sPokedexScreenData->dexSpecies);
-    StringAppend(buffer2, dexNum2);
+    ConvertIntToDecimalStringN(stringPtr, dexNum2, STR_CONV_MODE_LEADING_ZEROS, 3);
     length = GetStringWidth(FONT_NORMAL, buffer2, 0);
     DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[4], FONT_SMALL, buffer2, (((240 / 30) * 12) - length) / 2, 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[4]);
