@@ -136,7 +136,6 @@ static u8 DexScreen_PageNumberToRenderablePages(u16 page);
 void DexScreen_InputHandler_StartToCry(void);
 void DexScreen_PrintStringWithAlignment(const u8 *str, s32 mode);
 static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct ListMenu *list);
-static void MoveCursorFunc_OrderedListMenu(s32 itemIndex, bool8 onInit, struct ListMenu *list);
 static void ItemPrintFunc_DexModeSelect(u8 windowId, u32 itemId, u8 y);
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
@@ -516,10 +515,10 @@ static const struct WindowTemplate sWindowTemplate_OrderedListMenu = {
 
 static const struct ListMenuTemplate sListMenuTemplate_OrderedListMenu = {
     .items = sListMenuItems_KantoDexModeSelect,
-    .moveCursorFunc = MoveCursorFunc_OrderedListMenu,
+    .moveCursorFunc = ListMenuDefaultCursorMoveFunc,
     .itemPrintFunc = ItemPrintFunc_OrderedListMenu,
     .totalItems = 0,
-    .maxShowed = 8,
+    .maxShowed = 9,
     .windowId = 0,
     .header_X = 0,
     .item_X = 56,
@@ -1659,31 +1658,15 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     bool8 seen = (itemId >> 16) & 1;  // not used but required to match
     bool8 caught = (itemId >> 17) & 1;
     u8 type1;
-    u8 adjustedY = y;
-    
-    /* Add gap after 5th entry (y >= 80 means we're at entry 6 or later) */
-    /* Each entry is 16 pixels tall, so entry 1-5 are at y=0,16,32,48,64 */
-    /* Entry 6 would normally be at y=80, but we want to skip 16 pixels (one row gap) */
-    if (y >= 80)
-    {
-        adjustedY = y + 16;
-    }
-    
-    DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 13, adjustedY);
+    DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 13, y);
     if (caught)
     {
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, adjustedY);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y);
         type1 = gSpeciesInfo[species].types[0];
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, adjustedY);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y);
         if (type1 != gSpeciesInfo[species].types[1])
-            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, adjustedY);
+            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y);
     }
-}
-
-static void MoveCursorFunc_OrderedListMenu(s32 itemIndex, bool8 onInit, struct ListMenu *list)
-{
-    if (!onInit)
-        PlaySE(SE_SELECT);
 }
 
 static void Task_DexScreen_CategorySubmenu(u8 taskId)
