@@ -536,25 +536,25 @@ static const struct ListMenuTemplate sListMenuTemplate_OrderedListMenu = {
 
 static const struct ListMenuWindowRect sListMenuRects_OrderedList[] = {
     {
-        .x = 0,
+        .x = 1,
         .y = 0,
         .width = 5,
         .height = 16,
         .palNum = 0
     }, {
-        .x = 5,
+        .x = 6,
         .y = 0,
         .width = 2,
         .height = 16,
         .palNum = 1
     }, {
-        .x = 7,
+        .x = 8,
         .y = 0,
         .width = 8,
         .height = 16,
         .palNum = 0
     }, {
-        .x = 15,
+        .x = 16,
         .y = 0,
         .width = 8,
         .height = 16,
