@@ -1250,6 +1250,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     case 0:
         ListMenuLoadStdPalAt(BG_PLTT_ID(1), 0);
         ListMenuLoadStdPalAt(BG_PLTT_ID(2), 1);
+        DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
         sPokedexScreenData->orderedDexCount = DexScreen_CountMonsInOrderedList(sPokedexScreenData->dexOrderId);
         sPokedexScreenData->state = 2;
         break;
