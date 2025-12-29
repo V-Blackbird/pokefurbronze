@@ -140,6 +140,7 @@ static void ItemPrintFunc_DexModeSelect(u8 windowId, u32 itemId, u8 y);
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
+static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count);
 
 #include "data/pokemon_graphics/footprint_table.h"
 
