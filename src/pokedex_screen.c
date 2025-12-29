@@ -505,7 +505,7 @@ static const struct PokedexScreenWindowGfx sTopMenuSelectionIconGfxPtrs[] = {
 
 static const struct WindowTemplate sWindowTemplate_OrderedListMenu = {
     .bg = 1,
-    .tilemapLeft = 2,
+    .tilemapLeft = 3,
     .tilemapTop = 2,
     .width = 23,
     .height = 16,
@@ -526,7 +526,7 @@ static const struct ListMenuTemplate sListMenuTemplate_OrderedListMenu = {
     .upText_Y = 9,
     .cursorPal = 1,
     .fillValue = 0,
-    .cursorShadowPal = 3,
+    .cursorShadowPal = 0,
     .lettersSpacing = 1,
     .itemVerticalPadding = 0,
     .scrollMultiple = 1,
@@ -536,25 +536,25 @@ static const struct ListMenuTemplate sListMenuTemplate_OrderedListMenu = {
 
 static const struct ListMenuWindowRect sListMenuRects_OrderedList[] = {
     {
-        .x = 1,
+        .x = 0,
         .y = 0,
         .width = 5,
         .height = 16,
-        .palNum = 0
+        .palNum = 3
     }, {
-        .x = 6,
+        .x = 5,
         .y = 0,
         .width = 2,
         .height = 16,
         .palNum = 1
     }, {
-        .x = 8,
+        .x = 7,
         .y = 0,
         .width = 8,
         .height = 16,
-        .palNum = 0
+        .palNum = 3
     }, {
-        .x = 16,
+        .x = 15,
         .y = 0,
         .width = 8,
         .height = 16,
@@ -1237,7 +1237,7 @@ static void MoveCursorFunc_DexModeSelect(s32 itemIndex, bool8 onInit, struct Lis
 static void ItemPrintFunc_DexModeSelect(u8 windowId, u32 itemId, u8 y)
 {
     if (itemId >= DEX_CATEGORY_COUNT || sPokedexScreenData->unlockedCategories & (1 << itemId))
-        ListMenuOverrideSetColors(TEXT_COLOR_WHITE, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_TRANSPARENT);
+        ListMenuOverrideSetColors(TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_TRANSPARENT);
     else
         ListMenuOverrideSetColors(TEXT_DYNAMIC_COLOR_1, TEXT_COLOR_TRANSPARENT, TEXT_COLOR_TRANSPARENT);
 }
@@ -1652,6 +1652,39 @@ struct PokedexListItem
     bool8 caught:1;
 };
 
+// Convert type badge palette to LCD monochrome: white->black, rest->LCD green
+static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count)
+{
+    u16 i;
+    for (i = 0; i < count; i++)
+    {
+        u16 color = palette[i];
+        
+        // Extract RGB components (5-bit each)
+        u8 r = (color & 0x1F);
+        u8 g = ((color >> 5) & 0x1F);
+        u8 b = ((color >> 10) & 0x1F);
+        
+        // Calculate luminance to detect white/light colors
+        // Y = 0.299*R + 0.587*G + 0.114*B
+        // Scaled: Y = (77*R + 151*G + 28*B) / 256
+        u16 luminance = (77 * r + 151 * g + 28 * b) / 256;
+        
+        // Map white (high luminance) to black, everything else to LCD green
+        // LCD green: RGB(81, 80, 60) in 5-bit = (10, 10, 7)
+        if (luminance >= 28)  // Threshold for white/very light colors
+        {
+            // White text becomes black
+            palette[i] = RGB(0, 0, 0);
+        }
+        else
+        {
+            // Everything else becomes LCD green: RGB 81,80,60 = (10, 10, 7)
+            palette[i] = RGB(10, 10, 7);
+        }
+    }
+}
+
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
 {
     u16 species = itemId;
@@ -1659,13 +1692,14 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     bool8 caught = (itemId >> 17) & 1;
     u8 type1;
     DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 13, y);
+    DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
     if (caught)
     {
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y + 1);
         type1 = gSpeciesInfo[species].types[0];
-        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y);
+        BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y + 1);
         if (type1 != gSpeciesInfo[species].types[1])
-            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y);
+            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y + 1);
     }
 }
 
@@ -2345,39 +2379,6 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
         {
             // Dark color: black
             palette[i] = RGB(0, 0, 0);
-        }
-    }
-}
-
-// Convert type badge palette to LCD monochrome: white->black, rest->LCD green
-static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count)
-{
-    u16 i;
-    for (i = 0; i < count; i++)
-    {
-        u16 color = palette[i];
-        
-        // Extract RGB components (5-bit each)
-        u8 r = (color & 0x1F);
-        u8 g = ((color >> 5) & 0x1F);
-        u8 b = ((color >> 10) & 0x1F);
-        
-        // Calculate luminance to detect white/light colors
-        // Y = 0.299*R + 0.587*G + 0.114*B
-        // Scaled: Y = (77*R + 151*G + 28*B) / 256
-        u16 luminance = (77 * r + 151 * g + 28 * b) / 256;
-        
-        // Map white (high luminance) to black, everything else to LCD green
-        // LCD green: RGB(81, 80, 60) in 5-bit = (10, 10, 7)
-        if (luminance >= 28)  // Threshold for white/very light colors
-        {
-            // White text becomes black
-            palette[i] = RGB(0, 0, 0);
-        }
-        else
-        {
-            // Everything else becomes LCD green: RGB 81,80,60 = (10, 10, 7)
-            palette[i] = RGB(10, 10, 7);
         }
     }
 }
