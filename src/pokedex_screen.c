@@ -1342,6 +1342,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
     case 0:
         ListMenuLoadStdPalAt(BG_PLTT_ID(1), 0);
         ListMenuLoadStdPalAt(BG_PLTT_ID(2), 1);
+        DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
         sPokedexScreenData->orderedDexCount = DexScreen_CountMonsInOrderedList(sPokedexScreenData->dexOrderId);
         sPokedexScreenData->state = 2;
         break;
@@ -1692,7 +1693,6 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
     bool8 caught = (itemId >> 17) & 1;
     u8 type1;
     DexScreen_PrintMonDexNo(sPokedexScreenData->numericalOrderWindowId, FONT_SMALL, species, 13, y);
-    DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
     if (caught)
     {
         BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, MENU_INFO_ICON_CAUGHT, 0x28, y + 1);
