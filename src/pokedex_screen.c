@@ -25,6 +25,12 @@
 #include "blit.h"
 
 #define TAG_AREA_MARKERS 2001
+#define DEX_LIST_BG_WIDTH 30
+#define DEX_LIST_BG_HEIGHT 20
+#define DEX_LIST_BG_TILE_COUNT (DEX_LIST_BG_WIDTH * DEX_LIST_BG_HEIGHT)
+#define DEX_TILEMAP_TILE_MASK 0x0FFF
+#define DEX_TILEMAP_PAL1 0x1000
+#define DEX_TILEMAP_PAL1_FILL_TILE (DEX_TILEMAP_PAL1 | 0x00C)
 
 enum TextMode {
     TEXT_LEFT,
@@ -1202,8 +1208,8 @@ static void DexScreen_LoadListScreenBackground(void)
 {
     int i;
     u16 *buffer = GetBgTilemapBuffer(3);
-    for (i = 0; i < 30 * 20; i++)
-        buffer[i] = (sNationalDexTilemap[i] & 0x0FFF) | 0x1000;
+    for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
+        buffer[i] = (sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
 }
 
 static void DexScreen_InitGfxForTopMenu(void)
@@ -2886,7 +2892,7 @@ bool8 DexScreen_TurnCategoryPage_BgEffect(u8 page)
         {
             DexPage_TileBuffer_FillCol(0x000, bg1buff, dstCol);
             DexPage_TileBuffer_FillCol(0x000, bg2buff, dstCol);
-            DexPage_TileBuffer_FillCol(0x100C, bg3buff, dstCol);
+            DexPage_TileBuffer_FillCol(DEX_TILEMAP_PAL1_FILL_TILE, bg3buff, dstCol);
         }
         else
         {
