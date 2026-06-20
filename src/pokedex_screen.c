@@ -1211,7 +1211,9 @@ static void DexScreen_LoadListScreenBackground(void)
     int i;
     u16 *buffer = GetBgTilemapBuffer(3);
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
+    {
         buffer[i] = (sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
+    }
 }
 
 static void DexScreen_InitGfxForTopMenu(void)
