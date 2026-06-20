@@ -314,6 +314,9 @@ KailoTown_EventScript_WildBattleTest2::
   setvar VAR_0x8004, SPECIES_PIDGEOTTO
   special SetSeenMon
   special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_VILL
+  special SetSeenMon
+  special SetCaughtMon
   setvar VAR_0x8004, SPECIES_FARFETCHD
   special SetSeenMon
   special SetCaughtMon

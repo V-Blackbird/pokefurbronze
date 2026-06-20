@@ -1962,14 +1962,14 @@ const u8 gDeoxysPokedexText[] = _(
     "altering its cellular structure.");
 const u8 gDeoxysPokedexTextUnused[] = _("");
 const u8 gVillPokedexText[] = _(
-    "One of the PROF. BLACKBIRD's POKéMON.\n"
-    "He said that it evolved from EEVEE\n"
-    "while exploring Sinnoh");
+    "PROF. BLACKBIRD's POKéMON with ears\n"
+    "torn. He said that it evolved from\n"
+    "EEVEE while exploring Sinnoh.");
 const u8 gVillPokedexTextUnused[] = _("");
 const u8 gMariePokedexText[] = _(
     "One of PROF. BLACKBIRD's POKéMON.\n"
-    "She's quite hardy and when bites it's\n"
-    "somehow more painful.");
+    "She's quite hardy and when she bites\n"
+    "it's somehow more painful.");
 const u8 gMariePokedexTextUnused[] = _("");
 const u8 gMarieFPokedexText[] = _(
     "EEVEE that PROF. BLACKBIRD gave me\n"

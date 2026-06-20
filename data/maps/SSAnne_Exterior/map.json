@@ -16,7 +16,7 @@
   "connections": [
     {
       "map": "MAP_VERMILION_CITY",
-      "offset": 9,
+      "offset": 10,
       "direction": "up"
     }
   ],
