@@ -30,6 +30,7 @@
 #define DEX_LIST_BG_TILE_COUNT (DEX_LIST_BG_WIDTH * DEX_LIST_BG_HEIGHT)
 #define DEX_TILEMAP_TILE_MASK 0x0FFF
 #define DEX_TILEMAP_PAL1 0x1000
+#define DEX_TILEMAP_PAL_INDEX 1
 #define DEX_TILEMAP_FILL_TILE_ID 0x00C
 #define DEX_TILEMAP_PAL1_FILL_TILE (DEX_TILEMAP_PAL1 | DEX_TILEMAP_FILL_TILE_ID)
 
@@ -2936,7 +2937,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         sPokedexScreenData->data[0]++;
         break;
     case 3:
-        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, 30, 20, 1);
+        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, 30, 20, DEX_TILEMAP_PAL_INDEX);
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
@@ -2950,7 +2951,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         CpuFastCopy(GetBgTilemapBuffer(3), &sPokedexScreenData->bgBufsMem[0 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(2), &sPokedexScreenData->bgBufsMem[1 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(1), &sPokedexScreenData->bgBufsMem[2 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
-        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, 30, 20, 1);
+        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, 30, 20, DEX_TILEMAP_PAL_INDEX);
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
 
