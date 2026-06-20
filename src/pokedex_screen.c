@@ -113,6 +113,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId);
 static void DexScreen_CreateCharacteristicListMenu(void);
 static u16 DexScreen_CountMonsInOrderedList(u8 orderIdx);
 static void DexScreen_InitListMenuForOrderedList(const struct ListMenuTemplate * template, u8 order);
+static u8 DexScreen_CreateModeSelectScrollArrows(void);
 static u8 DexScreen_CreateDexOrderScrollArrows(void);
 static void DexScreen_DestroyDexOrderListMenu(u8 order);
 static void Task_DexScreen_CategorySubmenu(u8 taskId);
@@ -448,7 +449,7 @@ static const struct ScrollArrowsTemplate sScrollArrowsTemplate_KantoDex = {
     .secondX = 200,
     .secondY = 138,
     .fullyUpThreshold = 0,
-    .fullyDownThreshold = 11,
+    .fullyDownThreshold = 0,
     .tileTag = 2000,
     .palTag = 0xFFFF,
     .palNum = 1
@@ -462,7 +463,7 @@ static const struct ScrollArrowsTemplate sScrollArrowsTemplate_NatDex = {
     .secondX = 200,
     .secondY = 138,
     .fullyUpThreshold = 0,
-    .fullyDownThreshold = 12,
+    .fullyDownThreshold = 0,
     .tileTag = 2000,
     .palTag = 0xFFFF,
     .palNum = 1
@@ -1104,10 +1105,7 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 5:
         ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
-        if (IsNationalPokedexEnabled())
-            sPokedexScreenData->scrollArrowsTaskId = AddScrollIndicatorDexArrowPair(&sScrollArrowsTemplate_NatDex, &sPokedexScreenData->modeSelectCursorPosBak);
-        else
-            sPokedexScreenData->scrollArrowsTaskId = AddScrollIndicatorDexArrowPair(&sScrollArrowsTemplate_KantoDex, &sPokedexScreenData->modeSelectCursorPosBak);
+        sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateModeSelectScrollArrows();
         sPokedexScreenData->state = 6;
         break;
     case 6:
@@ -1689,6 +1687,30 @@ static u8 DexScreen_CreateDexOrderScrollArrows(void)
         template.fullyDownThreshold = sPokedexScreenData->orderedDexCount - sListMenuTemplate_OrderedListMenu.maxShowed;
     else
         template.fullyDownThreshold = 0;
+    return AddScrollIndicatorDexArrowPair(&template, &sPokedexScreenData->modeSelectCursorPosBak);
+}
+
+static u8 DexScreen_CreateModeSelectScrollArrows(void)
+{
+    struct ScrollArrowsTemplate template;
+    const struct ListMenuTemplate *listMenuTemplate;
+
+    if (IsNationalPokedexEnabled())
+    {
+        template = sScrollArrowsTemplate_NatDex;
+        listMenuTemplate = &sListMenuTemplate_NatDexModeSelect;
+    }
+    else
+    {
+        template = sScrollArrowsTemplate_KantoDex;
+        listMenuTemplate = &sListMenuTemplate_KantoDexModeSelect;
+    }
+
+    if (listMenuTemplate->totalItems > listMenuTemplate->maxShowed)
+        template.fullyDownThreshold = listMenuTemplate->totalItems - listMenuTemplate->maxShowed;
+    else
+        template.fullyDownThreshold = 0;
+
     return AddScrollIndicatorDexArrowPair(&template, &sPokedexScreenData->modeSelectCursorPosBak);
 }
 
