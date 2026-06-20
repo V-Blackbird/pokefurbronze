@@ -123,6 +123,7 @@ static bool8 DexScreen_CreateCategoryListGfx(bool8 justRegistered);
 static void DexScreen_CreateCategoryPageSelectionCursor(u8 cursorPos);
 static void DexScreen_UpdateCategoryPageCursorObject(u8 taskId, u8 cursorPos, u8 numMonsInPage);
 static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction);
+static void DexScreen_LoadListScreenBackground(void);
 void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale);
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered);
 u8 RemoveDexPageWindows(void);
@@ -1197,22 +1198,18 @@ static void DexScreen_ShowPokeDex80Label(void)
     CopyWindowToVram(2, COPYWIN_FULL);
 }
 
+static void DexScreen_LoadListScreenBackground(void)
+{
+    int i;
+    u16 *buffer = GetBgTilemapBuffer(3);
+    for (i = 0; i < 30 * 20; i++)
+        buffer[i] = (sNationalDexTilemap[i] & 0x0FFF) | 0x1000;
+}
+
 static void DexScreen_InitGfxForTopMenu(void)
 {
     struct ListMenuTemplate listMenuTemplate;
-    int row, col;
-    u16 *bg3buf = GetBgTilemapBuffer(3);
-    // Use dex entry border rows for top/bottom (avoids black borders)
-    for (col = 0; col < 32; col++)
-    {
-        bg3buf[0 * 32 + col] = sDexEntryTilemap[0 * 32 + col];
-        bg3buf[1 * 32 + col] = sDexEntryTilemap[1 * 32 + col];
-        bg3buf[18 * 32 + col] = sDexEntryTilemap[18 * 32 + col];
-        bg3buf[19 * 32 + col] = sDexEntryTilemap[19 * 32 + col];
-    }
-    for (row = 2; row < 18; row++)
-        for (col = 0; col < 32; col++)
-            bg3buf[row * 32 + col] = 0x00E;
+    DexScreen_LoadListScreenBackground();
     FillBgTilemapBufferRect(2, 0x000, 0, 0, 30, 20, 17);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 30, 20, 17);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
@@ -1355,13 +1352,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
 static void DexScreen_InitGfxForNumericalOrderList(void)
 {
     struct ListMenuTemplate template;
-    int i;
-    // Load tilemap-based background for list screen with palette 1
-    u16 *buffer = GetBgTilemapBuffer(3);
-    for (i = 0; i < 30 * 20; i++)
-    {
-        buffer[i] = (sNationalDexTilemap[i] & 0x0FFF) | 0x1000;  // Clear old palette bits, set palette 1
-    }
+    DexScreen_LoadListScreenBackground();
     CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
@@ -1450,8 +1441,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
 static void DexScreen_CreateCharacteristicListMenu(void)
 {
     struct ListMenuTemplate template;
-    // Load tilemap-based background for list screen
-    CopyToBgTilemapBuffer(3, sNationalDexTilemap, 0, 0);
+    DexScreen_LoadListScreenBackground();
     CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
@@ -2777,19 +2767,7 @@ static void DexScreen_PrintCategoryPageNumbers(u8 windowId, u16 currentPage, u16
 
 static bool8 DexScreen_CreateCategoryListGfx(bool8 justRegistered)
 {
-    int row, col;
-    u16 *bg3buf = GetBgTilemapBuffer(3);
-    // Use dex entry border rows for top/bottom (matches dex entry look, avoids black borders)
-    for (col = 0; col < 32; col++)
-    {
-        bg3buf[0 * 32 + col] = sDexEntryTilemap[0 * 32 + col];
-        bg3buf[1 * 32 + col] = sDexEntryTilemap[1 * 32 + col];
-        bg3buf[18 * 32 + col] = sDexEntryTilemap[18 * 32 + col];
-        bg3buf[19 * 32 + col] = sDexEntryTilemap[19 * 32 + col];
-    }
-    for (row = 2; row < 18; row++)
-        for (col = 0; col < 32; col++)
-            bg3buf[row * 32 + col] = 2;
+    DexScreen_LoadListScreenBackground();
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 32, 20);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
@@ -2908,7 +2886,7 @@ bool8 DexScreen_TurnCategoryPage_BgEffect(u8 page)
         {
             DexPage_TileBuffer_FillCol(0x000, bg1buff, dstCol);
             DexPage_TileBuffer_FillCol(0x000, bg2buff, dstCol);
-            DexPage_TileBuffer_FillCol(0x00C, bg3buff, dstCol);
+            DexPage_TileBuffer_FillCol(0x100C, bg3buff, dstCol);
         }
         else
         {
@@ -2951,7 +2929,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         sPokedexScreenData->data[0]++;
         break;
     case 3:
-        FillBgTilemapBufferRect_Palette0(3, 0x00C, 0, 0, 30, 20);
+        FillBgTilemapBufferRect(3, 0x00C, 0, 0, 30, 20, 1);
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
@@ -2965,7 +2943,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         CpuFastCopy(GetBgTilemapBuffer(3), &sPokedexScreenData->bgBufsMem[0 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(2), &sPokedexScreenData->bgBufsMem[1 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(1), &sPokedexScreenData->bgBufsMem[2 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
-        FillBgTilemapBufferRect_Palette0(3, 0x00C, 0, 0, 30, 20);
+        FillBgTilemapBufferRect(3, 0x00C, 0, 0, 30, 20, 1);
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
 
