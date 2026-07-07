@@ -1578,7 +1578,7 @@ static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species)
     {
         return sDexEntryTilemapFemale2;
     }
-    
+
     // Default tilemap for everything else (mixed-gender and genderless)
     return sDexEntryTilemap2;
 }
