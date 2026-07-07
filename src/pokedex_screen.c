@@ -151,6 +151,7 @@ static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count);
 static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species);
+static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species);
 
 // Pokemon Gender Constants
 #define GENDER_MALE_ONLY    0
@@ -168,6 +169,9 @@ const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tile
 const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sDexEntryTilemapMale[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_m.bin");
 const u16 sDexEntryTilemapFemale[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_f.bin");
+const u16 sDexEntryTilemap2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_2.bin");
+const u16 sDexEntryTilemapMale2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_m_2.bin");
+const u16 sDexEntryTilemapFemale2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_f_2.bin");
 const u16 sKantoDexPalette[0x100] = INCBIN_U16("graphics/pokedex/kanto_dex_bgpals.gbapal");
 const u16 sDexLCDPalette[0x100] = INCBIN_U16("graphics/pokedex/dex_lcd_bgpals.gbapal");
 
@@ -1553,6 +1557,30 @@ static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species)
     
     // Default tilemap for everything else (mixed-gender and genderless)
     return sDexEntryTilemap;
+}
+
+static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species)
+{
+    u8 genderRatio;
+    
+    // Get gender ratio from species info
+    if (species == SPECIES_NONE || species >= NUM_SPECIES)
+        return sDexEntryTilemap2;
+    
+    genderRatio = gSpeciesInfo[species].genderRatio;
+    
+    // Check if species is male-only or female-only
+    if (genderRatio == GENDER_MALE_ONLY)
+    {
+        return sDexEntryTilemapMale2;
+    }
+    else if (genderRatio == GENDER_FEMALE_ONLY)
+    {
+        return sDexEntryTilemapFemale2;
+    }
+    
+    // Default tilemap for everything else (mixed-gender and genderless)
+    return sDexEntryTilemap2;
 }
 
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
@@ -3284,7 +3312,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Use gender-specific tilemap based on species
     {
         u16 *buffer = GetBgTilemapBuffer(3);
-        const u16 *tilemap = DexScreen_GetEntryTilemapForSpecies(species);
+        const u16 *tilemap = DexScreen_GetEntryTilemapForSecondPageSpecies(species);
         int row, col;
         for (row = 0; row < 20; row++)
         {
@@ -3398,12 +3426,8 @@ u8 DexScreen_DrawMonAreaPage(void)
     }
     CopyWindowToVram(sPokedexScreenData->windowIds[0], COPYWIN_GFX);
 
-    // Draw the control info
-    FillWindowPixelBuffer(1, PIXEL_FILL(0));
-    DexScreen_AddTextPrinterParameterized(1, FONT_SMALL, gText_Cry, 8, 2, 4);
-    DexScreen_PrintControlInfo(gText_CancelPreviousData);
-    PutWindowTilemap(1);
-    CopyWindowToVram(1, COPYWIN_GFX);
+    // Hide bottom control bar on the second entry page.
+    ClearWindowTilemap(1);
 
     DexScreen_ShowPokeDex80Label();
     ChangeBgY(2, -(3 << 8), 0);
