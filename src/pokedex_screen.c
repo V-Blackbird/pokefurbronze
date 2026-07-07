@@ -150,8 +150,7 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count);
-static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species);
-static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species);
+static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species, bool8 secondPage);
 
 // Pokemon Gender Constants
 #define GENDER_MALE_ONLY    0
@@ -1534,53 +1533,29 @@ static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count)
     }
 }
 
-// Helper function to select appropriate tilemap based on species gender
-static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species)
-{
-    u8 genderRatio;
-    
-    // Get gender ratio from species info
-    if (species == SPECIES_NONE || species >= NUM_SPECIES)
-        return sDexEntryTilemap;
-    
-    genderRatio = gSpeciesInfo[species].genderRatio;
-    
-    // Check if species is male-only or female-only
-    if (genderRatio == GENDER_MALE_ONLY)
-    {
-        return sDexEntryTilemapMale;
-    }
-    else if (genderRatio == GENDER_FEMALE_ONLY)
-    {
-        return sDexEntryTilemapFemale;
-    }
-    
-    // Default tilemap for everything else (mixed-gender and genderless)
-    return sDexEntryTilemap;
-}
-
-static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species)
+// Helper function to select appropriate tilemap based on species gender and page.
+static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species, bool8 secondPage)
 {
     u8 genderRatio;
 
     // Get gender ratio from species info
     if (species == SPECIES_NONE || species >= NUM_SPECIES)
-        return sDexEntryTilemap2;
+        return secondPage ? sDexEntryTilemap2 : sDexEntryTilemap;
 
     genderRatio = gSpeciesInfo[species].genderRatio;
 
     // Check if species is male-only or female-only
     if (genderRatio == GENDER_MALE_ONLY)
     {
-        return sDexEntryTilemapMale2;
+        return secondPage ? sDexEntryTilemapMale2 : sDexEntryTilemapMale;
     }
     else if (genderRatio == GENDER_FEMALE_ONLY)
     {
-        return sDexEntryTilemapFemale2;
+        return secondPage ? sDexEntryTilemapFemale2 : sDexEntryTilemapFemale;
     }
 
     // Default tilemap for everything else (mixed-gender and genderless)
-    return sDexEntryTilemap2;
+    return secondPage ? sDexEntryTilemap2 : sDexEntryTilemap;
 }
 
 static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
@@ -3177,7 +3152,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
 
     // Get appropriate tilemap based on species gender
     {
-        const u16 *tilemap = DexScreen_GetEntryTilemapForSpecies(sPokedexScreenData->dexSpecies);
+        const u16 *tilemap = DexScreen_GetEntryTilemapForSpecies(sPokedexScreenData->dexSpecies, FALSE);
         
         for (row = 0; row < 20; row++)
         {
@@ -3312,7 +3287,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Use gender-specific tilemap based on species
     {
         u16 *buffer = GetBgTilemapBuffer(3);
-        const u16 *tilemap = DexScreen_GetEntryTilemapForSecondPageSpecies(species);
+        const u16 *tilemap = DexScreen_GetEntryTilemapForSpecies(species, TRUE);
         int row, col;
         for (row = 0; row < 20; row++)
         {
