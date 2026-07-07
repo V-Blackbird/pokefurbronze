@@ -1562,13 +1562,13 @@ static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species)
 static const u16 *DexScreen_GetEntryTilemapForSecondPageSpecies(u16 species)
 {
     u8 genderRatio;
-    
+
     // Get gender ratio from species info
     if (species == SPECIES_NONE || species >= NUM_SPECIES)
         return sDexEntryTilemap2;
-    
+
     genderRatio = gSpeciesInfo[species].genderRatio;
-    
+
     // Check if species is male-only or female-only
     if (genderRatio == GENDER_MALE_ONLY)
     {
