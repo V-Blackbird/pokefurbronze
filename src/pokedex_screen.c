@@ -1849,10 +1849,8 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         {
             FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 2, 30, 16);
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
-            FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
-            CopyBgTilemapBufferToVram(0);
             sPokedexScreenData->state = 24;
         }
         else
@@ -2014,10 +2012,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
             HideBg(1);
             FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 30, 20);
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 30, 20);
-            FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 0, 30, 20);
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
-            CopyBgTilemapBufferToVram(0);
             sPokedexScreenData->state = 10;
         }
         else
