@@ -3204,7 +3204,6 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
             }
         }
     }
-    CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     
     // Now clear other layers (full screen to avoid black bars)
     FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
@@ -3338,7 +3337,6 @@ u8 DexScreen_DrawMonAreaPage(void)
                 buffer[row * 32 + col] = tilemap[row * 32 + col];
             }
         }
-        CopyBgTilemapBufferToVram(3);  // Immediately copy to VRAM to prevent overwrites
     }
     
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
