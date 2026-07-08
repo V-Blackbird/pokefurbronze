@@ -105,6 +105,7 @@ EWRAM_DATA static struct PokedexScreenData * sPokedexScreenData = NULL;
 static void Task_PokedexScreen(u8 taskId);
 static void DexScreen_ShowPokeDex80Label(void);
 static void DexScreen_InitGfxForTopMenu(void);
+static void DexScreen_LoadBlankScreenBackground(void);
 static void Task_DexScreen_NumericalOrder(u8 taskId);
 static void DexScreen_InitGfxForNumericalOrderList(void);
 static void Task_DexScreen_CharacteristicOrder(u8 taskId);
@@ -171,6 +172,7 @@ const u16 sDexEntryTilemapFemale[] = INCBIN_U16("graphics/pokedex/dex_entry_tile
 const u16 sDexEntryTilemap2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_2.bin");
 const u16 sDexEntryTilemapMale2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_m_2.bin");
 const u16 sDexEntryTilemapFemale2[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_f_2.bin");
+const u16 sDexEntryTilemapBlank[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_blank.bin");
 const u16 sKantoDexPalette[0x100] = INCBIN_U16("graphics/pokedex/kanto_dex_bgpals.gbapal");
 const u16 sDexLCDPalette[0x100] = INCBIN_U16("graphics/pokedex/dex_lcd_bgpals.gbapal");
 
@@ -957,6 +959,8 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 7:
         DestroyListMenuTask(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPos, &sPokedexScreenData->modeSelectItemsAbove);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
@@ -970,6 +974,8 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 8:
         DestroyListMenuTask(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPos, &sPokedexScreenData->modeSelectItemsAbove);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->modeSelectWindowId);
         DexScreen_RemoveWindow(&sPokedexScreenData->dexCountsWindowId);
@@ -978,6 +984,8 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 9:
         DestroyListMenuTask(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPos, &sPokedexScreenData->modeSelectItemsAbove);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->modeSelectWindowId);
         DexScreen_RemoveWindow(&sPokedexScreenData->dexCountsWindowId);
@@ -1005,6 +1013,16 @@ static void DexScreen_LoadListScreenBackground(void)
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
     {
         buffer[i] = (sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
+    }
+}
+
+static void DexScreen_LoadBlankScreenBackground(void)
+{
+    int i;
+    u16 *buffer = GetBgTilemapBuffer(3);
+    for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
+    {
+        buffer[i] = (sDexEntryTilemapBlank[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
     }
 }
 
@@ -1087,6 +1105,8 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         break;
     case 1:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->numericalOrderWindowId);
         gTasks[taskId].func = Task_PokedexScreen;
@@ -1130,6 +1150,8 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         break;
     case 7:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
@@ -1174,6 +1196,8 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         break;
     case 1:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->numericalOrderWindowId);
         gTasks[taskId].func = Task_PokedexScreen;
@@ -1216,6 +1240,8 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         break;
     case 7:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->numericalOrderWindowId);
@@ -1590,6 +1616,8 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         sPokedexScreenData->state = 2;
         break;
     case 1:
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         DexScreen_DestroyCategoryPageMonIconAndInfoWindows();
         HideBg(2);
         HideBg(1);
@@ -1774,6 +1802,8 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
     case 17:
         if (JOY_NEW(A_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             RemoveDexPageWindows();
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
             CopyBgTilemapBufferToVram(1);
@@ -1837,6 +1867,8 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
     case 23:
         if (JOY_NEW(A_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 2, 30, 16);
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
             FillBgTilemapBufferRect_Palette0(0, 0x000, 0, 2, 30, 16);
@@ -1847,6 +1879,8 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 2, 30, 16);
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
             CopyBgTilemapBufferToVram(2);
@@ -1924,6 +1958,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 2;
         break;
     case 1:
+        DexScreen_LoadBlankScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         HideBg(2);
         HideBg(1);
         DexScreen_ShowPokeDex80Label();
@@ -1952,6 +1988,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
     case 5:
         if (JOY_NEW(A_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             HideBg(1);
             RemoveDexPageWindows();
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 2, 30, 16);
@@ -1960,6 +1998,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             HideBg(2);
             HideBg(1);
             RemoveDexPageWindows();
@@ -1967,6 +2007,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         }
         else if (JOY_NEW(DPAD_UP) && DexScreen_TryScrollMonsVertical(1))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             HideBg(2);
             HideBg(1);
             RemoveDexPageWindows();
@@ -1974,6 +2016,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         }
         else if (JOY_NEW(DPAD_DOWN) && DexScreen_TryScrollMonsVertical(0))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             HideBg(2);
             HideBg(1);
             RemoveDexPageWindows();
@@ -2008,6 +2052,8 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         }
         else if (JOY_NEW(B_BUTTON))
         {
+            DexScreen_LoadBlankScreenBackground();
+            CopyBgTilemapBufferToVram(3);
             HideBg(2);
             HideBg(1);
             FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 30, 20);
@@ -2738,7 +2784,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         sPokedexScreenData->data[0]++;
         break;
     case 3:
-        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, DEX_LIST_BG_WIDTH, DEX_LIST_BG_HEIGHT, DEX_TILEMAP_PAL_INDEX);
+        DexScreen_LoadBlankScreenBackground();
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
         CopyBgTilemapBufferToVram(1);
@@ -2752,7 +2798,7 @@ static bool8 DexScreen_FlipCategoryPageInDirection(u8 direction)
         CpuFastCopy(GetBgTilemapBuffer(3), &sPokedexScreenData->bgBufsMem[0 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(2), &sPokedexScreenData->bgBufsMem[1 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
         CpuFastCopy(GetBgTilemapBuffer(1), &sPokedexScreenData->bgBufsMem[2 * BG_SCREEN_SIZE / 2], BG_SCREEN_SIZE);
-        FillBgTilemapBufferRect(3, DEX_TILEMAP_FILL_TILE_ID, 0, 0, DEX_LIST_BG_WIDTH, DEX_LIST_BG_HEIGHT, DEX_TILEMAP_PAL_INDEX);
+        DexScreen_LoadBlankScreenBackground();
         FillBgTilemapBufferRect_Palette0(2, 0x000, 0, 0, 32, 20);
         FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 32, 20);
 
