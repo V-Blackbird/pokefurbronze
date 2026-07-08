@@ -984,7 +984,7 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 9:
         DestroyListMenuTask(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPos, &sPokedexScreenData->modeSelectItemsAbove);
-        DexScreen_LoadListScreenBackground();
+        DexScreen_LoadBlankScreenBackground();
         CopyBgTilemapBufferToVram(3);
         HideBg(1);
         DexScreen_RemoveWindow(&sPokedexScreenData->modeSelectWindowId);
@@ -1958,7 +1958,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 2;
         break;
     case 1:
-        DexScreen_LoadListScreenBackground();
+        DexScreen_LoadBlankScreenBackground();
         CopyBgTilemapBufferToVram(3);
         HideBg(2);
         HideBg(1);
