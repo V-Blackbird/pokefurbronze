@@ -29,10 +29,7 @@
 #define DEX_LIST_BG_HEIGHT 20
 #define DEX_LIST_BG_TILE_COUNT (DEX_LIST_BG_WIDTH * DEX_LIST_BG_HEIGHT)
 #define DEX_TILEMAP_TILE_MASK 0x0FFF
-#define DEX_TILEMAP_PAL1 0x1000
-#define DEX_TILEMAP_PAL_INDEX 1
-#define DEX_TILEMAP_FILL_TILE_ID 0x00C
-#define DEX_TILEMAP_PAL1_FILL_TILE (DEX_TILEMAP_PAL1 | DEX_TILEMAP_FILL_TILE_ID)
+#define DEX_TILEMAP_FILL_TILE 0x00C
 
 enum TextMode {
     TEXT_LEFT,
@@ -164,7 +161,7 @@ static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species, bool8 secondP
 const u32 sCategoryMonInfoBgTiles[] = INCBIN_U32("graphics/pokedex/mini_page.4bpp.lz");
 const u32 sKantoDexTiles[] = INCBIN_U32("graphics/pokedex/kanto_dex_bgtiles.4bpp.lz");
 const u32 sNatDexTiles[] = INCBIN_U32("graphics/pokedex/national_dex_bgtiles.4bpp.lz");
-const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.8bpp.lz");
+const u32 sDexEntryBgTiles[] = INCBIN_U32("graphics/pokedex/dex_entry_bgtiles.4bpp.lz");
 const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap.bin");
 const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sDexEntryTilemapMale[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_m.bin");
@@ -230,7 +227,7 @@ static const struct BgTemplate sBgTemplates[] = {
         .charBaseIndex = 3,  // Use separate character base from BG0
         .mapBaseIndex = 7,
         .screenSize = 0,
-        .paletteMode = 1,  // 8bpp mode for 256-color LCD tileset
+        .paletteMode = 0,
         .priority = 3,
         .baseTile = 0x0000
     },
@@ -779,9 +776,9 @@ void DexScreen_LoadResources(void)
     SetBgTilemapBuffer(1, (u16 *)Alloc(BG_SCREEN_SIZE));
     SetBgTilemapBuffer(0, (u16 *)Alloc(BG_SCREEN_SIZE));
     if (natDex)
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x1000, 0, 0);
     else
-        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x2000, 0, 0);
+        DecompressAndLoadBgGfxUsingHeap(3, (void *)sDexEntryBgTiles, 0x1000, 0, 0);
     InitWindows(sWindowTemplates);
     DeactivateAllTextPrinters();
     m4aSoundVSyncOn();
@@ -1012,7 +1009,7 @@ static void DexScreen_LoadListScreenBackground(void)
     // sNationalDexTilemap contains the full visible 30x20 tile area used by list-style dex screens.
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
     {
-        buffer[i] = (sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
+        buffer[i] = sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK;
     }
 }
 
@@ -1022,7 +1019,7 @@ static void DexScreen_LoadBlankScreenBackground(void)
     u16 *buffer = GetBgTilemapBuffer(3);
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
     {
-        buffer[i] = (sDexEntryTilemapBlank[i] & DEX_TILEMAP_TILE_MASK) | DEX_TILEMAP_PAL1;
+        buffer[i] = sDexEntryTilemapBlank[i] & DEX_TILEMAP_TILE_MASK;
     }
 }
 
@@ -1097,7 +1094,6 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     switch (sPokedexScreenData->state)
     {
     case 0:
-        gPaletteFade.bufferTransferDisabled = TRUE;
         ListMenuLoadStdPalAt(BG_PLTT_ID(1), 0);
         ListMenuLoadStdPalAt(BG_PLTT_ID(2), 1);
         DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
@@ -1118,23 +1114,12 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
+        DexScreen_LoadListScreenBackground();
+        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
         break;
     case 4:
-        if (!IsDma3ManagerBusyWithBgCopy())
-        {
-            gPaletteFade.bufferTransferDisabled = FALSE;
-            sPokedexScreenData->state = 8;
-        }
-        break;
-    case 8:
-        DexScreen_LoadListScreenBackground();
-        CopyBgTilemapBufferToVram(3);
-        CopyBgTilemapBufferToVram(1);
-        sPokedexScreenData->state = 9;
-        break;
-    case 9:
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             ShowBg(1);
@@ -2755,7 +2740,7 @@ bool8 DexScreen_TurnCategoryPage_BgEffect(u8 page)
         {
             DexPage_TileBuffer_FillCol(0x000, bg1buff, dstCol);
             DexPage_TileBuffer_FillCol(0x000, bg2buff, dstCol);
-            DexPage_TileBuffer_FillCol(DEX_TILEMAP_PAL1_FILL_TILE, bg3buff, dstCol);
+            DexPage_TileBuffer_FillCol(DEX_TILEMAP_FILL_TILE, bg3buff, dstCol);
         }
         else
         {
