@@ -25,9 +25,9 @@
 #include "blit.h"
 
 #define TAG_AREA_MARKERS 2001
-#define DEX_LIST_BG_WIDTH 30
+#define DEX_LIST_BG_STRIDE 32
 #define DEX_LIST_BG_HEIGHT 20
-#define DEX_LIST_BG_TILE_COUNT (DEX_LIST_BG_WIDTH * DEX_LIST_BG_HEIGHT)
+#define DEX_LIST_BG_TILE_COUNT (DEX_LIST_BG_STRIDE * DEX_LIST_BG_HEIGHT)
 #define DEX_TILEMAP_TILE_MASK 0x0FFF
 #define DEX_TILEMAP_FILL_TILE 0x00C
 
@@ -1008,7 +1008,7 @@ static void DexScreen_LoadListScreenBackground(void)
 {
     int i;
     u16 *buffer = GetBgTilemapBuffer(3);
-    // sNationalDexTilemap contains the full visible 30x20 tile area used by list-style dex screens.
+    // Copy complete 32-tile rows so no stale entries remain in the tilemap stride.
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
     {
         buffer[i] = sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK;
@@ -3204,7 +3204,7 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
     }
     
     // Now clear other layers (full screen to avoid black bars)
-    FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
+    FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 32, 32);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
 
@@ -3337,8 +3337,9 @@ u8 DexScreen_DrawMonAreaPage(void)
         }
     }
     
+    LoadBgTiles(2, sTransparentBgTile, sizeof(sTransparentBgTile), 0);
     FillBgTilemapBufferRect_Palette0(0, 0, 0, 0, 30, 20);
-    FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 30, 20);
+    FillBgTilemapBufferRect_Palette0(2, 0, 0, 0, 32, 32);
     FillBgTilemapBufferRect_Palette0(1, 0, 0, 0, 30, 20);
 
     sPokedexScreenData->windowIds[0] = AddWindow(&sWindowTemplate_AreaMap_Kanto);
