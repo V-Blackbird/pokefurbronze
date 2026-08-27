@@ -32,7 +32,7 @@
 #define DEX_TILEMAP_FILL_TILE 0x00C
 #define DEX_SIZE_COMPARISON_MATRIX_SCALE(scale) ((scale) * 4 / 3)
 #define DEX_SIZE_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * 3 + 32) / 4)
-#define POKEDEX_TYPE_NONE_ICON (TYPE_MYSTERY + 1)
+#define POKEDEX_TYPE_NONE_ICON MENU_INFO_ICON_POKEDEX_NONE
 
 enum TextMode {
     TEXT_LEFT,
