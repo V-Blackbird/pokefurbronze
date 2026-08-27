@@ -3358,6 +3358,13 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Draw the mon icon
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[11], PIXEL_FILL(0));
     ListMenu_LoadMonIconPalette(BG_PLTT_ID(10), species);
+    {
+        u16 iconPalette[16];
+
+        CpuCopy16(&gPlttBufferUnfaded[BG_PLTT_ID(10)], iconPalette, sizeof(iconPalette));
+        ConvertPaletteToLCDMonochrome(iconPalette, ARRAY_COUNT(iconPalette));
+        LoadPalette(iconPalette, BG_PLTT_ID(10), sizeof(iconPalette));
+    }
     ListMenu_DrawMonIconGraphics(sPokedexScreenData->windowIds[11], species, DexScreen_GetDefaultPersonality(species), 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[11]);
     CopyWindowToVram(sPokedexScreenData->windowIds[11], COPYWIN_GFX);
