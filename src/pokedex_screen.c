@@ -3372,21 +3372,11 @@ u8 DexScreen_DrawMonAreaPage(void)
     PutWindowTilemap(sPokedexScreenData->windowIds[11]);
     CopyWindowToVram(sPokedexScreenData->windowIds[11], COPYWIN_GFX);
 
-    // Print "Size"
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[9], PIXEL_FILL(0));
-    {
-        s32 strWidth = GetStringWidth(FONT_SMALL, gText_Size, 0);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[9], FONT_SMALL, gText_Size, (sWindowTemplate_AreaMap_Size.width * 8 - strWidth) / 2, 4, 0);
-    }
     PutWindowTilemap(sPokedexScreenData->windowIds[9]);
     CopyWindowToVram(sPokedexScreenData->windowIds[9], COPYWIN_GFX);
 
-    // Print "Area"
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[10], PIXEL_FILL(0));
-    {
-        s32 strWidth = GetStringWidth(FONT_SMALL, gText_Area, 0);
-        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[10], FONT_SMALL, gText_Area, (sWindowTemplate_AreaMap_Area.width * 8 - strWidth) / 2, 4, 0);
-    }
     PutWindowTilemap(sPokedexScreenData->windowIds[10]);
     CopyWindowToVram(sPokedexScreenData->windowIds[10], COPYWIN_GFX);
 
