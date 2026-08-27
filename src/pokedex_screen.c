@@ -31,6 +31,7 @@
 #define DEX_TILEMAP_TILE_MASK 0x0FFF
 #define DEX_TILEMAP_FILL_TILE 0x00C
 #define DEX_SIZE_COMPARISON_MATRIX_SCALE(scale) ((scale) * 4 / 3)
+#define DEX_SIZE_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * 3 + 32) / 4)
 
 enum TextMode {
     TEXT_LEFT,
@@ -3425,14 +3426,14 @@ u8 DexScreen_DrawMonAreaPage(void)
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
-        gSprites[sPokedexScreenData->windowIds[14]].y2 = gPokedexEntries[speciesId].pokemonOffset;
+        gSprites[sPokedexScreenData->windowIds[14]].y2 = DEX_SIZE_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].pokemonOffset);
         SetOamMatrix(2, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
         sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 116, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[15]].oam.matrixNum = 1;
         gSprites[sPokedexScreenData->windowIds[15]].oam.priority = 1;
-        gSprites[sPokedexScreenData->windowIds[15]].y2 = gPokedexEntries[speciesId].trainerOffset;
+        gSprites[sPokedexScreenData->windowIds[15]].y2 = DEX_SIZE_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].trainerOffset);
         SetOamMatrix(1, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale));
     }
     else
