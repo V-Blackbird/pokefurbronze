@@ -19,7 +19,7 @@ struct PAM_TaskData
 {
     struct SubspriteTable subsprites;
     void *buffer;
-    u8 unused;
+    u8 blinkTimer;
     u8 spriteId;
     u16 tilesTag;
     u16 paletteTag; // Never read
@@ -49,6 +49,7 @@ static const u32 sMarkerBgTile[8] = {
 };
 
 #define AREA_MARKER_BG_TILE 0x1A7
+#define AREA_MARKER_BLINK_FRAMES 30
 
 static const struct Subsprite sSubsprite_Circular = {
     .size = SPRITE_SIZE(8x8),
@@ -194,10 +195,15 @@ static const s8 sAreaMarkers[][4] = {
     [DEX_AREA_TANOBY_CHAMBER]   = { MARKER_MED_H,     96,  90 },
 };
 
-static void Task_ShowAreaMarkers(u8 taskId)
+static void Task_BlinkAreaMarkers(u8 taskId)
 {
     struct PAM_TaskData * data = (void *)gTasks[taskId].data;
-    gSprites[data->spriteId].invisible = FALSE;
+
+    if (++data->blinkTimer >= AREA_MARKER_BLINK_FRAMES)
+    {
+        data->blinkTimer = 0;
+        gSprites[data->spriteId].invisible ^= TRUE;
+    }
 }
 
 u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 x, u8 y)
@@ -216,9 +222,9 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 x, u8 y)
     LoadPalette(sMarkerPal, OBJ_PLTT_ID(palIdx), sizeof(sMarkerPal));
 
     // Get marker subsprites
-    taskId = CreateTask(Task_ShowAreaMarkers, 0);
+    taskId = CreateTask(Task_BlinkAreaMarkers, 0);
     data = (void *)gTasks[taskId].data;
-    data->unused = 0;
+    data->blinkTimer = 0;
     data->tilesTag = tilesTag;
     data->paletteTag = TAG_NONE;
     subsprites = Alloc(120 * sizeof(struct Subsprite));
@@ -241,7 +247,7 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 x, u8 y)
     gSprites[data->spriteId].oam.objMode = ST_OAM_OBJ_WINDOW;
     gSprites[data->spriteId].oam.paletteNum = palIdx;
     gSprites[data->spriteId].subspriteTableNum = 0;
-    gSprites[data->spriteId].invisible = TRUE;
+    gSprites[data->spriteId].invisible = FALSE;
 
     // Show markers
     HideBg(1);
