@@ -4,7 +4,6 @@
 #include "task.h"
 #include "wild_pokemon_area.h"
 #include "pokedex_area_markers.h"
-#include "pokedex.h"
 
 /*
     Controls the red ellipse markers that appear on the pokedex maps to show where a species is found.
@@ -37,6 +36,18 @@ enum {
 
 static const u16 sMarkerPal[] = INCBIN_U16("graphics/pokedex/area_markers/marker.gbapal");
 static const u32 sMarkerTiles[] = INCBIN_U32("graphics/pokedex/area_markers/marker.4bpp.lz");
+static const u32 sMarkerBgTile[8] = {
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+    0xDDDDDDDD,
+};
+
+#define AREA_MARKER_BG_TILE 0x1A7
 
 static const struct Subsprite sSubsprite_Circular = {
     .size = SPRITE_SIZE(8x8),
@@ -233,8 +244,8 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 x, u8 y)
 
     // Show markers
     HideBg(1);
-    SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, POKEDEX_BACKGROUND_CHAR_BASE);
-    FillBgTilemapBufferRect_Palette0(1, 0x00F, 0, 0, 30, 20);
+    LoadBgTiles(1, sMarkerBgTile, sizeof(sMarkerBgTile), AREA_MARKER_BG_TILE);
+    FillBgTilemapBufferRect_Palette0(1, AREA_MARKER_BG_TILE, 0, 0, 30, 20);
     CopyBgTilemapBufferToVram(1);
     ShowBg(1);
     return taskId;
