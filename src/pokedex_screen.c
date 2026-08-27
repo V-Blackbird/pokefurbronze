@@ -2045,11 +2045,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
         sPokedexScreenData->state = 9;
         break;
     case 9:
-        if (JOY_NEW(A_BUTTON))
-        {
-            sPokedexScreenData->state = 12;
-        }
-        else if (JOY_NEW(B_BUTTON))
+        if (JOY_NEW(A_BUTTON) || JOY_NEW(B_BUTTON))
         {
             DexScreen_LoadBlankScreenBackground();
             CopyBgTilemapBufferToVram(3);
@@ -2059,7 +2055,7 @@ static void Task_DexScreen_ShowMonPage(u8 taskId)
             FillBgTilemapBufferRect_Palette0(1, 0x000, 0, 0, 30, 20);
             CopyBgTilemapBufferToVram(2);
             CopyBgTilemapBufferToVram(1);
-            sPokedexScreenData->state = 10;
+            sPokedexScreenData->state = JOY_NEW(A_BUTTON) ? 12 : 10;
         }
         else
         {
