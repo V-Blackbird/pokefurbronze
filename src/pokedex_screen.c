@@ -122,6 +122,7 @@ static bool32 DexScreen_TryScrollMonsVertical(u8 direction);
 static void DexScreen_RemoveWindow(u8 *windowId_p);
 static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const u8 *str, u8 x, u8 y, u8 colorIdx);
 static void DexScreen_PrintNum3RightAlign(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx);
+static void DexScreen_FormatMonDexNo(u8 *dest, u16 species);
 static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y);
 static u16 DexScreen_GetDexCount(u8 caseId, bool8 whichDex);
 static void DexScreen_PrintControlInfo(const u8 *src);
@@ -2223,16 +2224,6 @@ static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const 
     AddTextPrinterParameterized4(windowId, fontId, x, y, fontId == FONT_SMALL ? 0 : 1, 0, textColor, -1, str);
 }
 
-static void DexScreen_PrintNum3LeadingZeroes(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx)
-{
-    u8 buff[4];
-    buff[0] = (num / 100) + CHAR_0;
-    buff[1] = ((num %= 100) / 10) + CHAR_0;
-    buff[2] = (num % 10) + CHAR_0;
-    buff[3] = EOS;
-    DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x, y, colorIdx);
-}
-
 static void DexScreen_PrintNum3RightAlign(u8 windowId, u8 fontId, u16 num, u8 x, u8 y, u8 colorIdx)
 {
     u8 buff[4];
@@ -2448,30 +2439,36 @@ static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOf
     DexScreen_AddSpriteInsetOutline(windowId);
 }
 
-static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
+static void DexScreen_FormatMonDexNo(u8 *dest, u16 species)
 {
     u16 dexNum = SpeciesToNationalPokedexNum(species);
     u16 baseDexNum;
     u8 fraction;
-    u8 buff[8];
-    
+
     // Check if this is a fabular species with fractional dex number
     if (GetFractionalDexNumber(species, &baseDexNum, &fraction))
     {
         // Format as "XXX.Y" (e.g., "133.1")
-        buff[0] = (baseDexNum / 100) + CHAR_0;
-        buff[1] = ((baseDexNum % 100) / 10) + CHAR_0;
-        buff[2] = (baseDexNum % 10) + CHAR_0;
-        buff[3] = CHAR_PERIOD;  // Decimal point
-        buff[4] = fraction + CHAR_0;
-        buff[5] = EOS;
-        DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x, y, 0);
+        dest[0] = (baseDexNum / 100) + CHAR_0;
+        dest[1] = ((baseDexNum % 100) / 10) + CHAR_0;
+        dest[2] = (baseDexNum % 10) + CHAR_0;
+        dest[3] = CHAR_PERIOD;
+        dest[4] = fraction + CHAR_0;
+        dest[5] = EOS;
     }
     else
     {
         // Normal 3-digit display
-        DexScreen_PrintNum3LeadingZeroes(windowId, fontId, dexNum, x, y, 0);
+        ConvertIntToDecimalStringN(dest, dexNum, STR_CONV_MODE_LEADING_ZEROS, 3);
     }
+}
+
+static void DexScreen_PrintMonDexNo(u8 windowId, u8 fontId, u16 species, u8 x, u8 y)
+{
+    u8 buff[8];
+
+    DexScreen_FormatMonDexNo(buff, species);
+    DexScreen_AddTextPrinterParameterized(windowId, fontId, buff, x, y, 0);
 }
 
 s8 DexScreen_GetSetPokedexFlag(u16 nationalDexNo, u8 caseId, bool8 indexIsSpecies)
@@ -3389,9 +3386,14 @@ u8 DexScreen_DrawMonAreaPage(void)
 
     // Print species name
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], PIXEL_FILL(0));
-    DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[8], FONT_SMALL, species, 0, 0);
     {
+        u8 dexNo[8];
+        s32 dexNoWidth;
         s32 strWidth = GetStringWidth(FONT_NORMAL, gSpeciesNames[species], 0);
+
+        DexScreen_FormatMonDexNo(dexNo, species);
+        dexNoWidth = GetStringWidth(FONT_SMALL, dexNo, 0);
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_SMALL, dexNo, (sWindowTemplate_AreaMap_SpeciesName.width * 8 - dexNoWidth) / 2, 0, 0);
         DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_NORMAL, gSpeciesNames[species], (sWindowTemplate_AreaMap_SpeciesName.width * 8 - strWidth) / 2, 12, 0);
     }
     PutWindowTilemap(sPokedexScreenData->windowIds[8]);
@@ -3418,14 +3420,14 @@ u8 DexScreen_DrawMonAreaPage(void)
 
     if (monIsCaught)
     {
-        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 116, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 120, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[14]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
         gSprites[sPokedexScreenData->windowIds[14]].y2 = gPokedexEntries[speciesId].pokemonOffset;
         SetOamMatrix(2, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
-        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 116, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 120, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[15]].oam.matrixNum = 1;
