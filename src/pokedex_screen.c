@@ -603,7 +603,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_MonIcon = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
     .bg = 2,
-    .tilemapLeft = 15,
+    .tilemapLeft = 13,
     .tilemapTop = 12,
     .width = 8,
     .height = 3,
@@ -633,7 +633,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_Area = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
-    .tilemapLeft = 15,
+    .tilemapLeft = 13,
     .tilemapTop = 15,
     .width = 8,
     .height = 2,
@@ -3390,7 +3390,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Print species name
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], PIXEL_FILL(0));
     DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[8], FONT_SMALL, species, 0, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_NORMAL, gSpeciesNames[species], 3, 12, 0);
+    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_NORMAL, gSpeciesNames[species], ((8*4)/2), 12, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[8]);
     CopyWindowToVram(sPokedexScreenData->windowIds[8], COPYWIN_GFX);
 
