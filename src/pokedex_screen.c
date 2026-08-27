@@ -1117,6 +1117,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
+        DexScreen_LoadListScreenBackground();
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
@@ -1165,8 +1166,6 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
 static void DexScreen_InitGfxForNumericalOrderList(void)
 {
     struct ListMenuTemplate template;
-    DexScreen_LoadListScreenBackground();
-    CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
