@@ -1097,6 +1097,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     switch (sPokedexScreenData->state)
     {
     case 0:
+        gPaletteFade.bufferTransferDisabled = TRUE;
         ListMenuLoadStdPalAt(BG_PLTT_ID(1), 0);
         ListMenuLoadStdPalAt(BG_PLTT_ID(2), 1);
         DexScreen_ConvertTypeBadgePaletteToLCD(&gPlttBufferUnfaded[BG_PLTT_ID(2)], 16);
@@ -1117,12 +1118,23 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        DexScreen_LoadListScreenBackground();
-        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
         break;
     case 4:
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            gPaletteFade.bufferTransferDisabled = FALSE;
+            sPokedexScreenData->state = 8;
+        }
+        break;
+    case 8:
+        DexScreen_LoadListScreenBackground();
+        CopyBgTilemapBufferToVram(3);
+        CopyBgTilemapBufferToVram(1);
+        sPokedexScreenData->state = 9;
+        break;
+    case 9:
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             ShowBg(1);
