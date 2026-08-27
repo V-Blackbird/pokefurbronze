@@ -603,7 +603,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_MonIcon = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
     .bg = 2,
-    .tilemapLeft = 18,
+    .tilemapLeft = 15,
     .tilemapTop = 12,
     .width = 8,
     .height = 3,
@@ -614,7 +614,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
 const struct WindowTemplate sWindowTemplate_AreaMap_Size = {
     .bg = 2,
     .tilemapLeft = 2,
-    .tilemapTop = 9,
+    .tilemapTop = 7,
     .width = 10,
     .height = 2,
     .paletteNum = 0,
@@ -633,7 +633,7 @@ const struct WindowTemplate sWindowTemplate_AreaMap_Area = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
-    .tilemapLeft = 18,
+    .tilemapLeft = 15,
     .tilemapTop = 15,
     .width = 8,
     .height = 2,
@@ -3415,14 +3415,14 @@ u8 DexScreen_DrawMonAreaPage(void)
 
     if (monIsCaught)
     {
-        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 112, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 104, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[14]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
         gSprites[sPokedexScreenData->windowIds[14]].y2 = gPokedexEntries[speciesId].pokemonOffset;
         SetOamMatrix(2, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
-        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 112, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 104, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[15]].oam.matrixNum = 1;
