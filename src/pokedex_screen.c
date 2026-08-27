@@ -3390,7 +3390,10 @@ u8 DexScreen_DrawMonAreaPage(void)
     // Print species name
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], PIXEL_FILL(0));
     DexScreen_PrintMonDexNo(sPokedexScreenData->windowIds[8], FONT_SMALL, species, 0, 0);
-    DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_NORMAL, gSpeciesNames[species], ((8*4)/2), 12, 0);
+    {
+        s32 strWidth = GetStringWidth(FONT_NORMAL, gSpeciesNames[species], 0);
+        DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[8], FONT_NORMAL, gSpeciesNames[species], (sWindowTemplate_AreaMap_SpeciesName.width * 8 - strWidth) / 2, 12, 0);
+    }
     PutWindowTilemap(sPokedexScreenData->windowIds[8]);
     CopyWindowToVram(sPokedexScreenData->windowIds[8], COPYWIN_GFX);
 
