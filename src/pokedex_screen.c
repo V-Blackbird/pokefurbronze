@@ -614,26 +614,6 @@ const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
     .baseBlock = 0x01b8
 };
 
-const struct WindowTemplate sWindowTemplate_AreaMap_Size = {
-    .bg = 2,
-    .tilemapLeft = 2,
-    .tilemapTop = 7,
-    .width = 10,
-    .height = 2,
-    .paletteNum = 0,
-    .baseBlock = 0x01d0
-};
-
-const struct WindowTemplate sWindowTemplate_AreaMap_Area = {
-    .bg = 2,
-    .tilemapLeft = 18,
-    .tilemapTop = 2,
-    .width = 10,
-    .height = 2,
-    .paletteNum = 0,
-    .baseBlock = 0x01e4
-};
-
 const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
     .tilemapLeft = 13,
@@ -3353,8 +3333,8 @@ u8 DexScreen_DrawMonAreaPage(void)
     for (i = 1; i <= 7; i++)
         sPokedexScreenData->windowIds[i] = 0xFF;
     sPokedexScreenData->windowIds[8] = AddWindow(&sWindowTemplate_AreaMap_SpeciesName);
-    sPokedexScreenData->windowIds[9] = AddWindow(&sWindowTemplate_AreaMap_Size);
-    sPokedexScreenData->windowIds[10] = AddWindow(&sWindowTemplate_AreaMap_Area);
+    sPokedexScreenData->windowIds[9] = 0xFF;
+    sPokedexScreenData->windowIds[10] = 0xFF;
     sPokedexScreenData->windowIds[11] = AddWindow(&sWindowTemplate_AreaMap_MonIcon);
     sPokedexScreenData->windowIds[12] = AddWindow(&sWindowTemplate_AreaMap_MonTypes);
 
@@ -3371,14 +3351,6 @@ u8 DexScreen_DrawMonAreaPage(void)
     ListMenu_DrawMonIconGraphics(sPokedexScreenData->windowIds[11], species, DexScreen_GetDefaultPersonality(species), 0, 0);
     PutWindowTilemap(sPokedexScreenData->windowIds[11]);
     CopyWindowToVram(sPokedexScreenData->windowIds[11], COPYWIN_GFX);
-
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[9], PIXEL_FILL(0));
-    PutWindowTilemap(sPokedexScreenData->windowIds[9]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[9], COPYWIN_GFX);
-
-    FillWindowPixelBuffer(sPokedexScreenData->windowIds[10], PIXEL_FILL(0));
-    PutWindowTilemap(sPokedexScreenData->windowIds[10]);
-    CopyWindowToVram(sPokedexScreenData->windowIds[10], COPYWIN_GFX);
 
     // Print species name
     FillWindowPixelBuffer(sPokedexScreenData->windowIds[8], PIXEL_FILL(0));
