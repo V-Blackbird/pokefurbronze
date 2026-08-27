@@ -1123,8 +1123,11 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 4;
         break;
     case 4:
-        ShowBg(1);
-        sPokedexScreenData->state = 5;
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            ShowBg(1);
+            sPokedexScreenData->state = 5;
+        }
         break;
     case 5:
         ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
