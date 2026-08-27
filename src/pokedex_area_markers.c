@@ -4,6 +4,7 @@
 #include "task.h"
 #include "wild_pokemon_area.h"
 #include "pokedex_area_markers.h"
+#include "pokedex.h"
 
 /*
     Controls the red ellipse markers that appear on the pokedex maps to show where a species is found.
