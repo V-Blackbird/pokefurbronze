@@ -1,6 +1,8 @@
 #ifndef GUARD_POKEDEX_H
 #define GUARD_POKEDEX_H
 
+#define POKEDEX_BACKGROUND_CHAR_BASE 3
+
 enum
 {
     DEX_MODE_KANTO,

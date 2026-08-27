@@ -188,7 +188,7 @@ static void Task_ShowAreaMarkers(u8 taskId)
     gSprites[data->spriteId].invisible = FALSE;
 }
 
-u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
+u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 x, u8 y)
 {
     struct SpriteTemplate spriteTemplate;
     struct CompressedSpriteSheet spriteSheet;
@@ -224,7 +224,7 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
     // Set marker subsprites on full sprite
     spriteTemplate = gDummySpriteTemplate;
     spriteTemplate.tileTag = tilesTag;
-    data->spriteId = CreateSprite(&spriteTemplate, 104, y + 32, 0);
+    data->spriteId = CreateSprite(&spriteTemplate, x, y, 0);
     SetSubspriteTables(&gSprites[data->spriteId], &data->subsprites);
     gSprites[data->spriteId].oam.objMode = ST_OAM_OBJ_WINDOW;
     gSprites[data->spriteId].oam.paletteNum = palIdx;
@@ -233,7 +233,7 @@ u8 CreatePokedexAreaMarkers(u16 species, u16 tilesTag, u8 palIdx, u8 y)
 
     // Show markers
     HideBg(1);
-    SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, 0);
+    SetBgAttribute(1, BG_ATTR_CHARBASEINDEX, POKEDEX_BACKGROUND_CHAR_BASE);
     FillBgTilemapBufferRect_Palette0(1, 0x00F, 0, 0, 30, 20);
     CopyBgTilemapBufferToVram(1);
     ShowBg(1);

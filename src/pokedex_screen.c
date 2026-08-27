@@ -33,6 +33,7 @@
 #define DEX_SIZE_COMPARISON_MATRIX_SCALE(scale) ((scale) * 4 / 3)
 #define DEX_SIZE_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * 3 + 32) / 4)
 #define POKEDEX_TYPE_NONE_ICON MENU_INFO_ICON_POKEDEX_NONE
+#define DEX_AREA_MAP_Y_OFFSET 3
 
 enum TextMode {
     TEXT_LEFT,
@@ -230,7 +231,7 @@ static const struct BgTemplate sBgTemplates[] = {
     },
     {
         .bg = 3,
-        .charBaseIndex = 3,  // Use separate character base from BG0
+        .charBaseIndex = POKEDEX_BACKGROUND_CHAR_BASE,
         .mapBaseIndex = 7,
         .screenSize = 0,
         .paletteMode = 0,
@@ -3412,7 +3413,12 @@ u8 DexScreen_DrawMonAreaPage(void)
     }
 
     // Create the area markers
-    sPokedexScreenData->areaMarkersTaskId = CreatePokedexAreaMarkers(species, TAG_AREA_MARKERS, 3, 3);
+    sPokedexScreenData->areaMarkersTaskId = CreatePokedexAreaMarkers(
+        species,
+        TAG_AREA_MARKERS,
+        3,
+        sWindowTemplate_AreaMap_Kanto.tilemapLeft * 8 - 32,
+        sWindowTemplate_AreaMap_Kanto.tilemapTop * 8 + DEX_AREA_MAP_Y_OFFSET);
     if (GetNumPokedexAreaMarkers(sPokedexScreenData->areaMarkersTaskId) == 0)
     {
         // No markers, display "Area Unknown"
@@ -3428,7 +3434,7 @@ u8 DexScreen_DrawMonAreaPage(void)
     ClearWindowTilemap(1);
 
     DexScreen_ShowPokeDex80Label();
-    ChangeBgY(2, -(3 << 8), 0);
+    ChangeBgY(2, -(DEX_AREA_MAP_Y_OFFSET << 8), 0);
 
     return 1;
 }
