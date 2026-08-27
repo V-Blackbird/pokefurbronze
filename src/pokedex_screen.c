@@ -603,18 +603,18 @@ const struct WindowTemplate sWindowTemplate_AreaMap_MonIcon = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_SpeciesName = {
     .bg = 2,
-    .tilemapLeft = 5,
-    .tilemapTop = 2,
+    .tilemapLeft = 18,
+    .tilemapTop = 12,
     .width = 8,
     .height = 3,
-    .paletteNum = 0,
+    .paletteNum = 3,
     .baseBlock = 0x01b8
 };
 
 const struct WindowTemplate sWindowTemplate_AreaMap_Size = {
     .bg = 2,
     .tilemapLeft = 2,
-    .tilemapTop = 7,
+    .tilemapTop = 9,
     .width = 10,
     .height = 2,
     .paletteNum = 0,
@@ -633,8 +633,8 @@ const struct WindowTemplate sWindowTemplate_AreaMap_Area = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_MonTypes = {
     .bg = 2,
-    .tilemapLeft = 5,
-    .tilemapTop = 5,
+    .tilemapLeft = 18,
+    .tilemapTop = 15,
     .width = 8,
     .height = 2,
     .paletteNum = 11,
