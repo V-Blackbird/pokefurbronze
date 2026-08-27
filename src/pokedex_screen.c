@@ -32,6 +32,7 @@
 #define DEX_TILEMAP_FILL_TILE 0x00C
 #define DEX_SIZE_COMPARISON_MATRIX_SCALE(scale) ((scale) * 4 / 3)
 #define DEX_SIZE_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * 3 + 32) / 4)
+#define POKEDEX_TYPE_NONE_ICON (TYPE_MYSTERY + 1)
 
 enum TextMode {
     TEXT_LEFT,
@@ -1607,6 +1608,8 @@ static void ItemPrintFunc_OrderedListMenu(u8 windowId, u32 itemId, u8 y)
         BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, type1 + 1, 0x78, y + 1);
         if (type1 != gSpeciesInfo[species].types[1])
             BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, gSpeciesInfo[species].types[1] + 1, 0x98, y + 1);
+        else
+            BlitMenuInfoIcon(sPokedexScreenData->numericalOrderWindowId, POKEDEX_TYPE_NONE_ICON, 0x98, y + 1);
     }
 }
 
@@ -3284,6 +3287,8 @@ static u8 DexScreen_DrawMonDexPage(bool8 justRegistered)
         BlitMenuInfoIcon(sPokedexScreenData->windowIds[6], 1 + gSpeciesInfo[sPokedexScreenData->dexSpecies].types[0], 0, 0);
         if (gSpeciesInfo[sPokedexScreenData->dexSpecies].types[0] != gSpeciesInfo[sPokedexScreenData->dexSpecies].types[1])
             BlitMenuInfoIcon(sPokedexScreenData->windowIds[6], 1 + gSpeciesInfo[sPokedexScreenData->dexSpecies].types[1], 32, 0);
+        else
+            BlitMenuInfoIcon(sPokedexScreenData->windowIds[6], POKEDEX_TYPE_NONE_ICON, 32, 0);
     }
     PutWindowTilemap(sPokedexScreenData->windowIds[6]);
     CopyWindowToVram(sPokedexScreenData->windowIds[6], COPYWIN_GFX);
@@ -3411,6 +3416,8 @@ u8 DexScreen_DrawMonAreaPage(void)
         BlitMenuInfoIcon(sPokedexScreenData->windowIds[12], 1 + gSpeciesInfo[species].types[0], 0, 1);
         if (gSpeciesInfo[species].types[0] != gSpeciesInfo[species].types[1])
             BlitMenuInfoIcon(sPokedexScreenData->windowIds[12], 1 + gSpeciesInfo[species].types[1], 32, 1);
+        else
+            BlitMenuInfoIcon(sPokedexScreenData->windowIds[12], POKEDEX_TYPE_NONE_ICON, 32, 1);
     }
     PutWindowTilemap(sPokedexScreenData->windowIds[12]);
     CopyWindowToVram(sPokedexScreenData->windowIds[12], COPYWIN_GFX);
