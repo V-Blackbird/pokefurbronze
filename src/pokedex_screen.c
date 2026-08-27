@@ -596,8 +596,8 @@ const struct WindowTemplate sWindowTemplate_DexEntry_FlavorText = {
 
 const struct WindowTemplate sWindowTemplate_AreaMap_MonIcon = {
     .bg = 2,
-    .tilemapLeft = 1,
-    .tilemapTop = 2,
+    .tilemapLeft = 22,
+    .tilemapTop = 12,
     .width = 4,
     .height = 4,
     .paletteNum = 10,
