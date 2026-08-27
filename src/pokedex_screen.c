@@ -2348,12 +2348,12 @@ static void DexScreen_AddSpriteInsetOutline(u8 windowId)
             if (pixel == 0)
                 continue;
             
-            // Check 8 neighbors for transparency
+            // Check cardinal neighbors only so diagonal edges stay one pixel thick.
             for (dy = -1; dy <= 1; dy++)
             {
                 for (dx = -1; dx <= 1; dx++)
                 {
-                    if (dx == 0 && dy == 0)
+                    if ((dx == 0 && dy == 0) || (dx != 0 && dy != 0))
                         continue;
                     
                     nx = x + dx;
@@ -3420,14 +3420,14 @@ u8 DexScreen_DrawMonAreaPage(void)
 
     if (monIsCaught)
     {
-        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 120, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[14] = CreateMonPicSprite_HandleDeoxys(species, SHINY_ODDS, DexScreen_GetDefaultPersonality(species), TRUE, 40, 116, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[14]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
         gSprites[sPokedexScreenData->windowIds[14]].y2 = gPokedexEntries[speciesId].pokemonOffset;
         SetOamMatrix(2, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
-        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 120, 0, 0xFFFF);
+        sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 80, 116, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[15]].oam.matrixNum = 1;
