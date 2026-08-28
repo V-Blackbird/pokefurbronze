@@ -34,10 +34,10 @@
 #define DEX_SIZE_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * 3 + 32) / 4)
 #define DEX_BASE_TRAINER_HEIGHT_CM 160
 #define DEX_TRAINER_HEIGHT_CM 195
-#define DEX_TRAINER_VISIBLE_SCALE_NUMERATOR (3 * DEX_TRAINER_HEIGHT_CM)
-#define DEX_TRAINER_VISIBLE_SCALE_DENOMINATOR (4 * DEX_BASE_TRAINER_HEIGHT_CM)
-#define DEX_TRAINER_COMPARISON_MATRIX_SCALE(scale) ((scale) * DEX_TRAINER_VISIBLE_SCALE_DENOMINATOR / DEX_TRAINER_VISIBLE_SCALE_NUMERATOR)
-#define DEX_TRAINER_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * DEX_TRAINER_VISIBLE_SCALE_NUMERATOR + 32 * (DEX_TRAINER_VISIBLE_SCALE_DENOMINATOR - DEX_TRAINER_VISIBLE_SCALE_NUMERATOR)) / DEX_TRAINER_VISIBLE_SCALE_DENOMINATOR)
+#define DEX_POKEMON_VISIBLE_SCALE_NUMERATOR (3 * DEX_BASE_TRAINER_HEIGHT_CM)
+#define DEX_POKEMON_VISIBLE_SCALE_DENOMINATOR (4 * DEX_TRAINER_HEIGHT_CM)
+#define DEX_POKEMON_COMPARISON_MATRIX_SCALE(scale) ((scale) * DEX_POKEMON_VISIBLE_SCALE_DENOMINATOR / DEX_POKEMON_VISIBLE_SCALE_NUMERATOR)
+#define DEX_POKEMON_COMPARISON_Y_OFFSET(offset) ((((s16)(offset)) * DEX_POKEMON_VISIBLE_SCALE_NUMERATOR + 32 * (DEX_POKEMON_VISIBLE_SCALE_DENOMINATOR - DEX_POKEMON_VISIBLE_SCALE_NUMERATOR)) / DEX_POKEMON_VISIBLE_SCALE_DENOMINATOR)
 #define POKEDEX_TYPE_NONE_ICON MENU_INFO_ICON_POKEDEX_NONE
 #define DEX_AREA_MAP_Y_OFFSET 3
 
@@ -3402,15 +3402,15 @@ u8 DexScreen_DrawMonAreaPage(void)
         gSprites[sPokedexScreenData->windowIds[14]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[14]].oam.matrixNum = 2;
         gSprites[sPokedexScreenData->windowIds[14]].oam.priority = 1;
-        gSprites[sPokedexScreenData->windowIds[14]].y2 = DEX_SIZE_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].pokemonOffset);
-        SetOamMatrix(2, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
+        gSprites[sPokedexScreenData->windowIds[14]].y2 = DEX_POKEMON_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].pokemonOffset);
+        SetOamMatrix(2, DEX_POKEMON_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale), 0, 0, DEX_POKEMON_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].pokemonScale));
         sPokedexScreenData->windowIds[15] = CreateTrainerPicSprite(PlayerGenderToFrontTrainerPicId(gSaveBlock2Ptr->playerGender, TRUE), 1, 88, 110, 0, 0xFFFF);
         gSprites[sPokedexScreenData->windowIds[15]].oam.paletteNum = 2;
         gSprites[sPokedexScreenData->windowIds[15]].oam.affineMode = ST_OAM_AFFINE_NORMAL;
         gSprites[sPokedexScreenData->windowIds[15]].oam.matrixNum = 1;
         gSprites[sPokedexScreenData->windowIds[15]].oam.priority = 1;
-        gSprites[sPokedexScreenData->windowIds[15]].y2 = DEX_TRAINER_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].trainerOffset);
-        SetOamMatrix(1, DEX_TRAINER_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale), 0, 0, DEX_TRAINER_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale));
+        gSprites[sPokedexScreenData->windowIds[15]].y2 = DEX_SIZE_COMPARISON_Y_OFFSET(gPokedexEntries[speciesId].trainerOffset);
+        SetOamMatrix(1, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale), 0, 0, DEX_SIZE_COMPARISON_MATRIX_SCALE(gPokedexEntries[speciesId].trainerScale));
     }
     else
     {
