@@ -2167,6 +2167,11 @@ static void DexScreen_AddTextPrinterParameterized(u8 windowId, u8 fontId, const 
         textColor[1] = 1;
         textColor[2] = 0;
         break;
+    case 5:
+        textColor[0] = 0;
+        textColor[1] = 3;
+        textColor[2] = 0;
+        break;
     }
     AddTextPrinterParameterized4(windowId, fontId, x, y, fontId == FONT_SMALL ? 0 : 1, 0, textColor, -1, str);
 }
@@ -3383,7 +3388,7 @@ u8 DexScreen_DrawMonAreaPage(void)
         BlitBitmapRectToWindow(sPokedexScreenData->windowIds[0], (void *)sBlitTiles_WideEllipse, 0, 0, 88, 16, 4, 28, 88, 16);
         {
             s32 strWidth = GetStringWidth(FONT_SMALL, gText_AreaUnknown, 0);
-            DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[0], FONT_SMALL, gText_AreaUnknown, (96 - strWidth) / 2, 29, 0);
+            DexScreen_AddTextPrinterParameterized(sPokedexScreenData->windowIds[0], FONT_SMALL, gText_AreaUnknown, (96 - strWidth) / 2, 29, 5);
         }
     }
     CopyWindowToVram(sPokedexScreenData->windowIds[0], COPYWIN_GFX);
