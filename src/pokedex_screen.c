@@ -1754,6 +1754,7 @@ static void Task_DexScreen_CategorySubmenu(u8 taskId)
         }
         break;
     case 12:
+        DexScreen_DestroyCategoryPageMonIconAndInfoWindows();
         sPokedexScreenData->dexSpecies = sPokedexScreenData->pageSpecies[sPokedexScreenData->categoryCursorPosInPage];
         PlaySE(SE_SELECT);
         sPokedexScreenData->state = 14;
