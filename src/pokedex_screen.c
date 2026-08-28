@@ -870,6 +870,8 @@ static void Task_PokedexScreen(u8 taskId)
             case DEX_CATEGORY_ROUGH_TERRAIN:
             case DEX_CATEGORY_URBAN:
             case DEX_CATEGORY_RARE:
+                if (DexScreen_CreateHabitatList(sPokedexScreenData->modeSelectInput) == 0)
+                    break;
                 RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
                 sPokedexScreenData->category = sPokedexScreenData->modeSelectInput;
                 sPokedexScreenData->habitatListActive = TRUE;
