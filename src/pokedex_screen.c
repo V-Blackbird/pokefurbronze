@@ -991,15 +991,16 @@ static void Task_PokedexScreen(u8 taskId)
     case 10:
         DexScreen_LoadOffScreenBackground();
         CopyBgTilemapBufferToVram(3);
+        DexScreen_ShowPokeDex80Label();
         HideBg(2);
         HideBg(1);
-        HideBg(0);
         sPokedexScreenData->state = 11;
         break;
     case 11:
         if (!IsDma3ManagerBusyWithBgCopy())
         {
             ShowBg(3);
+            ShowBg(0);
             if (gPaletteFade.bufferTransferDisabled)
                 gPaletteFade.bufferTransferDisabled = FALSE;
             if (JOY_NEW(A_BUTTON))
