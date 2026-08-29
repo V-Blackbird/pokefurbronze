@@ -311,6 +311,18 @@ KailoTown_EventScript_WildBattleTest2::
   setvar VAR_0x8004, SPECIES_LEAFEON
   special SetSeenMon
   special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_PIDGEOTTO
+  special SetSeenMon
+  special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_VILL
+  special SetSeenMon
+  special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_FARFETCHD
+  special SetSeenMon
+  special SetCaughtMon
+  setvar VAR_0x8004, SPECIES_LUGIA
+  special SetSeenMon
+  special SetCaughtMon
   givemon SPECIES_MARIEF, 5
   givemon SPECIES_GILANG, 5
   givemon SPECIES_EVERESTL, 5

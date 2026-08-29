@@ -45,6 +45,7 @@ struct ScrollIndicatorTemplate
 static EWRAM_DATA struct ScrollArrowsTemplate sTempScrollArrowTemplate = {0};
 
 static void SpriteCallback_ScrollIndicatorArrow(struct Sprite *sprite);
+static void SpriteCallback_ScrollIndicatorArrowStatic(struct Sprite *sprite);
 static void SpriteCallback_RedArrowCursor(struct Sprite *sprite);
 static void Task_ScrollIndicatorArrowPair(u8 taskId);
 static u8 ListMenuAddRedArrowCursorObject(const struct CursorStruct *cursor);
@@ -137,6 +138,17 @@ static const struct SpriteTemplate sSpriteTemplate_ScrollArrowIndicator =
     .images = NULL,
     .affineAnims = gDummySpriteAffineAnimTable,
     .callback = SpriteCallback_ScrollIndicatorArrow,
+};
+
+static const struct SpriteTemplate sSpriteTemplate_ScrollArrowIndicatorStatic =
+{
+    .tileTag = 0,
+    .paletteTag = 0,
+    .oam = &sOamData_ScrollArrowIndicator,
+    .anims = sSpriteAnimTable_ScrollArrowIndicator,
+    .images = NULL,
+    .affineAnims = gDummySpriteAffineAnimTable,
+    .callback = SpriteCallback_ScrollIndicatorArrowStatic,
 };
 
 static const struct Subsprite sSubsprite_RedOutline1 =
@@ -257,6 +269,7 @@ static const struct SpriteTemplate sSpriteTemplate_RedArrowCursor =
 
 static const u16 sRedArrowPal[] = INCBIN_U16("graphics/interface/red_arrow.gbapal");
 static const u32 sRedArrowOtherGfx[] = INCBIN_U32("graphics/interface/red_arrow_other.4bpp.lz");
+static const u32 sRedArrowPokedexGfx[] = INCBIN_U32("graphics/interface/red_arrow_pokedex.4bpp.lz");
 static const u32 sSelectorOutlineGfx[] = INCBIN_U32("graphics/interface/selector_outline.4bpp.lz");
 static const u32 sRedArrowGfx[] = INCBIN_U32("graphics/interface/red_arrow.4bpp.lz");
 
@@ -313,6 +326,30 @@ static u8 AddScrollIndicatorArrowObject(u8 arrowDir, u8 x, u8 y, u16 tileTag, u1
     return spriteId;
 }
 
+static void SpriteCallback_ScrollIndicatorArrowStatic(struct Sprite *sprite)
+{
+    if (sprite->tState == 0)
+    {
+        StartSpriteAnim(sprite, sprite->tAnimNum);
+        sprite->tState++;
+    }
+}
+
+static u8 AddScrollIndicatorArrowObjectStatic(u8 arrowDir, u8 x, u8 y, u16 tileTag, u16 palTag)
+{
+    u8 spriteId;
+    struct SpriteTemplate spriteTemplate;
+
+    spriteTemplate = sSpriteTemplate_ScrollArrowIndicatorStatic;
+    spriteTemplate.tileTag = tileTag;
+    spriteTemplate.paletteTag = palTag;
+    spriteId = CreateSprite(&spriteTemplate, x, y, 0);
+    gSprites[spriteId].invisible = TRUE;
+    gSprites[spriteId].tState = 0;
+    gSprites[spriteId].tAnimNum = sScrollIndicatorTemplates[arrowDir].animNum;
+    return spriteId;
+}
+
 #undef tState
 #undef tAnimNum
 #undef tBounceDir
@@ -361,6 +398,47 @@ u8 AddScrollIndicatorArrowPair(const struct ScrollArrowsTemplate *arrowInfo, u16
     return taskId;
 }
 
+u8 AddScrollIndicatorDexArrowPair(const struct ScrollArrowsTemplate *arrowInfo, u16 *scrollOffset)
+{
+    struct CompressedSpriteSheet spriteSheet;
+    struct SpritePalette spritePal;
+    struct ScrollIndicatorPair *data;
+    u8 taskId;
+
+    spriteSheet.data = sRedArrowPokedexGfx;
+    spriteSheet.size = 0x100;
+    spriteSheet.tag = arrowInfo->tileTag;
+    LoadCompressedSpriteSheet(&spriteSheet);
+    if (arrowInfo->palTag == TAG_NONE)
+    {
+        LoadPalette(sRedArrowPal, OBJ_PLTT_ID(arrowInfo->palNum), sizeof(sRedArrowPal));
+    }
+    else
+    {
+        spritePal.data = sRedArrowPal;
+        spritePal.tag = arrowInfo->palTag;
+        LoadSpritePalette(&spritePal);
+    }
+    taskId = CreateTask(Task_ScrollIndicatorArrowPair, 0);
+    data = (struct ScrollIndicatorPair *)gTasks[taskId].data;
+
+    data->field_0 = 0;
+    data->scrollOffset = scrollOffset;
+    data->fullyUpThreshold = arrowInfo->fullyUpThreshold;
+    data->fullyDownThreshold = arrowInfo->fullyDownThreshold;
+    data->tileTag = arrowInfo->tileTag;
+    data->palTag = arrowInfo->palTag;
+    data->topSpriteId = AddScrollIndicatorArrowObjectStatic(arrowInfo->firstArrowType, arrowInfo->firstX, arrowInfo->firstY, arrowInfo->tileTag, arrowInfo->palTag);
+    data->bottomSpriteId = AddScrollIndicatorArrowObjectStatic(arrowInfo->secondArrowType, arrowInfo->secondX, arrowInfo->secondY, arrowInfo->tileTag, arrowInfo->palTag);
+
+    if (arrowInfo->palTag == TAG_NONE)
+    {
+        gSprites[data->topSpriteId].oam.paletteNum = arrowInfo->palNum;
+        gSprites[data->bottomSpriteId].oam.paletteNum = arrowInfo->palNum;
+    }
+    return taskId;
+}
+
 u8 AddScrollIndicatorArrowPairParameterized(u32 arrowType, s32 commonPos, s32 firstPos, s32 secondPos, s32 fullyDownThreshold, s32 tileTag, s32 palTag, u16 *scrollOffset)
 {
     if (arrowType == SCROLL_ARROW_UP || arrowType == SCROLL_ARROW_DOWN)
@@ -388,6 +466,35 @@ u8 AddScrollIndicatorArrowPairParameterized(u32 arrowType, s32 commonPos, s32 fi
     sTempScrollArrowTemplate.palNum = 0;
 
     return AddScrollIndicatorArrowPair(&sTempScrollArrowTemplate, scrollOffset);
+}
+
+u8 AddScrollIndicatorDexArrowPairParameterized(u32 arrowType, s32 commonPos, s32 firstPos, s32 secondPos, s32 fullyDownThreshold, s32 tileTag, s32 palTag, u16 *scrollOffset)
+{
+    if (arrowType == SCROLL_ARROW_UP || arrowType == SCROLL_ARROW_DOWN)
+    {
+        sTempScrollArrowTemplate.firstArrowType = SCROLL_ARROW_UP;
+        sTempScrollArrowTemplate.firstX = commonPos;
+        sTempScrollArrowTemplate.firstY = firstPos;
+        sTempScrollArrowTemplate.secondArrowType = SCROLL_ARROW_DOWN;
+        sTempScrollArrowTemplate.secondX = commonPos;
+        sTempScrollArrowTemplate.secondY = secondPos;
+    }
+    else
+    {
+        sTempScrollArrowTemplate.firstArrowType = SCROLL_ARROW_LEFT;
+        sTempScrollArrowTemplate.firstX = firstPos;
+        sTempScrollArrowTemplate.firstY = commonPos;
+        sTempScrollArrowTemplate.secondArrowType = SCROLL_ARROW_RIGHT;
+        sTempScrollArrowTemplate.secondX = secondPos;
+        sTempScrollArrowTemplate.secondY = commonPos;
+    }
+    sTempScrollArrowTemplate.fullyUpThreshold = 0;
+    sTempScrollArrowTemplate.fullyDownThreshold = fullyDownThreshold;
+    sTempScrollArrowTemplate.tileTag = tileTag;
+    sTempScrollArrowTemplate.palTag = palTag;
+    sTempScrollArrowTemplate.palNum = 0;
+
+    return AddScrollIndicatorDexArrowPair(&sTempScrollArrowTemplate, scrollOffset);
 }
 
 static void Task_ScrollIndicatorArrowPair(u8 taskId)

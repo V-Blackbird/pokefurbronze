@@ -1,6 +1,8 @@
 #ifndef GUARD_POKEDEX_H
 #define GUARD_POKEDEX_H
 
+#define POKEDEX_BACKGROUND_CHAR_BASE 3
+
 enum
 {
     DEX_MODE_KANTO,
@@ -128,6 +130,10 @@ u16 GetKantoPokedexCount(u8);
 bool16 HasAllHoennMons(void);
 bool16 HasAllKantoMons(void);
 bool16 HasAllMons(void);
+u16 KantoToNationalOrder(u16 kantoDexNum);
+u16 NationalToKantoOrder(u16 nationalDexNum);
+bool8 IsFabularSpecies(u16 species);
+bool8 GetFractionalDexNumber(u16 species, u16 *baseDexNum, u8 *fraction);
 
 u8 DexScreen_RegisterMonToPokedex(u16 species);
 

@@ -209,6 +209,22 @@
       "secondaryId": 11
     },
     {
+      "english": "SHADOW BALL",
+      "itemId": "ITEM_SHADOW_BALL",
+      "price": 9999,
+      "holdEffect": "HOLD_EFFECT_NONE",
+      "holdEffectParam": 0,
+      "description_english": "A shadow of Pokemon that\\nwas outside its BALL before battle.\\nCheater.",
+      "importance": 0,
+      "registrability": 0,
+      "pocket": "POCKET_POKE_BALLS",
+      "type": 11,
+      "fieldUseFunc": "NULL",
+      "battleUsage": 2,
+      "battleUseFunc": "BattleUseFunc_PokeBallEtc",
+      "secondaryId": 12
+    },
+    {
       "english": "POTION",
       "itemId": "ITEM_POTION",
       "price": 300,
@@ -241,7 +257,7 @@
       "secondaryId": 0
     },
     {
-      "english": "BURN HEAL",
+      "english": "BRN HEAL",
       "itemId": "ITEM_BURN_HEAL",
       "price": 250,
       "holdEffect": "HOLD_EFFECT_NONE",
@@ -289,7 +305,7 @@
       "secondaryId": 0
     },
     {
-      "english": "PARLYZ HEAL",
+      "english": "PRLZ HEAL",
       "itemId": "ITEM_PARALYZE_HEAL",
       "price": 200,
       "holdEffect": "HOLD_EFFECT_NONE",

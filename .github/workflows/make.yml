@@ -39,7 +39,6 @@ jobs:
       with:
         name: sha1s
         path: |
-          pokeiceturquoise.sha1
           pokemindpink.sha1
           pokeiceturquoise_rev1.sha1
           pokemindpink_rev1.sha1

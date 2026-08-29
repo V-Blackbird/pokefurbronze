@@ -405,6 +405,7 @@ const u32 gTrainerPalette_RSMay2[] = INCBIN_U32("graphics/trainers/palettes/ruby
 
 const u32 gTrainerFrontPic_Red[] = INCBIN_U32("graphics/trainers/front_pics/red_front_pic.4bpp.lz");
 const u32 gTrainerPalette_Red[] = INCBIN_U32("graphics/trainers/palettes/red.gbapal.lz");
+const u32 gTrainerFrontPic_PokedexDummy[] = INCBIN_U32("graphics/trainers/front_pics/pokedex_dummy.4bpp.lz");
 
 const u32 gTrainerFrontPic_Leaf[] = INCBIN_U32("graphics/trainers/front_pics/leaf_front_pic.4bpp.lz");
 const u32 gTrainerPalette_Leaf[] = INCBIN_U32("graphics/trainers/palettes/leaf.gbapal.lz");

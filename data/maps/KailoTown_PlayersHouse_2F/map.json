@@ -90,7 +90,17 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 11,
+      "y": 8,
+      "elevation": 0,
+      "var": "VAR_TEMP_1",
+      "var_value": "0",
+      "script": "KailoTown_EventScript_WildBattleTest"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",
