@@ -521,6 +521,20 @@ static const struct ScrollArrowsTemplate sDexOrderScrollArrowsTemplate = {
     .palNum = 1,
 };
 
+static const struct ScrollArrowsTemplate sHabitatListScrollArrowsTemplate = {
+    .firstArrowType = 2,
+    .firstX = 211,
+    .firstY = 21,
+    .secondArrowType = 3,
+    .secondX = 211,
+    .secondY = 138,
+    .fullyUpThreshold = 0,
+    .fullyDownThreshold = 0,
+    .tileTag = 2000,
+    .palTag = 0xFFFF,
+    .palNum = 1,
+};
+
 static const struct WindowTemplate sWindowTemplate_CategoryMonIcon = {
     .bg = 2,
     .tilemapLeft = 0,
@@ -1274,7 +1288,7 @@ static void DexScreen_DestroyHabitatListMenu(void)
 
 static u8 DexScreen_CreateHabitatListScrollArrows(void)
 {
-    struct ScrollArrowsTemplate template = sDexOrderScrollArrowsTemplate;
+    struct ScrollArrowsTemplate template = sHabitatListScrollArrowsTemplate;
 
     if (sPokedexScreenData->orderedDexCount > sListMenuTemplate_OrderedListMenu.maxShowed)
         template.fullyDownThreshold = sPokedexScreenData->orderedDexCount - sListMenuTemplate_OrderedListMenu.maxShowed;
