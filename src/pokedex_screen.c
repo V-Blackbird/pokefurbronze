@@ -77,6 +77,7 @@ struct PokedexScreenData
     u16 habitatListMenuCursorPos[DEX_CATEGORY_COUNT];
     u8 numericalOrderWindowId;
     u8 habitatFrameWindowId;
+    u8 habitatMonWindowId;
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
     bool8 habitatListActive;
@@ -119,6 +120,8 @@ static u16 DexScreen_CreateHabitatList(u8 category);
 static void DexScreen_InitHabitatListMenu(void);
 static void DexScreen_DestroyHabitatListMenu(void);
 static u8 DexScreen_CreateHabitatListScrollArrows(void);
+static void MoveCursorFunc_HabitatList(s32 itemIndex, bool8 onInit, struct ListMenu *list);
+static void DexScreen_DrawHabitatMonPic(u16 species);
 static void ItemPrintFunc_HabitatListMenu(u8 windowId, u32 itemId, u8 y);
 static void Task_DexScreen_CharacteristicOrder(u8 taskId);
 static void DexScreen_CreateCharacteristicListMenu(void);
@@ -141,6 +144,7 @@ static bool8 DexScreen_CreateCategoryListGfx(void);
 static void DexScreen_CreateCategoryPageSelectionCursor(u8 cursorPos);
 static void DexScreen_UpdateCategoryPageCursorObject(u8 taskId, u8 cursorPos, u8 numMonsInPage);
 static void DexScreen_LoadListScreenBackground(void);
+static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset);
 void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale);
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered);
 u8 RemoveDexPageWindows(void);
@@ -293,6 +297,7 @@ static const struct PokedexScreenData sDexScreenDataInitialState = {
     .categoryMonInfoWindowIds = {-1, -1, -1, -1},
     .numericalOrderWindowId = -1,
     .habitatFrameWindowId = -1,
+    .habitatMonWindowId = -1,
     .windowIds = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     .scrollArrowsTaskId = -1,
     .categoryPageCursorTaskId = -1,
@@ -317,6 +322,16 @@ static const struct WindowTemplate sWindowTemplate_HabitatPicFrame = {
     .height = 10,
     .paletteNum = 0,
     .baseBlock = 0x0178
+};
+
+static const struct WindowTemplate sWindowTemplate_HabitatMonPic = {
+    .bg = 1,
+    .tilemapLeft = 18,
+    .tilemapTop = 3,
+    .width = 8,
+    .height = 8,
+    .paletteNum = 9,
+    .baseBlock = 0x01DC
 };
 
 static const struct WindowTemplate sWindowTemplate_DexCounts = {
@@ -1254,6 +1269,7 @@ static void DexScreen_InitHabitatListMenu(void)
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
     template.items = sPokedexScreenData->listItems;
+    template.moveCursorFunc = MoveCursorFunc_HabitatList;
     template.itemPrintFunc = ItemPrintFunc_HabitatListMenu;
     template.windowId = sPokedexScreenData->numericalOrderWindowId;
     template.totalItems = max(1, sPokedexScreenData->orderedDexCount);
@@ -1267,6 +1283,12 @@ static void DexScreen_InitHabitatListMenu(void)
     BlitBitmapToWindow(sPokedexScreenData->habitatFrameWindowId, sDexHabitatPicFrame, 0, 0, 80, 80);
     PutWindowTilemap(sPokedexScreenData->habitatFrameWindowId);
     CopyWindowToVram(sPokedexScreenData->habitatFrameWindowId, COPYWIN_FULL);
+    sPokedexScreenData->habitatMonWindowId = AddWindow(&sWindowTemplate_HabitatMonPic);
+    PutWindowTilemap(sPokedexScreenData->habitatMonWindowId);
+    DexScreen_DrawHabitatMonPic(
+        sPokedexScreenData->listItems[
+            sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category]
+          + sPokedexScreenData->habitatListMenuItemsAbove[sPokedexScreenData->category]].index);
     FillWindowPixelBuffer(0, PIXEL_FILL(15));
     DexScreen_PrintStringWithAlignment(sDexCategoryNamePtrs[sPokedexScreenData->category], TEXT_CENTER);
     FillWindowPixelBuffer(1, PIXEL_FILL(15));
@@ -1283,6 +1305,7 @@ static void DexScreen_DestroyHabitatListMenu(void)
         sPokedexScreenData->orderedListMenuTaskId,
         &sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category],
         &sPokedexScreenData->habitatListMenuItemsAbove[sPokedexScreenData->category]);
+    DexScreen_RemoveWindow(&sPokedexScreenData->habitatMonWindowId);
     DexScreen_RemoveWindow(&sPokedexScreenData->habitatFrameWindowId);
 }
 
@@ -1297,6 +1320,23 @@ static u8 DexScreen_CreateHabitatListScrollArrows(void)
     return AddScrollIndicatorDexArrowPair(
         &template,
         &sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category]);
+}
+
+static void MoveCursorFunc_HabitatList(s32 itemIndex, bool8 onInit, struct ListMenu *list)
+{
+    if (!onInit)
+    {
+        PlaySE(SE_SELECT);
+        DexScreen_DrawHabitatMonPic(itemIndex);
+    }
+}
+
+static void DexScreen_DrawHabitatMonPic(u16 species)
+{
+    species &= 0xFFFF;
+    FillWindowPixelBuffer(sPokedexScreenData->habitatMonWindowId, PIXEL_FILL(0));
+    DexScreen_LoadMonPicInWindow(sPokedexScreenData->habitatMonWindowId, species, 144);
+    CopyWindowToVram(sPokedexScreenData->habitatMonWindowId, COPYWIN_GFX);
 }
 
 static void ItemPrintFunc_HabitatListMenu(u8 windowId, u32 itemId, u8 y)
