@@ -877,10 +877,19 @@ static void Task_PokedexScreen(u8 taskId)
         break;
     case 1:
         RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
+        DestroyListMenuTask(sPokedexScreenData->modeSelectListMenuId, NULL, NULL);
         DexScreen_RemoveWindow(&sPokedexScreenData->modeSelectWindowId);
         DexScreen_RemoveWindow(&sPokedexScreenData->dexCountsWindowId);
-        SetMainCallback2(CB2_ClosePokedex);
-        DestroyTask(taskId);
+        ClearWindowTilemap(0);
+        ClearWindowTilemap(1);
+        DexScreen_ShowPokeDex80Label();
+        CopyBgTilemapBufferToVram(0);
+        HideBg(2);
+        HideBg(1);
+        DexScreen_LoadOffScreenBackground();
+        CopyBgTilemapBufferToVram(3);
+        sPokedexScreenData->startupDelayTimer = 30;
+        sPokedexScreenData->state = 14;
         break;
     case 2:
         DexScreen_InitGfxForTopMenu();
@@ -1025,6 +1034,21 @@ static void Task_PokedexScreen(u8 taskId)
         {
             sPokedexScreenData->startupScreenShown = TRUE;
             sPokedexScreenData->state = 2;
+        }
+        break;
+    case 14:
+        if (!IsDma3ManagerBusyWithBgCopy())
+            sPokedexScreenData->state = 15;
+        break;
+    case 15:
+        if (sPokedexScreenData->startupDelayTimer != 0)
+        {
+            sPokedexScreenData->startupDelayTimer--;
+        }
+        else
+        {
+            SetMainCallback2(CB2_ClosePokedex);
+            DestroyTask(taskId);
         }
         break;
     }
