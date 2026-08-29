@@ -116,6 +116,7 @@ static void DexScreen_LoadBlankScreenBackground(void);
 static void DexScreen_BlankBg1(void);
 static void Task_DexScreen_NumericalOrder(u8 taskId);
 static void DexScreen_InitGfxForNumericalOrderList(void);
+static void MoveCursorFunc_NumericalList(s32 itemIndex, bool8 onInit, struct ListMenu *list);
 static void Task_DexScreen_HabitatList(u8 taskId);
 static u16 DexScreen_CreateHabitatList(u8 category);
 static void DexScreen_InitHabitatListMenu(void);
@@ -145,6 +146,7 @@ static bool8 DexScreen_CreateCategoryListGfx(void);
 static void DexScreen_CreateCategoryPageSelectionCursor(u8 cursorPos);
 static void DexScreen_UpdateCategoryPageCursorObject(u8 taskId, u8 cursorPos, u8 numMonsInPage);
 static void DexScreen_LoadListScreenBackground(void);
+static void DexScreen_LoadListScreenBackgroundForSpecies(u16 species);
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset);
 void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale);
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered);
@@ -986,12 +988,28 @@ static void DexScreen_ShowPokeDex80Label(void)
 
 static void DexScreen_LoadListScreenBackground(void)
 {
+    DexScreen_LoadListScreenBackgroundForSpecies(SPECIES_NONE);
+}
+
+static void DexScreen_LoadListScreenBackgroundForSpecies(u16 species)
+{
     int i;
     u16 *buffer = GetBgTilemapBuffer(3);
+    const u16 *tilemap = sNationalDexTilemap;
+
+    species &= 0xFFFF;
+    if (species != SPECIES_NONE && species < NUM_SPECIES)
+    {
+        if (gSpeciesInfo[species].genderRatio == GENDER_MALE_ONLY)
+            tilemap = sNationalDexTilemapMale;
+        else if (gSpeciesInfo[species].genderRatio == GENDER_FEMALE_ONLY)
+            tilemap = sNationalDexTilemapFemale;
+    }
+
     // Copy complete 32-tile rows so no stale entries remain in the tilemap stride.
     for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
     {
-        buffer[i] = sNationalDexTilemap[i] & DEX_TILEMAP_TILE_MASK;
+        buffer[i] = tilemap[i] & DEX_TILEMAP_TILE_MASK;
     }
 }
 
@@ -1101,7 +1119,7 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        DexScreen_LoadListScreenBackground();
+        DexScreen_LoadListScreenBackgroundForSpecies(sPokedexScreenData->characteristicMenuInput);
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
@@ -1147,6 +1165,17 @@ static void Task_DexScreen_NumericalOrder(u8 taskId)
     }
 }
 
+static void MoveCursorFunc_NumericalList(s32 itemIndex, bool8 onInit, struct ListMenu *list)
+{
+    sPokedexScreenData->characteristicMenuInput = itemIndex;
+    if (!onInit)
+    {
+        PlaySE(SE_SELECT);
+        DexScreen_LoadListScreenBackgroundForSpecies(itemIndex);
+        CopyBgTilemapBufferToVram(3);
+    }
+}
+
 static void Task_DexScreen_HabitatList(u8 taskId)
 {
     switch (sPokedexScreenData->state)
@@ -1173,7 +1202,7 @@ static void Task_DexScreen_HabitatList(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        DexScreen_LoadListScreenBackground();
+        DexScreen_LoadListScreenBackgroundForSpecies(sPokedexScreenData->characteristicMenuInput);
         CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
@@ -1372,9 +1401,12 @@ static u8 DexScreen_CreateHabitatListScrollArrows(void)
 
 static void MoveCursorFunc_HabitatList(s32 itemIndex, bool8 onInit, struct ListMenu *list)
 {
+    sPokedexScreenData->characteristicMenuInput = itemIndex;
     if (!onInit)
     {
         PlaySE(SE_SELECT);
+        DexScreen_LoadListScreenBackgroundForSpecies(itemIndex);
+        CopyBgTilemapBufferToVram(3);
         sPokedexScreenData->habitatPreviewSpecies = itemIndex;
         sPokedexScreenData->state = 8;
     }
@@ -1437,6 +1469,7 @@ static void DexScreen_InitGfxForNumericalOrderList(void)
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
     template.items = sPokedexScreenData->listItems;
+    template.moveCursorFunc = MoveCursorFunc_NumericalList;
     template.windowId = sPokedexScreenData->numericalOrderWindowId;
     template.totalItems = sPokedexScreenData->orderedDexCount;
     DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId);
