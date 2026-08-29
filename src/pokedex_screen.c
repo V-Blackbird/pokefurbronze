@@ -81,6 +81,7 @@ struct PokedexScreenData
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
     bool8 habitatListActive;
+    u16 habitatPreviewSpecies;
     struct ListMenuItem * listItems;
     u16 orderedDexCount;
     u8 windowIds[0x10];
@@ -1225,6 +1226,30 @@ static void Task_DexScreen_HabitatList(u8 taskId)
         gTasks[taskId].func = Task_DexScreen_ShowMonPage;
         sPokedexScreenData->state = 0;
         break;
+    case 8:
+        ClearWindowTilemap(sPokedexScreenData->habitatMonWindowId);
+        CopyBgTilemapBufferToVram(1);
+        sPokedexScreenData->state = 9;
+        break;
+    case 9:
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            DexScreen_DrawHabitatMonPic(sPokedexScreenData->habitatPreviewSpecies);
+            sPokedexScreenData->state = 10;
+        }
+        break;
+    case 10:
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            PutWindowTilemap(sPokedexScreenData->habitatMonWindowId);
+            CopyBgTilemapBufferToVram(1);
+            sPokedexScreenData->state = 11;
+        }
+        break;
+    case 11:
+        if (!IsDma3ManagerBusyWithBgCopy())
+            sPokedexScreenData->state = 6;
+        break;
     }
 }
 
@@ -1327,7 +1352,8 @@ static void MoveCursorFunc_HabitatList(s32 itemIndex, bool8 onInit, struct ListM
     if (!onInit)
     {
         PlaySE(SE_SELECT);
-        DexScreen_DrawHabitatMonPic(itemIndex);
+        sPokedexScreenData->habitatPreviewSpecies = itemIndex;
+        sPokedexScreenData->state = 8;
     }
 }
 
