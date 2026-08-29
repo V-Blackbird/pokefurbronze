@@ -1508,20 +1508,30 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
         sPokedexScreenData->state = 3;
         break;
     case 3:
-        CopyBgTilemapBufferToVram(3);
         CopyBgTilemapBufferToVram(1);
         sPokedexScreenData->state = 4;
         break;
     case 4:
-        ShowBg(1);
-        sPokedexScreenData->state = 5;
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            DexScreen_LoadListScreenBackgroundForSpecies(sPokedexScreenData->characteristicMenuInput);
+            CopyBgTilemapBufferToVram(3);
+            sPokedexScreenData->state = 5;
+        }
         break;
     case 5:
-        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
-        sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateDexOrderScrollArrows();
-        sPokedexScreenData->state = 6;
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            ShowBg(1);
+            sPokedexScreenData->state = 6;
+        }
         break;
     case 6:
+        ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
+        sPokedexScreenData->scrollArrowsTaskId = DexScreen_CreateDexOrderScrollArrows();
+        sPokedexScreenData->state = 7;
+        break;
+    case 7:
         sPokedexScreenData->characteristicMenuInput = ListMenu_ProcessInput(sPokedexScreenData->orderedListMenuTaskId);
         ListMenuGetScrollAndRow(sPokedexScreenData->modeSelectListMenuId, &sPokedexScreenData->modeSelectCursorPosBak, NULL);
         if (JOY_NEW(A_BUTTON))
@@ -1530,7 +1540,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
             {
                 sPokedexScreenData->dexSpecies = sPokedexScreenData->characteristicMenuInput;
                 RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
-                sPokedexScreenData->state = 7;
+                sPokedexScreenData->state = 8;
             }
         }
         else if (JOY_NEW(B_BUTTON))
@@ -1539,7 +1549,7 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
             sPokedexScreenData->state = 1;
         }
         break;
-    case 7:
+    case 8:
         DexScreen_DestroyDexOrderListMenu(sPokedexScreenData->dexOrderId);
         DexScreen_LoadBlankScreenBackground();
         CopyBgTilemapBufferToVram(3);
@@ -1553,12 +1563,11 @@ static void Task_DexScreen_CharacteristicOrder(u8 taskId)
 static void DexScreen_CreateCharacteristicListMenu(void)
 {
     struct ListMenuTemplate template;
-    DexScreen_LoadListScreenBackground();
-    CopyBgTilemapBufferToVram(3);
     FillBgTilemapBufferRect(1, 0x000, 0, 0, 32, 32, 17);
     sPokedexScreenData->numericalOrderWindowId = AddWindow(&sWindowTemplate_OrderedListMenu);
     template = sListMenuTemplate_OrderedListMenu;
     template.items = sPokedexScreenData->listItems;
+    template.moveCursorFunc = MoveCursorFunc_NumericalList;
     template.windowId = sPokedexScreenData->numericalOrderWindowId;
     template.totalItems = sPokedexScreenData->orderedDexCount;
     DexScreen_InitListMenuForOrderedList(&template, sPokedexScreenData->dexOrderId);
