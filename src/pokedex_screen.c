@@ -1513,10 +1513,8 @@ static void DexScreen_DrawHabitatMonPic(u16 species)
         return;
     }
     sPokedexScreenData->habitatMonSpriteId = spriteId;
+    gSprites[spriteId].animPaused = TRUE;
     DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[0].data, 8, 8);
-    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[1].data, 8, 8);
-    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[2].data, 8, 8);
-    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[3].data, 8, 8);
 
     compressedPal = GetMonSpritePalFromSpeciesAndPersonality(
         species,
