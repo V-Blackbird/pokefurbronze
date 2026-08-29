@@ -76,6 +76,7 @@ struct PokedexScreenData
     u16 habitatListMenuItemsAbove[DEX_CATEGORY_COUNT];
     u16 habitatListMenuCursorPos[DEX_CATEGORY_COUNT];
     u8 numericalOrderWindowId;
+    u8 habitatFrameWindowId;
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
     bool8 habitatListActive;
@@ -174,6 +175,7 @@ const u16 sNationalDexTilemap[] = INCBIN_U16("graphics/pokedex/national_dex_tile
 const u16 sNationalDexTilemapMale[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap_m.bin");
 const u16 sNationalDexTilemapFemale[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap_f.bin");
 const u16 sNationalDexTilemapOff[] = INCBIN_U16("graphics/pokedex/national_dex_tilemap_off.bin");
+const u8 sDexHabitatPicFrame[] = INCBIN_U8("graphics/pokedex/pic_frame.4bpp");
 const u16 sDexEntryTilemap[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap.bin");
 const u16 sDexEntryTilemapMale[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_m.bin");
 const u16 sDexEntryTilemapFemale[] = INCBIN_U16("graphics/pokedex/dex_entry_tilemap_f.bin");
@@ -290,6 +292,7 @@ static const struct PokedexScreenData sDexScreenDataInitialState = {
     .categoryMonWindowIds = {-1, -1, -1, -1},
     .categoryMonInfoWindowIds = {-1, -1, -1, -1},
     .numericalOrderWindowId = -1,
+    .habitatFrameWindowId = -1,
     .windowIds = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     .scrollArrowsTaskId = -1,
     .categoryPageCursorTaskId = -1,
@@ -304,6 +307,16 @@ static const struct WindowTemplate sWindowTemplate_ModeSelect = {
     .height = 16,
     .paletteNum = 3,
     .baseBlock = 0x0008
+};
+
+static const struct WindowTemplate sWindowTemplate_HabitatPicFrame = {
+    .bg = 1,
+    .tilemapLeft = 16,
+    .tilemapTop = 5,
+    .width = 10,
+    .height = 10,
+    .paletteNum = 0,
+    .baseBlock = 0x0178
 };
 
 static const struct WindowTemplate sWindowTemplate_DexCounts = {
@@ -1235,6 +1248,11 @@ static void DexScreen_InitHabitatListMenu(void)
         sListMenuRects_OrderedList,
         sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category],
         sPokedexScreenData->habitatListMenuItemsAbove[sPokedexScreenData->category]);
+    sPokedexScreenData->habitatFrameWindowId = AddWindow(&sWindowTemplate_HabitatPicFrame);
+    FillWindowPixelBuffer(sPokedexScreenData->habitatFrameWindowId, PIXEL_FILL(0));
+    BlitBitmapToWindow(sPokedexScreenData->habitatFrameWindowId, sDexHabitatPicFrame, 0, 0, 80, 80);
+    PutWindowTilemap(sPokedexScreenData->habitatFrameWindowId);
+    CopyWindowToVram(sPokedexScreenData->habitatFrameWindowId, COPYWIN_FULL);
     FillWindowPixelBuffer(0, PIXEL_FILL(15));
     DexScreen_PrintStringWithAlignment(sDexCategoryNamePtrs[sPokedexScreenData->category], TEXT_CENTER);
     FillWindowPixelBuffer(1, PIXEL_FILL(15));
@@ -1251,6 +1269,7 @@ static void DexScreen_DestroyHabitatListMenu(void)
         sPokedexScreenData->orderedListMenuTaskId,
         &sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category],
         &sPokedexScreenData->habitatListMenuItemsAbove[sPokedexScreenData->category]);
+    DexScreen_RemoveWindow(&sPokedexScreenData->habitatFrameWindowId);
 }
 
 static u8 DexScreen_CreateHabitatListScrollArrows(void)
@@ -1269,7 +1288,14 @@ static u8 DexScreen_CreateHabitatListScrollArrows(void)
 static void ItemPrintFunc_HabitatListMenu(u8 windowId, u32 itemId, u8 y)
 {
     if (itemId != LIST_HEADER)
-        ItemPrintFunc_OrderedListMenu(windowId, itemId, y);
+    {
+        u16 species = itemId;
+        bool8 caught = (itemId >> 17) & 1;
+
+        DexScreen_PrintMonDexNo(windowId, FONT_SMALL, species, 13, y);
+        if (caught)
+            BlitBitmapRectToWindow(windowId, gMenuInfoElements_Gfx, 16, 0, 128, 128, 0x28, y + 1, 12, 12);
+    }
 }
 
 static void DexScreen_InitGfxForNumericalOrderList(void)
