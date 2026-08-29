@@ -77,7 +77,7 @@ struct PokedexScreenData
     u16 habitatListMenuCursorPos[DEX_CATEGORY_COUNT];
     u8 numericalOrderWindowId;
     u8 habitatFrameWindowId;
-    u8 habitatMonWindowId;
+    u8 habitatMonSpriteId;
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
     bool8 habitatListActive;
@@ -162,6 +162,8 @@ static int DexScreen_CanShowMonInDex(u16 species);
 static void Task_DexScreen_RegisterNonKantoMonBeforeNationalDex(u8 taskId);
 static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count);
+static u32 DexScreen_GetDefaultPersonality(int species);
+static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count);
 static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species, bool8 secondPage);
 
 // Pokemon Gender Constants
@@ -298,7 +300,7 @@ static const struct PokedexScreenData sDexScreenDataInitialState = {
     .categoryMonInfoWindowIds = {-1, -1, -1, -1},
     .numericalOrderWindowId = -1,
     .habitatFrameWindowId = -1,
-    .habitatMonWindowId = -1,
+    .habitatMonSpriteId = -1,
     .windowIds = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     .scrollArrowsTaskId = -1,
     .categoryPageCursorTaskId = -1,
@@ -323,16 +325,6 @@ static const struct WindowTemplate sWindowTemplate_HabitatPicFrame = {
     .height = 10,
     .paletteNum = 0,
     .baseBlock = 0x0178
-};
-
-static const struct WindowTemplate sWindowTemplate_HabitatMonPic = {
-    .bg = 1,
-    .tilemapLeft = 18,
-    .tilemapTop = 3,
-    .width = 8,
-    .height = 8,
-    .paletteNum = 9,
-    .baseBlock = 0x01DC
 };
 
 static const struct WindowTemplate sWindowTemplate_DexCounts = {
@@ -1227,28 +1219,22 @@ static void Task_DexScreen_HabitatList(u8 taskId)
         sPokedexScreenData->state = 0;
         break;
     case 8:
-        ClearWindowTilemap(sPokedexScreenData->habitatMonWindowId);
-        CopyBgTilemapBufferToVram(1);
+        if (sPokedexScreenData->habitatMonSpriteId != 0xFF)
+            gSprites[sPokedexScreenData->habitatMonSpriteId].invisible = TRUE;
         sPokedexScreenData->state = 9;
         break;
     case 9:
-        if (!IsDma3ManagerBusyWithBgCopy())
-        {
-            DexScreen_DrawHabitatMonPic(sPokedexScreenData->habitatPreviewSpecies);
-            sPokedexScreenData->state = 10;
-        }
+        if (sPokedexScreenData->habitatMonSpriteId != 0xFF)
+            FreeAndDestroyMonPicSprite(sPokedexScreenData->habitatMonSpriteId);
+        DexScreen_DrawHabitatMonPic(sPokedexScreenData->habitatPreviewSpecies);
+        if (sPokedexScreenData->habitatMonSpriteId != 0xFF)
+            gSprites[sPokedexScreenData->habitatMonSpriteId].invisible = TRUE;
+        sPokedexScreenData->state = 10;
         break;
     case 10:
-        if (!IsDma3ManagerBusyWithBgCopy())
-        {
-            PutWindowTilemap(sPokedexScreenData->habitatMonWindowId);
-            CopyBgTilemapBufferToVram(1);
-            sPokedexScreenData->state = 11;
-        }
-        break;
-    case 11:
-        if (!IsDma3ManagerBusyWithBgCopy())
-            sPokedexScreenData->state = 6;
+        if (sPokedexScreenData->habitatMonSpriteId != 0xFF)
+            gSprites[sPokedexScreenData->habitatMonSpriteId].invisible = FALSE;
+        sPokedexScreenData->state = 6;
         break;
     }
 }
@@ -1308,8 +1294,6 @@ static void DexScreen_InitHabitatListMenu(void)
     BlitBitmapToWindow(sPokedexScreenData->habitatFrameWindowId, sDexHabitatPicFrame, 0, 0, 80, 80);
     PutWindowTilemap(sPokedexScreenData->habitatFrameWindowId);
     CopyWindowToVram(sPokedexScreenData->habitatFrameWindowId, COPYWIN_FULL);
-    sPokedexScreenData->habitatMonWindowId = AddWindow(&sWindowTemplate_HabitatMonPic);
-    PutWindowTilemap(sPokedexScreenData->habitatMonWindowId);
     DexScreen_DrawHabitatMonPic(
         sPokedexScreenData->listItems[
             sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category]
@@ -1330,7 +1314,9 @@ static void DexScreen_DestroyHabitatListMenu(void)
         sPokedexScreenData->orderedListMenuTaskId,
         &sPokedexScreenData->habitatListMenuCursorPos[sPokedexScreenData->category],
         &sPokedexScreenData->habitatListMenuItemsAbove[sPokedexScreenData->category]);
-    DexScreen_RemoveWindow(&sPokedexScreenData->habitatMonWindowId);
+    if (sPokedexScreenData->habitatMonSpriteId != 0xFF)
+        FreeAndDestroyMonPicSprite(sPokedexScreenData->habitatMonSpriteId);
+    sPokedexScreenData->habitatMonSpriteId = 0xFF;
     DexScreen_RemoveWindow(&sPokedexScreenData->habitatFrameWindowId);
 }
 
@@ -1359,10 +1345,35 @@ static void MoveCursorFunc_HabitatList(s32 itemIndex, bool8 onInit, struct ListM
 
 static void DexScreen_DrawHabitatMonPic(u16 species)
 {
+    const u32 *compressedPal;
+    u16 palBuffer[16];
+    u16 spriteId;
+
     species &= 0xFFFF;
-    FillWindowPixelBuffer(sPokedexScreenData->habitatMonWindowId, PIXEL_FILL(0));
-    DexScreen_LoadMonPicInWindow(sPokedexScreenData->habitatMonWindowId, species, 144);
-    CopyWindowToVram(sPokedexScreenData->habitatMonWindowId, COPYWIN_GFX);
+    spriteId = CreateMonPicSprite_HandleDeoxys(
+        species,
+        SHINY_ODDS,
+        DexScreen_GetDefaultPersonality(species),
+        TRUE,
+        176,
+        55,
+        2,
+        0xFFFF);
+    if (spriteId == 0xFFFF)
+    {
+        sPokedexScreenData->habitatMonSpriteId = 0xFF;
+        return;
+    }
+    sPokedexScreenData->habitatMonSpriteId = spriteId;
+
+    compressedPal = GetMonSpritePalFromSpeciesAndPersonality(
+        species,
+        SHINY_ODDS,
+        DexScreen_GetDefaultPersonality(species));
+    LZ77UnCompWram(compressedPal, palBuffer);
+    ConvertPaletteToLCDMonochrome(palBuffer, 16);
+    palBuffer[15] = RGB_BLACK;
+    LoadPalette(palBuffer, OBJ_PLTT_ID(2), PLTT_SIZE_4BPP);
 }
 
 static void ItemPrintFunc_HabitatListMenu(u8 windowId, u32 itemId, u8 y)
