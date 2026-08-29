@@ -164,6 +164,7 @@ static void Task_DexScreen_RegisterMonToPokedex(u8 taskId);
 static void DexScreen_ConvertTypeBadgePaletteToLCD(u16 *palette, u16 count);
 static u32 DexScreen_GetDefaultPersonality(int species);
 static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count);
+static void DexScreen_AddInsetOutlineToTiles(u8 *tileData, u16 width, u16 height);
 static const u16 *DexScreen_GetEntryTilemapForSpecies(u16 species, bool8 secondPage);
 
 // Pokemon Gender Constants
@@ -1365,6 +1366,10 @@ static void DexScreen_DrawHabitatMonPic(u16 species)
         return;
     }
     sPokedexScreenData->habitatMonSpriteId = spriteId;
+    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[0].data, 8, 8);
+    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[1].data, 8, 8);
+    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[2].data, 8, 8);
+    DexScreen_AddInsetOutlineToTiles((u8 *)gSprites[spriteId].images[3].data, 8, 8);
 
     compressedPal = GetMonSpritePalFromSpeciesAndPersonality(
         species,
@@ -2187,11 +2192,8 @@ static void ConvertPaletteToLCDMonochrome(u16 *palette, u16 count)
 }
 
 // Add inset black outline to sprite to improve visibility of light-colored Pokemon
-static void DexScreen_AddSpriteInsetOutline(u8 windowId)
+static void DexScreen_AddInsetOutlineToTiles(u8 *tileData, u16 width, u16 height)
 {
-    u8 *tileData = (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA);
-    u16 width = GetWindowAttribute(windowId, WINDOW_WIDTH);
-    u16 height = GetWindowAttribute(windowId, WINDOW_HEIGHT);
     u32 pixelWidth = width * 8;
     u32 pixelHeight = height * 8;
     u8 *pixelBuffer;
@@ -2333,7 +2335,10 @@ static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOf
     LoadPalette(palBuffer, BG_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
     
     // Add inset outline to improve visibility
-    DexScreen_AddSpriteInsetOutline(windowId);
+    DexScreen_AddInsetOutlineToTiles(
+        (u8 *)GetWindowAttribute(windowId, WINDOW_TILE_DATA),
+        GetWindowAttribute(windowId, WINDOW_WIDTH),
+        GetWindowAttribute(windowId, WINDOW_HEIGHT));
 }
 
 static void DexScreen_FormatMonDexNo(u8 *dest, u16 species)
