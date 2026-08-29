@@ -1244,9 +1244,16 @@ static u16 DexScreen_CreateHabitatList(u8 category)
 {
     u16 count = 0;
     u16 species;
+    u16 dexNum;
+    u16 previousDexNum;
+    u16 sortIndex;
+    u16 insertIndex;
     u8 page;
     u8 i;
+    u8 fraction;
+    u8 previousFraction;
     bool8 caught;
+    struct ListMenuItem item;
 
     for (page = 0; page < gDexCategories[category].count; page++)
     {
@@ -1262,6 +1269,35 @@ static u16 DexScreen_CreateHabitatList(u8 category)
             sPokedexScreenData->listItems[count].index = (caught << 17) | (1 << 16) | species;
             count++;
         }
+    }
+
+    for (sortIndex = 1; sortIndex < count; sortIndex++)
+    {
+        item = sPokedexScreenData->listItems[sortIndex];
+        species = item.index & 0xFFFF;
+        if (!GetFractionalDexNumber(species, &dexNum, &fraction))
+        {
+            dexNum = SpeciesToNationalPokedexNum(species);
+            fraction = 0;
+        }
+
+        insertIndex = sortIndex;
+        while (insertIndex > 0)
+        {
+            species = sPokedexScreenData->listItems[insertIndex - 1].index & 0xFFFF;
+            if (!GetFractionalDexNumber(species, &previousDexNum, &previousFraction))
+            {
+                previousDexNum = SpeciesToNationalPokedexNum(species);
+                previousFraction = 0;
+            }
+            if (previousDexNum < dexNum
+             || (previousDexNum == dexNum && previousFraction <= fraction))
+                break;
+
+            sPokedexScreenData->listItems[insertIndex] = sPokedexScreenData->listItems[insertIndex - 1];
+            insertIndex--;
+        }
+        sPokedexScreenData->listItems[insertIndex] = item;
     }
 
     if (count == 0)
