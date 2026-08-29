@@ -311,8 +311,8 @@ static const struct WindowTemplate sWindowTemplate_ModeSelect = {
 
 static const struct WindowTemplate sWindowTemplate_HabitatPicFrame = {
     .bg = 1,
-    .tilemapLeft = 16,
-    .tilemapTop = 5,
+    .tilemapLeft = 17,
+    .tilemapTop = 2,
     .width = 10,
     .height = 10,
     .paletteNum = 0,
