@@ -81,6 +81,8 @@ struct PokedexScreenData
     u8 orderedListMenuTaskId;
     u8 dexOrderId;
     bool8 habitatListActive;
+    bool8 startupScreenShown;
+    u8 startupDelayTimer;
     u16 habitatPreviewSpecies;
     struct ListMenuItem * listItems;
     u16 orderedDexCount;
@@ -113,6 +115,7 @@ static void Task_PokedexScreen(u8 taskId);
 static void DexScreen_ShowPokeDex80Label(void);
 static void DexScreen_InitGfxForTopMenu(void);
 static void DexScreen_LoadBlankScreenBackground(void);
+static void DexScreen_LoadOffScreenBackground(void);
 static void DexScreen_BlankBg1(void);
 static void Task_DexScreen_NumericalOrder(u8 taskId);
 static void DexScreen_InitGfxForNumericalOrderList(void);
@@ -731,6 +734,15 @@ void VBlankCB(void)
     TransferPlttBuffer();
 }
 
+static void DexScreen_LoadOffScreenBackground(void)
+{
+    int i;
+    u16 *buffer = GetBgTilemapBuffer(3);
+
+    for (i = 0; i < DEX_LIST_BG_TILE_COUNT; i++)
+        buffer[i] = sNationalDexTilemapOff[i] & DEX_TILEMAP_TILE_MASK;
+}
+
 void CB2_PokedexScreen(void)
 {
     if (!gPaletteFade.active || IsDma3ManagerBusyWithBgCopy())
@@ -858,7 +870,10 @@ static void Task_PokedexScreen(u8 taskId)
     switch (sPokedexScreenData->state)
     {
     case 0:
-        sPokedexScreenData->state = 2;
+        if (sPokedexScreenData->startupScreenShown)
+            sPokedexScreenData->state = 2;
+        else
+            sPokedexScreenData->state = 10;
         break;
     case 1:
         RemoveScrollIndicatorArrowPair(sPokedexScreenData->scrollArrowsTaskId);
@@ -972,6 +987,44 @@ static void Task_PokedexScreen(u8 taskId)
         DexScreen_RemoveWindow(&sPokedexScreenData->dexCountsWindowId);
         gTasks[taskId].func = Task_DexScreen_NumericalOrder;
         sPokedexScreenData->state = 0;
+        break;
+    case 10:
+        DexScreen_LoadOffScreenBackground();
+        CopyBgTilemapBufferToVram(3);
+        HideBg(2);
+        HideBg(1);
+        HideBg(0);
+        sPokedexScreenData->state = 11;
+        break;
+    case 11:
+        if (!IsDma3ManagerBusyWithBgCopy())
+        {
+            ShowBg(3);
+            if (gPaletteFade.bufferTransferDisabled)
+                gPaletteFade.bufferTransferDisabled = FALSE;
+            if (JOY_NEW(A_BUTTON))
+            {
+                DexScreen_LoadBlankScreenBackground();
+                CopyBgTilemapBufferToVram(3);
+                sPokedexScreenData->startupDelayTimer = 60;
+                sPokedexScreenData->state = 12;
+            }
+        }
+        break;
+    case 12:
+        if (!IsDma3ManagerBusyWithBgCopy())
+            sPokedexScreenData->state = 13;
+        break;
+    case 13:
+        if (sPokedexScreenData->startupDelayTimer != 0)
+        {
+            sPokedexScreenData->startupDelayTimer--;
+        }
+        else
+        {
+            sPokedexScreenData->startupScreenShown = TRUE;
+            sPokedexScreenData->state = 2;
+        }
         break;
     }
 }
