@@ -146,7 +146,7 @@ static bool8 DexScreen_CreateCategoryListGfx(void);
 static void DexScreen_CreateCategoryPageSelectionCursor(u8 cursorPos);
 static void DexScreen_UpdateCategoryPageCursorObject(u8 taskId, u8 cursorPos, u8 numMonsInPage);
 static void DexScreen_LoadListScreenBackground(void);
-static void DexScreen_LoadListScreenBackgroundForSpecies(u16 species);
+static void DexScreen_LoadListScreenBackgroundForSpecies(u32 itemId);
 static void DexScreen_LoadMonPicInWindow(u8 windowId, u16 species, u16 paletteOffset);
 void DexScreen_DexPageZoomEffectFrame(u8 bg, u8 scale);
 static u8 DexScreen_DrawMonDexPage(bool8 justRegistered);
@@ -991,14 +991,15 @@ static void DexScreen_LoadListScreenBackground(void)
     DexScreen_LoadListScreenBackgroundForSpecies(SPECIES_NONE);
 }
 
-static void DexScreen_LoadListScreenBackgroundForSpecies(u16 species)
+static void DexScreen_LoadListScreenBackgroundForSpecies(u32 itemId)
 {
     int i;
     u16 *buffer = GetBgTilemapBuffer(3);
     const u16 *tilemap = sNationalDexTilemap;
+    u16 species = itemId & 0xFFFF;
+    bool8 seen = (itemId >> 16) & 1;
 
-    species &= 0xFFFF;
-    if (species != SPECIES_NONE && species < NUM_SPECIES)
+    if (seen && species != SPECIES_NONE && species < NUM_SPECIES)
     {
         if (gSpeciesInfo[species].genderRatio == GENDER_MALE_ONLY)
             tilemap = sNationalDexTilemapMale;
