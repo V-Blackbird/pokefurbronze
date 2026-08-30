@@ -461,11 +461,15 @@ static void FieldEffectScript_LoadFadedPal(const u8 **script)
 {
     const struct SpritePalette * spritePalette = (const struct SpritePalette * )FieldEffectScript_ReadWord(script);
     u8 idx = IndexOfSpritePaletteTag(spritePalette->tag);
-    LoadSpritePalette(spritePalette);
-    UpdatePaletteGammaType(IndexOfSpritePaletteTag(spritePalette->tag), GAMMA_NORMAL);
-    if (idx == 0xFF)
-        ApplyGlobalFieldPaletteTint(IndexOfSpritePaletteTag(spritePalette->tag));
-    UpdateSpritePaletteWithWeather(IndexOfSpritePaletteTag(spritePalette->tag));
+    u8 paletteIndex = LoadSpritePalette(spritePalette);
+
+    if (paletteIndex != 0xFF)
+    {
+        UpdatePaletteGammaType(paletteIndex, GAMMA_NORMAL);
+        if (idx == 0xFF)
+            ApplyGlobalFieldPaletteTint(paletteIndex);
+        UpdateSpritePaletteWithWeather(paletteIndex);
+    }
     *script += sizeof(u32);
 }
 
@@ -473,9 +477,10 @@ static void FieldEffectScript_LoadPal(const u8 **script)
 {
     const struct SpritePalette * spritePalette = (const struct SpritePalette * )FieldEffectScript_ReadWord(script);
     u8 idx = IndexOfSpritePaletteTag(spritePalette->tag);
-    LoadSpritePalette(spritePalette);
-    if (idx != 0xFF)
-        ApplyGlobalFieldPaletteTint(IndexOfSpritePaletteTag(spritePalette->tag));
+    u8 paletteIndex = LoadSpritePalette(spritePalette);
+    // Only tint on a fresh load; an already-loaded palette was tinted when it was first loaded.
+    if (idx == 0xFF && paletteIndex != 0xFF)
+        ApplyGlobalFieldPaletteTint(paletteIndex);
     *script += sizeof(u32);
 }
 

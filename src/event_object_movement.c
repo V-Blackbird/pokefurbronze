@@ -77,6 +77,7 @@ static void SetPlayerAvatarObjectEventIdAndObjectId(u8, u8);
 static void ResetObjectEventFldEffData(struct ObjectEvent *);
 static u8 TryLoadObjectPalette(const struct SpritePalette *spritePalette);
 static u8 FindObjectEventPaletteIndexByTag(u16);
+static void LoadObjectEventPaletteWithWeather(u16 paletteTag);
 static bool8 ObjectEventDoesElevationMatch(struct ObjectEvent *, u8);
 static bool8 IsElevationMismatchAt(u8 elevation, s16 x, s16 y);
 static bool8 AreElevationsCompatible(u8 a, u8 b);
@@ -1388,9 +1389,8 @@ static u8 TrySetupObjectEventSprite(const struct ObjectEventTemplate *objectEven
 
     objectEvent = &gObjectEvents[objectEventId];
     graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
-    if (spriteTemplate->paletteTag != 0xFFFF)
-        LoadObjectEventPalette(spriteTemplate->paletteTag);
-        UpdatePaletteGammaType(IndexOfSpritePaletteTag(spriteTemplate->paletteTag), GAMMA_ALT);
+    if (spriteTemplate->paletteTag != TAG_NONE)
+        LoadObjectEventPaletteWithWeather(spriteTemplate->paletteTag);
 
     if (objectEvent->movementType == MOVEMENT_TYPE_INVISIBLE)
         objectEvent->invisible = TRUE;
@@ -1713,10 +1713,8 @@ static void SpawnObjectEventOnReturnToField(u8 objectEventId, s16 x, s16 y)
     CopyObjectGraphicsInfoToSpriteTemplate_WithMovementType(objectEvent->graphicsId, objectEvent->movementType, &spriteTemplate, &subspriteTables);
     spriteTemplate.images = &spriteFrameImage;
 
-    if (graphicsInfo->paletteSlot != TAG_NONE)
-        LoadObjectEventPalette(spriteTemplate.paletteTag);
-        UpdatePaletteGammaType(IndexOfSpritePaletteTag(spriteTemplate.paletteTag), GAMMA_ALT);
-        
+    if (spriteTemplate.paletteTag != TAG_NONE)
+        LoadObjectEventPaletteWithWeather(spriteTemplate.paletteTag);
     spriteId = CreateSprite(&spriteTemplate, 0, 0, 0);
     if (spriteId != MAX_SPRITES)
     {
@@ -1945,18 +1943,49 @@ void FreeAndReserveObjectSpritePalettes(void)
     gReservedSpritePaletteCount = OBJ_PALSLOT_COUNT;
 }
 
+// Maps each object palette slot to a reflection slot that is reserved from dynamic allocation.
+// Dynamic object palettes use slots 12-15, paired with reflection slots 6-9.
+const u8 gReflectionEffectPaletteMap[16] = {
+    [PALSLOT_PLAYER]                 = PALSLOT_PLAYER_REFLECTION,
+    [PALSLOT_PLAYER_REFLECTION]      = PALSLOT_PLAYER_REFLECTION,
+    [PALSLOT_NPC_1]                  = PALSLOT_NPC_1_REFLECTION,
+    [PALSLOT_NPC_2]                  = PALSLOT_NPC_2_REFLECTION,
+    [PALSLOT_NPC_3]                  = PALSLOT_NPC_3_REFLECTION,
+    [PALSLOT_NPC_4]                  = PALSLOT_NPC_4_REFLECTION,
+    [PALSLOT_NPC_1_REFLECTION]       = PALSLOT_NPC_1_REFLECTION,
+    [PALSLOT_NPC_2_REFLECTION]       = PALSLOT_NPC_2_REFLECTION,
+    [PALSLOT_NPC_3_REFLECTION]       = PALSLOT_NPC_3_REFLECTION,
+    [PALSLOT_NPC_4_REFLECTION]       = PALSLOT_NPC_4_REFLECTION,
+    [PALSLOT_NPC_SPECIAL]            = PALSLOT_NPC_SPECIAL_REFLECTION,
+    [PALSLOT_NPC_SPECIAL_REFLECTION] = PALSLOT_NPC_SPECIAL_REFLECTION,
+    [12]                             = PALSLOT_NPC_1_REFLECTION,
+    [13]                             = PALSLOT_NPC_2_REFLECTION,
+    [14]                             = PALSLOT_NPC_3_REFLECTION,
+    [15]                             = PALSLOT_NPC_4_REFLECTION,
+};
+
+static void LoadObjectEventPaletteWithWeather(u16 paletteTag)
+{
+    u8 oldPaletteIndex = IndexOfSpritePaletteTag(paletteTag);
+    u8 paletteIndex;
+
+    LoadObjectEventPalette(paletteTag);
+    paletteIndex = IndexOfSpritePaletteTag(paletteTag);
+    if (paletteIndex == 0xFF)
+        return;
+
+    UpdatePaletteGammaType(paletteIndex, GAMMA_ALT);
+    if (oldPaletteIndex == 0xFF)
+        ApplyGlobalFieldPaletteTint(paletteIndex);
+    UpdateSpritePaletteWithWeather(paletteIndex);
+}
+
 void LoadObjectEventPalette(u16 paletteTag)
 {
     u16 i = FindObjectEventPaletteIndexByTag(paletteTag);
 
-#ifdef BUGFIX
-    if (sObjectEventSpritePalettes[i].tag != OBJ_EVENT_PAL_TAG_NONE)
-#else
-    if (i != OBJ_EVENT_PAL_TAG_NONE) // always true
-#endif
-    {
+    if (i != 0xFF)
         TryLoadObjectPalette(&sObjectEventSpritePalettes[i]);
-    }
 }
 
 // Unused
@@ -1984,8 +2013,24 @@ void PatchObjectPalette(u16 paletteTag, u8 paletteSlot)
 {
     u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
 
+    // Guard against an unknown tag: FindObjectEventPaletteIndexByTag returns 0xFF when the
+    // tag isn't in sObjectEventSpritePalettes, which would otherwise index out of bounds.
+    if (paletteIndex == 0xFF)
+        return;
+
     LoadPalette(sObjectEventSpritePalettes[paletteIndex].data, OBJ_PLTT_ID(paletteSlot), PLTT_SIZE_4BPP);
     ApplyGlobalFieldPaletteTint(paletteSlot);
+}
+
+bool8 CopyObjectEventPalette(u16 paletteTag, u16 *dest)
+{
+    u8 paletteIndex = FindObjectEventPaletteIndexByTag(paletteTag);
+
+    if (paletteIndex == 0xFF)
+        return FALSE;
+
+    CpuCopy16(sObjectEventSpritePalettes[paletteIndex].data, dest, PLTT_SIZE_4BPP);
+    return TRUE;
 }
 
 void PatchObjectPaletteRange(const u16 *paletteTags, u8 minSlot, u8 maxSlot)

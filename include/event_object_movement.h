@@ -85,6 +85,8 @@ void RemoveObjectEventByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup);
 u16 GetBoulderRevealFlagByLocalIdAndMap(u8 localId, u8 mapNum, u8 mapGroup);
 void LoadPlayerObjectReflectionPalette(u16, u8);
 void LoadSpecialObjectReflectionPalette(u16, u8);
+extern const u8 gReflectionEffectPaletteMap[16];
+bool8 CopyObjectEventPalette(u16 paletteTag, u16 *dest);
 void TryMoveObjectEventToMapCoords(u8, u8, u8, s16, s16);
 void PatchObjectPalette(u16, u8);
 void SpawnObjectEventsOnReturnToField(s16 x, s16 y);

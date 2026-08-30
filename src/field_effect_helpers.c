@@ -13,6 +13,7 @@
 #include "constants/songs.h"
 
 #define OBJ_EVENT_PAL_TAG_NONE 0x11FF // duplicate of define in event_object_movement.c
+#define OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION 0x1102
 
 static void UpdateObjectReflectionSprite(struct Sprite *sprite);
 static void LoadObjectReflectionPalette(struct ObjectEvent * objectEvent, struct Sprite *sprite);
@@ -30,7 +31,7 @@ static void SpriteCB_UnderwaterSurfBlob(struct Sprite *sprite);
 static u32 ShowDisguiseFieldEffect(u8, u8);
 static void LoadFieldEffectPalette_(u8 fieldEffect, bool8 updateGammaType);
 
-void LoadSpecialReflectionPalette(struct Sprite *sprite);
+static void LoadObjectEventReflectionPalette(u16 paletteTag, u8 reflectionSlot);
 
 extern u16 gReflectionPaletteBuffer[];
 
@@ -41,6 +42,9 @@ void SetUpReflection(struct ObjectEvent * objectEvent, struct Sprite *sprite, bo
     reflectionSprite = &gSprites[CreateCopySpriteAt(sprite, sprite->x, sprite->y, 0x98)];
     reflectionSprite->callback = UpdateObjectReflectionSprite;
     reflectionSprite->oam.priority = 3;
+    // Map the copied object's palette slot to a dedicated reserved reflection slot,
+    // so reflections never allocate (and leak) dynamic sprite-palette slots.
+    reflectionSprite->oam.paletteNum = gReflectionEffectPaletteMap[reflectionSprite->oam.paletteNum];
     reflectionSprite->usingSheet = TRUE;
     reflectionSprite->anims = gDummySpriteAnimTable;
     StartSpriteAnim(reflectionSprite, 0);
@@ -61,41 +65,50 @@ static s16 GetReflectionVerticalOffset(struct ObjectEvent * objectEvent)
     return GetObjectEventGraphicsInfo(objectEvent->graphicsId)->height - 2;
 }
 
-#define OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION 0x1102
-
 static void LoadObjectReflectionPalette(struct ObjectEvent * objectEvent, struct Sprite *reflectionSprite)
 {
     u8 bridgeType;
     u16 bridgeReflectionVerticalOffsets[] = { 12, 28, 44 };
+    const struct ObjectEventGraphicsInfo *graphicsInfo = GetObjectEventGraphicsInfo(objectEvent->graphicsId);
     reflectionSprite->data[2] = 0;
-    if (!GetObjectEventGraphicsInfo(objectEvent->graphicsId)->disableReflectionPaletteLoad && ((bridgeType = MetatileBehavior_GetBridgeType(objectEvent->previousMetatileBehavior)) || (bridgeType = MetatileBehavior_GetBridgeType(objectEvent->currentMetatileBehavior))))
+    if (!graphicsInfo->disableReflectionPaletteLoad && ((bridgeType = MetatileBehavior_GetBridgeType(objectEvent->previousMetatileBehavior)) || (bridgeType = MetatileBehavior_GetBridgeType(objectEvent->currentMetatileBehavior))))
     {
         // When walking on a bridge high above water (Route 120), the reflection is a solid dark blue color.
         // This is so the sprite blends in with the dark water metatile underneath the bridge.
         reflectionSprite->data[2] = bridgeReflectionVerticalOffsets[bridgeType - 1];
-LoadObjectEventPalette(OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION);
-        reflectionSprite->oam.paletteNum = IndexOfSpritePaletteTag(OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION);
+        PatchObjectPalette(OBJ_EVENT_PAL_TAG_BRIDGE_REFLECTION, reflectionSprite->oam.paletteNum);
         UpdatePaletteGammaType(reflectionSprite->oam.paletteNum, GAMMA_NORMAL);
         UpdateSpritePaletteWithWeather(reflectionSprite->oam.paletteNum);
     }
     else
     {
-        LoadSpecialReflectionPalette(reflectionSprite);
+        LoadObjectEventReflectionPalette(graphicsInfo->paletteTag, reflectionSprite->oam.paletteNum);
     }
 }
 
-void LoadSpecialReflectionPalette(struct Sprite *sprite)
+// Builds a water-tinted copy of the object's source palette in the mapped reflection slot.
+// This preserves each object's custom
+// palette identity in its reflection without allocating (and leaking) a dynamic palette tag.
+static void LoadObjectEventReflectionPalette(u16 paletteTag, u8 reflectionSlot)
 {
-    struct SpritePalette reflectionPalette;
+    if (!CopyObjectEventPalette(paletteTag, gReflectionPaletteBuffer))
+        return;
 
-    CpuCopy16(&gPlttBufferUnfaded[0x100 + sprite->oam.paletteNum * 16], gReflectionPaletteBuffer, 32);
     TintPalette_CustomTone(gReflectionPaletteBuffer, 16, Q_8_8(1.0), Q_8_8(1.0), Q_8_8(3.5));
-    reflectionPalette.data = gReflectionPaletteBuffer;
-    reflectionPalette.tag = GetSpritePaletteTagByPaletteNum(sprite->oam.paletteNum) + 0x1000;
-    LoadSpritePalette(&reflectionPalette);
-    sprite->oam.paletteNum = IndexOfSpritePaletteTag(reflectionPalette.tag);
-    UpdatePaletteGammaType(sprite->oam.paletteNum, GAMMA_ALT);
-    UpdateSpritePaletteWithWeather(sprite->oam.paletteNum);
+    LoadPalette(gReflectionPaletteBuffer, OBJ_PLTT_ID(reflectionSlot), PLTT_SIZE_4BPP);
+    ApplyGlobalFieldPaletteTint(reflectionSlot);
+    UpdatePaletteGammaType(reflectionSlot, GAMMA_ALT);
+    UpdateSpritePaletteWithWeather(reflectionSlot);
+}
+
+void LoadPlayerObjectReflectionPalette(u16 tag, u8 slot)
+{
+    LoadObjectEventReflectionPalette(tag, gReflectionEffectPaletteMap[slot]);
+}
+
+void LoadSpecialObjectReflectionPalette(u16 tag, u8 slot)
+{
+    LoadObjectEventReflectionPalette(tag, gReflectionEffectPaletteMap[slot]);
 }
 
 static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
@@ -111,6 +124,7 @@ static void UpdateObjectReflectionSprite(struct Sprite *reflectionSprite)
     }
     else
     {
+        reflectionSprite->oam.paletteNum = gReflectionEffectPaletteMap[mainSprite->oam.paletteNum];
         reflectionSprite->oam.shape = mainSprite->oam.shape;
         reflectionSprite->oam.size = mainSprite->oam.size;
         reflectionSprite->oam.matrixNum = mainSprite->oam.matrixNum | ST_OAM_VFLIP;
@@ -1421,9 +1435,20 @@ static void LoadFieldEffectPalette_(u8 fieldEffect, bool8 updateGammaType)
     spriteTemplate = gFieldEffectObjectTemplatePointers[fieldEffect];
     if (spriteTemplate->paletteTag != 0xffff)
     {
+        u8 existingIndex = IndexOfSpritePaletteTag(spriteTemplate->paletteTag);
         LoadObjectEventPalette(spriteTemplate->paletteTag);
         if (updateGammaType)
-            UpdatePaletteGammaType(IndexOfSpritePaletteTag(spriteTemplate->paletteTag), GAMMA_NORMAL);
+        {
+            u8 paletteIndex = IndexOfSpritePaletteTag(spriteTemplate->paletteTag);
+
+            if (paletteIndex == 0xFF)
+                return;
+            UpdatePaletteGammaType(paletteIndex, GAMMA_NORMAL);
+            // Only tint on a fresh load; an already-loaded palette was tinted previously.
+            if (existingIndex == 0xFF)
+                ApplyGlobalFieldPaletteTint(paletteIndex);
+            UpdateSpritePaletteWithWeather(paletteIndex);
+        }
     }
 }
 
