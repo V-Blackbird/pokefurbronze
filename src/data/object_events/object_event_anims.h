@@ -1043,6 +1043,79 @@ static const union AnimCmd *const sAnimTable_Standard[] = {
     [ANIM_RAISE_HAND] = sAnim_RaiseHand,
 };
 
+// Truck (vehicle) animations.
+// Frame layout in pic table: 0 = side view idle, 1 = back view (north),
+// 2 = side view idle (west), 7 = side view wheels rolling, 8 = side view idle.
+// No front (south) frame exists; south reuses the side view.
+static const union AnimCmd sAnim_TruckGoSouth[] = {
+    ANIMCMD_FRAME(0, 8),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoNorth[] = {
+    ANIMCMD_FRAME(1, 8),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoWest[] = {
+    ANIMCMD_FRAME(7, 8),
+    ANIMCMD_FRAME(2, 8),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoEast[] = {
+    ANIMCMD_FRAME(7, 8, .hFlip = TRUE),
+    ANIMCMD_FRAME(2, 8, .hFlip = TRUE),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoFastWest[] = {
+    ANIMCMD_FRAME(7, 4),
+    ANIMCMD_FRAME(2, 4),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoFastEast[] = {
+    ANIMCMD_FRAME(7, 4, .hFlip = TRUE),
+    ANIMCMD_FRAME(2, 4, .hFlip = TRUE),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoFasterWest[] = {
+    ANIMCMD_FRAME(7, 2),
+    ANIMCMD_FRAME(2, 2),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd sAnim_TruckGoFasterEast[] = {
+    ANIMCMD_FRAME(7, 2, .hFlip = TRUE),
+    ANIMCMD_FRAME(2, 2, .hFlip = TRUE),
+    ANIMCMD_JUMP(0),
+};
+
+static const union AnimCmd *const sAnimTable_Truck[] = {
+    [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
+    [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
+    [ANIM_STD_FACE_WEST] = sAnim_FaceWest,
+    [ANIM_STD_FACE_EAST] = sAnim_FaceEast,
+    [ANIM_STD_GO_SOUTH] = sAnim_TruckGoSouth,
+    [ANIM_STD_GO_NORTH] = sAnim_TruckGoNorth,
+    [ANIM_STD_GO_WEST] = sAnim_TruckGoWest,
+    [ANIM_STD_GO_EAST] = sAnim_TruckGoEast,
+    [ANIM_STD_GO_FAST_SOUTH] = sAnim_TruckGoSouth,
+    [ANIM_STD_GO_FAST_NORTH] = sAnim_TruckGoNorth,
+    [ANIM_STD_GO_FAST_WEST] = sAnim_TruckGoFastWest,
+    [ANIM_STD_GO_FAST_EAST] = sAnim_TruckGoFastEast,
+    [ANIM_STD_GO_FASTER_SOUTH] = sAnim_TruckGoSouth,
+    [ANIM_STD_GO_FASTER_NORTH] = sAnim_TruckGoNorth,
+    [ANIM_STD_GO_FASTER_WEST] = sAnim_TruckGoFasterWest,
+    [ANIM_STD_GO_FASTER_EAST] = sAnim_TruckGoFasterEast,
+    [ANIM_STD_GO_FASTEST_SOUTH] = sAnim_TruckGoSouth,
+    [ANIM_STD_GO_FASTEST_NORTH] = sAnim_TruckGoNorth,
+    [ANIM_STD_GO_FASTEST_WEST] = sAnim_TruckGoFasterWest,
+    [ANIM_STD_GO_FASTEST_EAST] = sAnim_TruckGoFasterEast,
+};
+
 static const union AnimCmd *const sAnimTable_HoOh[] = {
     [ANIM_STD_FACE_SOUTH] = sAnim_FaceSouth,
     [ANIM_STD_FACE_NORTH] = sAnim_FaceNorth,
