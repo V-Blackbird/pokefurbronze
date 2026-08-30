@@ -314,30 +314,30 @@ PalletTown_ProfessorOaksLab_EventScript_RivalApproachForBattleSquirtle::
 	message KailoLabYard_Text_Victor_NoBattle
 	fadeoutbgm 0
 	msgbox KailoLabYard_Text_Victor_NoBattle2
-	applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+	applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
 	waitmovement 0
 	closemessage
 	playbgm MUS_PEWTER, 0
 	msgbox KailoLabYard_Text_Yori_NoBattle
-	applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+	applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
 	waitmovement 0
 	msgbox KailoLabYard_Text_Yori_GoHome
 	setvar VAR_GOT_STARTER, 1
 	setflag FLAG_GOT_STARTER
 	special SpawnCameraObject
 	applymovement OBJ_EVENT_ID_PLAYER, PalletTown_ProfessorOaksLab_Movement_PlayerLeavingYard
-	applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalLeavingYard
+	applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalLeavingYard
 	delay 50
 	warp MAP_KAILO_TOWN_PLAYERS_HOUSE_2F, 5, 4
 	end
 
 PalletTown_ProfessorOaksLab_EventScript_RivalApproachUp::
-	applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalApproachForBattleSquirtle
+	applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalApproachForBattleSquirtle
 	waitmovement 0
 	return
 
 PalletTown_ProfessorOaksLab_EventScript_RivalApproachDown::
-	applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalApproachForBattleSquirtle2
+	applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalApproachForBattleSquirtle2
 	waitmovement 0
 	return
 
@@ -389,19 +389,19 @@ PalletTown_ProfessorOaksLab_EventScript_RivalApproachForBattleBulbasaur::
 	message KailoLabYard_Text_Victor_NoBattle
 	fadeoutbgm 0
 	msgbox KailoLabYard_Text_Victor_NoBattle2
-	applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
+	applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_GilanLookVictor
 	waitmovement 0
 	closemessage
 	playbgm MUS_PEWTER, 0
 	msgbox KailoLabYard_Text_Yori_NoBattle
-	applymovement LOCALID_YORI, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
+	applymovement LOCALID_YORI_LAB, KailoLabYard_Movement_StartBlackbirdMeeting_VictorLookGilan
 	waitmovement 0
 	msgbox KailoLabYard_Text_Yori_GoHome
 	setvar VAR_GOT_STARTER, 2
 	setflag FLAG_GOT_STARTER
 	special SpawnCameraObject
 	applymovement OBJ_EVENT_ID_PLAYER, PalletTown_ProfessorOaksLab_Movement_PlayerLeavingYard
-	applymovement LOCALID_YORI, PalletTown_ProfessorOaksLab_Movement_RivalLeavingYard
+	applymovement LOCALID_YORI_LAB, PalletTown_ProfessorOaksLab_Movement_RivalLeavingYard
 	delay 50
 	warp MAP_KAILO_TOWN_PLAYERS_HOUSE_2F, 5, 4
 	end

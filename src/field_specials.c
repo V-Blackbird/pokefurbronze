@@ -1818,7 +1818,7 @@ static const struct {
     u16 outside_grp;
     u16 outside_num;
 } sInsideOutsidePairs[] = {
-    [QL_LOCATION_HOME]               = {MAP(MAP_PALLET_TOWN_PLAYERS_HOUSE_1F),          MAP(MAP_PALLET_TOWN)},
+    [QL_LOCATION_HOME]               = {MAP(MAP_KAILO_TOWN_PLAYERS_HOUSE_1F),           MAP(MAP_KAILO_TOWN)},
     [QL_LOCATION_OAKS_LAB]           = {MAP(MAP_PALLET_TOWN_PROFESSOR_OAKS_LAB),        MAP(MAP_PALLET_TOWN)},
     [QL_LOCATION_VIRIDIAN_GYM]       = {MAP(MAP_VIRIDIAN_CITY_GYM),                     MAP(MAP_VIRIDIAN_CITY)},
     [QL_LOCATION_LEAGUE_GATE_1]      = {MAP(MAP_ROUTE22_NORTH_ENTRANCE),                MAP(MAP_ROUTE22)},
