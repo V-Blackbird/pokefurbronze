@@ -85,6 +85,7 @@ EWRAM_DATA u16 *gQuestLogRecordingPointer = NULL;
 static EWRAM_DATA u16 *sEventData[32] = {NULL};
 static EWRAM_DATA void (* sQuestLogCB)(void) = NULL;
 static EWRAM_DATA u16 *sPalettesBackup = NULL;
+static EWRAM_DATA u32 sPalettesBackupFilled[PLTT_BUFFER_SIZE / 32] = {0};
 static EWRAM_DATA struct PlaybackControl sPlaybackControl = {0};
 static EWRAM_DATA struct QuestLogAction sQuestLogActionRecordBuffer[SCRIPT_BUFFER_SIZE] = {0};
 EWRAM_DATA u16 gQuestLogCurActionIdx = 0;
@@ -1109,12 +1110,19 @@ static void QuestLog_WaitFadeAndCancelPlayback(void)
 void QuestLog_InitPalettesBackup(void)
 {
     if (gQuestLogState == QL_STATE_PLAYBACK_LAST)
+    {
         sPalettesBackup = AllocZeroed(PLTT_SIZE);
+        CpuFill32(0, sPalettesBackupFilled, sizeof(sPalettesBackupFilled));
+    }
 }
 
 void QuestLog_BackUpPalette(u16 offset, u16 size)
 {
+    u16 i;
+
     CpuCopy16(&gPlttBufferUnfaded[offset], &sPalettesBackup[offset], PLTT_SIZEOF(size));
+    for (i = offset; i < offset + size; i++)
+        sPalettesBackupFilled[i / 32] |= 1u << (i % 32);
 }
 
 static bool8 FieldCB2_FinalScene(void)
@@ -1222,6 +1230,7 @@ static void Task_EndQuestLog(u8 taskId)
         if (sPlaybackControl.endMode == END_MODE_FINISH)
             ShowMapNamePopup(TRUE);
         CpuCopy16(sPalettesBackup, gPlttBufferUnfaded, PLTT_SIZE);
+        CpuCopy16(sPalettesBackup, gPlttBufferFaded, PLTT_SIZE);
         Free(sPalettesBackup);
         sPlaybackControl = (struct PlaybackControl){};
         ClearPlayerHeldMovementAndUnfreezeObjectEvents();
@@ -1266,14 +1275,21 @@ static bool8 RestoreScreenAfterPlayback(u8 taskId)
 
 static void QL_SlightlyDarkenSomePals(void)
 {
+    u16 i;
     u16 *buffer = Alloc(PLTT_SIZE);
-    CpuCopy16(sPalettesBackup, buffer, PLTT_SIZE);
-    SlightlyDarkenPalsInWeather(sPalettesBackup, sPalettesBackup, 13 * 16);
-    SlightlyDarkenPalsInWeather(&sPalettesBackup[OBJ_PLTT_ID(1)], &sPalettesBackup[OBJ_PLTT_ID(1)], 1 * 16);
-    SlightlyDarkenPalsInWeather(&sPalettesBackup[OBJ_PLTT_ID(6)], &sPalettesBackup[OBJ_PLTT_ID(6)], 4 * 16);
-    SlightlyDarkenPalsInWeather(&sPalettesBackup[OBJ_PLTT_ID(11)], &sPalettesBackup[OBJ_PLTT_ID(11)], 5 * 16);
-    CpuCopy16(sPalettesBackup, gPlttBufferUnfaded, PLTT_SIZE);
+
+    CpuCopy16(gPlttBufferUnfaded, buffer, PLTT_SIZE);
+    for (i = 0; i < PLTT_BUFFER_SIZE; i++)
+    {
+        if (sPalettesBackupFilled[i / 32] & (1u << (i % 32)))
+            buffer[i] = sPalettesBackup[i];
+    }
     CpuCopy16(buffer, sPalettesBackup, PLTT_SIZE);
+    SlightlyDarkenPalsInWeather(buffer, buffer, 13 * 16);
+    SlightlyDarkenPalsInWeather(&buffer[OBJ_PLTT_ID(1)], &buffer[OBJ_PLTT_ID(1)], 1 * 16);
+    SlightlyDarkenPalsInWeather(&buffer[OBJ_PLTT_ID(6)], &buffer[OBJ_PLTT_ID(6)], 4 * 16);
+    SlightlyDarkenPalsInWeather(&buffer[OBJ_PLTT_ID(11)], &buffer[OBJ_PLTT_ID(11)], 5 * 16);
+    CpuCopy16(buffer, gPlttBufferUnfaded, PLTT_SIZE);
     Free(buffer);
 }
 
