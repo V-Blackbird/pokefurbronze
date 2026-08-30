@@ -1827,13 +1827,13 @@ static const struct SpriteFrameImage sPicTable_Red2[] = {
 };
 
 const struct SpriteFrameImage gObjectEventPicTable_MartTruck[] = {
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0),
-    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0),
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0), // south idle (no front view, left side fallback)
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1), // north idle (back)
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0), // west idle (left side)
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0), // south walk 1
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0), // south walk 2
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1), // north walk 1
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 1), // north walk 2
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 2), // west walk 1 (wheels)
+    overworld_frame(gObjectEventPic_MartTruck, 8, 8, 0), // west walk 2
 };
